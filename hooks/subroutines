@@ -1,0 +1,52 @@
+# FAI executes these default tasks in the following order:
+#   confdir     Mount or obtain the $FAI configuration directory
+#   setup       Set clock, define $FAI_FLAGS, start VTs, start sshd
+#   defclass    Define classes
+#   defvar      Source $FAI/$class/*.var and /tmp/fai/additional.var
+#   action      Decide action - sysinfo, install, softupdate, or custom action
+#   sysinfo     If action=sysinfo, show hardware info, mount /target readonly
+#   install     If action=install, 3 beeps, call tasks partition...savelog
+#   dirinstall  If action=dirinstall, call tasks extrbase...finish, savelog
+#   softupdate  If action=softupdate, update an existing installation
+#
+#   partition   Run setup-storage, write /tmp/fai/disk_var.sh and fstab
+#   mountdisks  Mount partitions using /tmp/fai/fstab relative to $FAI_ROOT
+#   extrbase    Run debootstrap (use /var/tmp/base.tgz as a shortcut)
+#   mirror      If $FAI_DEBMIRROR is NFS, mount it to $MNTPOINT
+#   debconf     Fill debconf database by running `fai-debconf $FAI/debconf`
+#   prepareapt  Set up resolv.conf and other files for the next task updatebase
+#   updatebase  Mount /proc et al, make diversions, apt-key add, apt-get update
+#   instsoft    Install packages as directed by $FAI/package_config
+#   configure   Call scripts in $FAI/scripts/ and subdirectories
+#   tests       Call scripts in $FAI/tests/ and subdirectories
+#   finish      Unmount target filesystems, undo fai-divert diversions
+#   chboot      Execute fai-chboot on the server
+#   savelog     Copy local logs to account $LOGUSER on $LOGSERVER
+#
+#   faiend      Wait for bg jobs to finish, reboot if appropriate
+#
+# Most hooks are called before the task of the same name.  This file,
+# $FAI/hooks/subroutines, is a special case.  It is called after the confdir
+# task, which is the earliest opportunity for the contents of the $FAI
+# configuration directory to influence anything.
+#
+# In addition to completing the establishment of the $FAI configuration
+# directory, you can define and override FAI builtin functions here.
+#
+# Since this file is sourced by bash rather than executed, please take care to
+# avoid introducing unintentional side effects.  A good convention to follow
+# would be to wrap as much functionality as possible in shell functions with
+# local variables.  The shell functions should be named ece_something() to
+# distinguish them from FAI builtin functions.
+
+ece_post_confdir_setup_git() {
+    echo "$FAI_CONFIG_SRC_REF"
+}
+
+ece_post_confdir_hook() {
+    case "$FAI_CONFIG_SRC" in
+      git*) ece_post_confdir_setup_git ;;
+    esac
+}
+
+ece_post_confdir_hook
