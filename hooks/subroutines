@@ -26,9 +26,11 @@
 #   faiend      Wait for bg jobs to finish, reboot if appropriate
 #
 # Most hooks are called before the task of the same name.  This file,
-# $FAI/hooks/subroutines, is a special case.  It is called after the confdir
-# task, which is the earliest opportunity for the contents of the $FAI
-# configuration directory to influence anything.
+# $FAI/hooks/subroutines, is a special case.  It is called in the early stages
+# of the setup task, which is the earliest opportunity for the contents of the
+# $FAI configuration directory to influence anything.  Note that this means
+# that there is no confdir or setup hook, since the $FAI configuration space is
+# not yet available at the time that those hooks would run.
 #
 # In addition to completing the establishment of the $FAI configuration
 # directory, you can define and override FAI builtin functions here.
@@ -39,14 +41,32 @@
 # local variables.  The shell functions should be named ece_something() to
 # distinguish them from FAI builtin functions.
 
-ece_post_confdir_setup_git() {
-    echo "$FAI_CONFIG_SRC_REF"
+ece_setup_git() {
+    local saved_pwd old_ref new_ref
+    local git_cmd
+
+    git_cmd="git --work-tree=$FAI --git-dir=$FAI/.git"
+    if [ -n "$FAI_CONFIG_SRC_REF" ]; then
+        # git-checkout a particular branch, tag, or commit of the configuration
+        # space
+        old_ref=`$git_cmd rev-parse HEAD`
+        $git_cmd checkout "$FAI_CONFIG_SRC_REF"
+        new_ref=`$git_cmd rev-parse HEAD`
+
+        if [ "$new_ref" != "$old_ref" ]; then
+            echo "Checked out $FAI_CONFIG_SRC_REF of $FAI_CONFIG_SRC."
+            echo "Running $FAI/hooks/subroutines again."
+            . $FAI/hooks/subroutines
+            return
+        fi
+    fi
+    $git_cmd log -n 1 --pretty=format:"Using git ref %h of $FAI_CONFIG_SRC"
 }
 
-ece_post_confdir_hook() {
+ece_setup_hook() {
     case "$FAI_CONFIG_SRC" in
-      git*) ece_post_confdir_setup_git ;;
+      git*) ece_setup_git ;;
     esac
 }
 
-ece_post_confdir_hook
+ece_setup_hook
