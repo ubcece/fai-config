@@ -1,0 +1,132 @@
+FAI Dependencies
+================
+
+ECE's FAI infrastructure has external dependencies and is not self-hosting.
+Our FAI setup relies on a DHCP server, a Git server, a Debian mirror, and a
+CFengine server.  Since these dependencies are Debian servers themselves, it
+might be possible to end up with a minor bootstrapping challenge if a disaster
+knocks out one of those services.
+
+
+Servers
+=======
+
+A machine performing an FAI installation typically interacts with five
+servers.  One of the servers, which we call the "FAI server", hosts the PXE,
+key distribution, and FAI log archive services, since the implementation is
+much simpler when those services are all located on the same server.
+
+ 1) DHCP server
+    (mlookup1.ece.ubc.ca and xlookup1.ece.ubc.ca)
+
+    The machine to be installed should be set to boot from the network.  The
+    first step of network booting involves contacting the DHCP server.  The
+    DHCP server is configured, using NetData, to tell PXE clients about the
+    PXE boot service on the FAI server.
+
+ 2) PXE boot (boot menu, kernel, initrd, NFS root) from the FAI server
+    (fai.ece.ubc.ca)
+
+    The client fetches the PXELINUX boot menu from the TFTP server; the boot
+    menu may be host-specific and is put in place by the
+    SERVER-SIDE/bin/fai-pxe script (which is a wrapper for the fai-chboot
+    command).  The menu may instruct the PXE client to boot a kernel and
+    initrd with certain parameters in order to run FAI.
+
+    We use TFTP for the kernel and initrd and NFS for the nfsroot, but an
+    alternative approach would be for the FAI client to download all three
+    images over HTTP.  (HTTP would have the disadvantage of requiring the
+    entire nfsroot image to be downloaded initially, but would be more
+    flexible in working through a firewall.)
+
+    Note that even if a client is not intended to run FAI, if it is configured
+    to try booting from the network before trying local media, it will still
+    need to fetch a boot menu that instructs it to run a PXELINUX binary to
+    load the bootloader on the local disk.  Therefore, misconfiguration of the
+    default PXE boot menu can prevent machines from booting normally!
+
+    Macintosh computers do not support PXE protocol; they use their own Boot
+    Server Discovery Protocol (BSDP) instead.  The topic of running FAI to
+    install Linux on Macs is covered in running.txt.
+
+ 3) The FAI configuration space from a Git server
+    (dev.ece.ubc.ca)
+
+    The boot parameters tell the Linux kernel where to find the NFS root.  The
+    NFS root contains an FAI configuration file that tells it where to fetch
+    the FAI configuration space.
+
+    In the past, we had the FAI server share the configuration space with the
+    clients over NFS.  However, it is highly advantageous to keep the
+    configuration under version control.  Furthermore, by using a distributed
+    version control system that allows for easy branching, it is much more
+    convenient to try experimental FAI configurations before committing
+    changes.  Therefore, we now keep the FAI configuration in a Git
+    repository.  The FAI client can fetch the configuration from Git over HTTP
+    without needing authentication.  (IT staff can upload changes to the Git
+    repository using the git+ssh protocol.)
+
+ 4) Key distribution from the FAI server
+    (fai.ece.ubc.ca)
+
+    The FAI client needs to fetch the CFengine and SSH host keys early in the
+    FAI process.  This presents a security challenge since private keys should
+    be kept secret.
+
+    In the past, the client would fetch these host-specific files from the FAI
+    server over SSH.  However, that would require the client to connect to the
+    server using a passwordless SSH key.  The security implications of a
+    compromised key could be mitigated by limiting the allowable commands (in
+    the authorized_keys file of the fai account on the server), and by
+    limiting the time window during which the fai user may login to the server
+    (by inserting and later removing a line in /etc/security/access.conf).
+    Unfortunately, those protections are cumbersome and unreliable.  It is
+    hard to enumerate exactly what commands the fai user should be permitted
+    to run.  Also, triggering a PAM configuration file to be automatically
+    modified some time after the start of the installation process requires a
+    countdown timer process to run on the FAI server, which is inelegant.
+
+    We now take the smarter approach to distribute the key files using a web
+    server, which verifies eligibility at the time each file is requested.
+    When generating the PXE boot parameters for the FAI client, a timestamped
+    cryptographic key is created.  The web server can serve only the files
+    related to the host associated with that key, and only for a limited time
+    after the key's creation timestamp.  If the client fails to download any
+    host-specific files using the key, then it can request a new key from the
+    server after a system administrator authenticates at the console on the
+    client machine.  (The ability to prompt for authorization on the FAI
+    console suggests the possibility of client-initiated reinstallations.)
+
+ 5) APT repositories
+    (mirrors.ece.ubc.ca)
+
+    We currently use ECE's Debian mirror on http://mirrors.ece.ubc.ca.  An
+    alternative approach would be for mirrors.ece.ubc.ca to share the
+    repositories over NFS.  If the mirror server is unavailable, it should be
+    easy to reconfigure FAI to use another public Debian repository.
+
+ 6) CFengine server
+    (huey.ece.ubc.ca)
+
+    The CFengine server does not necessarily need to reside on the same
+    machine as the FAI server, and it currently doesn't.  That is not a
+    technical problem, but it is somewhat inconvenient to have to edit the FAI
+    and CFengine configurations on separate servers, since such configuration
+    changes are often logically correlated.
+
+ 7) FAI log archive
+    (fai.ece.ubc.ca)
+
+    At the end of the installation, the FAI client runs fai-chboot on the
+    server to discontinue PXE booting and archives the installation logs back
+    to the server.  These two actions present the same security challenges as
+    the key distribution problem described above.  The same solution applies:
+    a web server accepts log files uploaded by the client and executes
+    fai-chboot when requested by the FAI client.
+
+In addition, FAI may be configured to use supplementary APT repositories to
+obtain some software, such as Proxmox VE.  Also, some scripts in the FAI
+configuration may download software from other sources, such as MATLAB and
+Maple from huey.ece.ubc.ca.
+
+# vim: tw=78:

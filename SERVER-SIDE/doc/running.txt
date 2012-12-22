@@ -1,0 +1,36 @@
+Run FAI From PXE
+================
+
+To run FAI from PXE (Preboot Execution Environment), the machine to be
+installed needs to be configured to attempt to boot from the network before
+booting from local media.  The PXE server needs to have a PXELINUX boot menu
+associated with that machine that loads the FAI kernel and initrd with the
+appropriate boot parameters.
+
+The easiest way to put that boot menu in place is to use the
+SERVER-SIDE/bin/fai-pxe command.  A typical invocation might be:
+
+    1 $ SERVER-SIDE/bin/fai-pxe -t install-squeeze bofh
+
+TODO: More about fai-pxe
+
+
+Run FAI dirinstall
+==================
+
+TODO: dirinstall on a real machine, dirinstall on an OpenVZ container
+
+
+FAI on a Macintosh
+==================
+
+Macintosh computers do not support PXE protocol; they use their own Boot
+Server Discovery Protocol (BSDP) instead.  Although it is possible to
+configure a DHCP server to support the BSDP extensions to DHCP, it is unclear
+if it is possible to package a Linux kernel in a way that it can be booted
+using BSDP.  To install Linux on a Mac, you could try booting to a USB stick
+containing the FAI NFS root.  A more challenging approach might be to write an
+FAI kernel, initrd, GRUB2 EFI bootloader, and a GRUB2 configuration to the EFI
+partition.
+
+# vim: tw=78:

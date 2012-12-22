@@ -1,0 +1,12 @@
+How to Manage the NFS Root Using Makefiles
+==========================================
+
+TODO
+
+Regenerating the NFS root filesystem takes about 5 minutes.  Run make with -j2
+to generate two NFS roots in parallel.
+
+Note that regenerating the NFSROOT will break any current NFS clients that
+have the old NFSROOT mounted.
+
+# vim: tw=78:

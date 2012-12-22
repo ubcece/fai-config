@@ -1,0 +1,98 @@
+Security and Privacy
+====================
+
+Please keep in mind that the entire Git repository is Internet accessible
+(read-only over HTTP) with no authentication.  Any secret information,
+especially passwords and private keys, should be kept out of the repository,
+and should probably be handled using the FAI key exchange web server or
+CFengine instead.
+
+
+FAI vs. CFengine
+================
+
+TODO: Describe how to divide the responsibilities between FAI and CFengine.
+
+
+Our Classes
+===========
+
+DEFAULT         The first class of every FAI invocation
+LINUX           The second class of every FAI invocation (from `uname -s`)
+AMD64 I386      Installation architecture (maybe different from the hardware)
+FAICD           FAI is running from an ISO image
+
+I386_BIGMEM     I386 with > 4 GiB RAM, which could benefit from PAE kernel
+
+VZ_CONTAINER    Installing to an OpenVZ container
+NOT_VZ_CONTAINER ... or not
+
+VM_GUEST        Installing to a virtual machine
+BOCHS_GUEST      ... KVM virtual machine
+VMWARE_GUEST     ... VMWare virtual machine
+
+==
+
+FAIBASE         TODO: How is this different from DEFAULT and LINUX?
+DHCPC           If FAIBASE, configure eth0 to use DHCP, not static IP address
+
+ECE             TODO: Seems to do nothing?
+
+ECE_DISK2       Machine with 2 disks; FAI will install to second disk
+
+SERVER          TODO: UTC, LVM snapshot space
+LOOKUPSERVER    BIND, DHCP, LDAP, NIS, NTP, VertXd server (no NFS support)
+SMBSERVER       Samba server with LDAP utilities
+MAIL            Mail server (SMTP, IMAP, and/or mailing list)
+WEB             Apache server
+
+DATABASE        MySQL and PostgreSQL server
+
+RT              OBSOLETE: Install Request Tracker software
+
+VM_HOST         Make /var/lib/vz partition
+
+RAID            Partition using software RAID1
+
+GRID            Oracle (Sun) Grid Engine client
+
+GNOME           Install GNOME desktop environment
+KDE             Install KDE desktop environment
+
+NET             Routing/bridging/firewalling/VPN server
+
+WEBGOAT         Java Servlet server (misnomer since WebGoat is not installed)
+
+OMNI            General-purpose workstation with lots of packages
+
+SLOW            Long pauses before risky operations
+
+NOMBR           OBSOLETE: Install boot loader to root partition, not MBR
+==
+
+GRUB2           Install GRUB2 bootloader
+
+SQBPO           Use kernel from squeeze-backports, nVidia software from testing
+SQUEEZE         Debian 6
+WHEEZY          Debian 7
+
+* suffix is "S" for SERVER, "W2" for ECE_DISK2, "W" for all others
+TINY*           10 GB <= disk < 35 GB
+SMALL*          35 GB <= disk < 70 GB without RAID
+MEDIUM*         70 GB <= disk < 500 GB without RAID
+RAID1S*         35 GB <= disk < 70 GB with RAID
+RAID1M*         70 GB <= disk < 500 GB with RAID
+HUGE            500 GB <= disk, not ECE_DISK2
+HUGE2           ECE_DISK2 with 500 GB <= disk
+
+HP_ILO          HP Integrated Lights-Out Management present
+HP_ILO_REV1      ... rev 1
+HP_ILO_REV3      ... rev 3
+HP_ILO_REV4      ... rev 4
+
+MPT_SCSI        SCSI card present: LSI Logic Fusion-MPT
+AIC79XX         Hardware RAID card present: Adaptec AIC-79XX
+
+LAST            The last class of every FAI invocation
+
+# vim: tw=78 sw=4 et:

@@ -1,0 +1,223 @@
+Using Git to Manage the FAI Configuration Space
+===============================================
+
+We use Git to version-control and distribute the FAI configuration space to
+the clients.  One advantage of Git, as a distributed version-control system,
+is that it allows the repository to be branched and merged conveniently, so
+that changes can be tested before being merged into the canonical
+configuration.  Furthermore, multiple people can easily try different variants
+of the configuration simultaneously.
+
+Because Git is a distributed version-control system, it can be confusing to
+keep track of all the steps necessary to make a change.  The central Git
+repository for ECE's FAI configuration is hosted on the dev.ece.ubc.ca server.
+To edit the configuration, you must first clone the repository into a local
+repository.  After you edit some files in your local repository, you can commit
+your changes.  (Git has a two-stage commit process, in which you first mark
+which changes you want to include in your commit by adding them to the index.)
+However, for your changes to take effect (either for testing or production),
+your commits must be pushed back into the central repository.
+
+To start, you must first register your SSH public key for use with the
+repository (submit a help ticket!).  Once the key is registered, you can clone
+the repository using the git+ssh protocol to any machine that has Git
+installed:
+
+    1 $ git clone git@dev.ece.ubc.ca:fai-config
+    2 $ cd fai-config
+
+The steps above will check out the "master" branch, which is the canonical
+configuration.  You should probably create a personal branch for
+experimentation instead of working directly on the master branch:
+
+    3 $ git checkout -b lucaf/test1
+
+"lucaf" is a placeholder for your username, and "test1" can be any name you
+choose for your personal branch.
+
+
+Security Notice
+===============
+
+Please keep in mind that the entire Git repository is Internet accessible
+(read-only over HTTP) with no authentication.  (It has to be that way, since
+when FAI first tries to fetch its configuration, all it knows is the
+repository's URL.)  Any secret information, especially passwords and private
+keys, should be kept out of the repository, and should probably be handled
+using the FAI key exchange web server or CFengine instead.
+
+If you ever accidentally push files containing secret information onto the Git
+server, the secret should be considered compromised and remedial steps should
+be taken.  It would also be a good idea to expunge it from the version-control
+history using `git rebase`.
+
+
+About These Instructions
+========================
+
+These instructions are written for Git 1.7.  Older and newer releases of Git
+should interoperate well with our Git repository on dev.ece.ubc.ca, since Git
+data structures and protocols are stable and well defined.  However, the
+command-line tools' arguments and outputs may vary from version to version;
+the Git commands tend to become more user-friendly with newer releases.
+
+
+Making Changes to Your Personal Branch
+======================================
+
+First, confirm that you are working on your personal branch, indicated by an
+asterisk (and if not, use `git checkout` to checkout the right branch):
+
+    4 $ git branch
+      * lucaf/test1
+        master
+
+Next, you can edit a few files.
+
+    5 $ vi class/50-host-classes
+    6 $ vi files/etc/network/interfaces/bofh
+
+You can review your work to see what changed.
+
+    7 $ git status
+      # On branch lucaf/test1
+      # Changed but not updated:
+      #   (use "git add <file>..." to update what will be committed)
+      #   (use "git checkout -- <file>..." to discard changes in working directory)
+      #
+      #       modified:   class/50-host-classes
+      #       modified:   files/etc/network/interfaces/bofh
+      #
+      no changes added to commit (use "git add" and/or "git commit -a")
+    8 $ git diff
+      [Diff output...]
+
+When you are satisfied, you can commit your changes.  Creating a commit in Git
+involves two steps: adding your changes to the "index", which serves as a
+staging area, and commiting the index.  (This design sounds cumbersome, but it
+is helpful to power users, who have a habit of editing many unrelated things
+at once, but often want to commit some of the outstanding edits.)
+
+    6 $ git add class/50-host-classes files/etc/network/interfaces/bofh
+    7 $ git status
+      # On branch lucaf/test1
+      # Changes to be committed:
+      #   (use "git reset HEAD <file>..." to unstage)
+      #
+      #       modified:   class/50-host-classes
+      #       modified:   files/etc/network/interfaces/bofh
+      #
+    8 $ git diff --cached
+      [Diff output showing what will be committed...]
+    9 $ git diff
+      [Empty, since no unstaged changes remain]
+   10 $ git commit
+      [Type your brief and full commit messages in the editor...]
+
+When composing your commit message, it is customary to enter a brief
+description (of up to 50 characters) on the first line, followed by an empty
+line, followed by a full description of any length (wrapped at 72 characters
+per line).
+
+Of course, commands 6 and 10 above are the only essential ones.  You can
+combine the two into `git commit -a`, as suggested in the output of command 7;
+this tells git to commit all changes to files that is already tracking.  (You
+still have to `git add` new files that are not yet under version control.)
+
+Now, although you have created a commit, the commit only exists in your local
+repository.  To upload your local commits to the central repository on
+dev.ece.ubc.ca (known as the "remote repository" in Git terminology), you have
+to run:
+
+  11a $ git push
+  11b $ git push --mirror
+  11c $ git push origin lucaf/test1
+
+In routine use, `git push` suffices.  However, the first time you push to a
+new branch on the remote server, you'll need command 11b or 11c to create the
+remote branch.
+
+Changes on your branch will be pushed to the correspondingly named branch on
+the remote repository.
+
+The FAI client, as well as other IT staff, will only see the commits that
+exist in the central repository.  Therefore, you must remember to run `git
+push` before you can test your changes.
+
+
+Testing FAI
+===========
+
+Once you have pushed your changes into the central repository, you can try
+running FAI with your new configuration.  See running.txt for instructions.
+
+
+Refining Your Work
+==================
+
+You can refine your work by committing and pushing further changes.
+
+You also have the option to amend commits on your personal branch; this lets
+you correct mistakes without cluttering up the revision history.  To amend the
+most recent commit, for example:
+
+   12 $ vi files/etc/network/interfaces/bofh
+   13 $ git add files/etc/network/interfaces/bofh
+   14 $ git commit --amend
+
+Remember, you still need to push the amended commit to the remote repository
+for it to take effect.  However, `git push` will fail, since the amended
+commit conflicts with the one you already pushed in command 11.  To overwrite
+the remote branch with the amended history:
+
+   15 $ git push -f
+
+It is also possible to amend commits that occurred before the most recent one,
+using `git rebase -i`.  The exact instructions for doing that are beyond the
+scope of this basic tutorial.
+
+
+Merging Your Changes Into the Master Branch
+===========================================
+
+Once your changes have been thoroughly tested, it is time to merge them back
+into the master branch so that they will become part of the standard FAI
+configuration.  Switch to the master branch and pull in any changes that other
+users may have pushed into the remote master branch.
+
+   16 $ git checkout master
+   17 $ git pull
+
+Let's view the commits that exist in your personal branch that are not in the
+master branch:
+
+   18 $ git log --oneline master..lucaf/test1
+      aa12345 Reclassified a few hosts
+      babecaf Added the helloworld package to the OMNI class
+      feedfac Added configuration for bofh
+
+You can cherry-pick a specific commit into the master branch:
+
+   19 $ git cherry-pick babecaf
+
+Or, you can merge all commits on your personal branch into master:
+
+   20 $ git merge lucaf/test1
+
+If a conflict exists between others' changes that were pulled into the master
+branch in step 11 and your own changes, you will be told to resolve the
+conflict.  Use `git status` to see which files conflict, edit the conflicting
+files, run `git add` to mark the files as resolved, and run `git commit` to
+proceed.  See git-merge(1) and git-mergetool(1) for details.
+
+
+Dealing With Other People's Changes
+===================================
+
+TODO: git pull.  git rebase.  git push -f.  How to delete your branch.
+
+Personal branches are rewindable; the master branch is not.  You may rebase
+your personal branch at will.  You should never rebase master, since you would
+not be allowed to push a rebased master branch to the Git server.
+
+# vim: tw=78:
