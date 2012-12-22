@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -d /proc/vz -a ! -f /proc/vz/version ]; then
     echo "VZ_CONTAINER"
