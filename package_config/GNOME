@@ -1,0 +1,49 @@
+# To avoid unpleasantness install nvidia-kernel modules before nvidia-glx.
+# "install" is an alias for apt-get. apt-get's are done before aptitude's (see
+# /usr/sbin/install_packages)
+
+###PACKAGES install AMD64
+###nvidia-kernel-2.6-amd64
+
+###PACKAGES install I386
+###nvidia-kernel-2.6-686
+
+PACKAGES install SQBPO
+nvidia-glx/testing
+nvidia-glx-ia32/testing
+nvidia-vdpau-driver-ia32/testing
+libgl1-nvidia-glx-ia32/testing
+nvidia-settings/testing
+nvidia-xconfig/testing
+
+
+PACKAGES aptitude
+compiz
+gnome-desktop-environment
+gnumeric
+icedove
+iceweasel
+gdm3
+menu
+#### nvidia-kernel-2.6-686 must be installed before nvidia-glx or unwanted
+#### linux-image- packages are installed.
+###nvidia-glx
+###nvidia-glx-dev
+###nvidia-settings
+###nvidia-xconfig
+nvidia-glx
+nvidia-glx-ia32
+nvidia-vdpau-driver-ia32
+libgl1-nvidia-glx-ia32
+nvidia-settings
+nvidia-xconfig
+synaptic
+xorg xserver-xorg-video-all xserver-xorg-input-all 
+ttf-freefont
+# 2010-08-18 ChrisD. The next two packages expand the scope of properly displayed Chinese characters.
+ttf-arphic-ukai
+ttf-arphic-uming
+xterm
+
+###PACKAGES aptitude AMD64
+###nvidia-glx-ia32

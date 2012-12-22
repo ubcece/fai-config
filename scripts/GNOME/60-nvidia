@@ -1,0 +1,91 @@
+#!/bin/bash
+
+! ifclass SQUEEZE && exit 0
+
+# 2011-03-01 Chris Dumont. 
+
+chroot $target update-pciids >/dev/null 2>/dev/null
+
+/usr/bin/lspci | grep VGA | grep -q -i nVidia
+if [ $? -ne 0 ]; then
+	echo "Not an Nvidia video card."
+        exit 0
+fi
+
+ARCH=`dpkg --print-architecture`
+
+#fcopy -iBM /etc/X11/xorg.conf
+
+[ "$target" == "" ] && target="/"
+NVINST="runonce_nvidxorg.sh"
+
+cat <<EOF > $target/etc/init.d/$NVINST
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          nvidia_xconfig
+# Required-Start:    \$local_fs \$syslog
+# Required-Stop:     \$local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Runs nvidia-xconfig after OS install.
+# Description:       Runs nvidia-xconfig after OS install. This script
+#                    erases itself.
+### END INIT INFO
+
+set -e
+iam=$NVINST
+touch /root/\${iam}_no_success
+
+[ "\$1" != "start" ] && exit 0
+
+echo "Configuring X11 to use the Nvidia video card. "
+
+# FIXME: does this script interfere with runonce.sh (cfengine) which can run concurrently? 
+
+KVERS=\`uname -r\`
+case "\$KVERS" in
+  2.6.38-bpo.2-amd64)
+	  echo "deb http://mirrors.ece.ubc.ca/debian sid main contrib non-free" >> /etc/apt/sources.list
+	  apt-get -qq update
+	  apt-get -qq -y install  linux-headers-2.6.38-bpo.2-all-amd64 nvidia-kernel-dkms/unstable
+	  LIST="
+	  glx-alternative-mesa/unstable
+	  glx-alternative-nvidia/unstable
+	  glx-diversions/unstable
+	  libgl1-nvidia-alternatives/unstable
+	  libgl1-nvidia-glx/unstable
+	  libgl1-nvidia-glx-ia32/unstable
+	  libglx-nvidia-alternatives/unstable
+	  multiarch-support/unstable
+	  nvidia-alternative/unstable
+	  nvidia-glx/unstable
+	  nvidia-glx-ia32/unstable
+	  nvidia-support/unstable
+	  nvidia-vdpau-driver/unstable
+	  xserver-xorg-video-nvidia/unstable"
+	  apt-get -qq -y  install \$LIST
+  ;;
+  2.6.32*)
+    :
+  ;;
+  *)
+    echo "Don't know how to get nvidia and \$KVERS to work together. Pausing."
+    sleep 3600
+  ;;
+esac
+nvidia-xconfig -s 2>/dev/null # Complains but doesn't return an error.
+perl -p -i -e "s/HorizSync[[:space:]]+28.0 - 33.0/HorizSync       28.0 - 73.0/" /etc/X11/xorg.conf
+/etc/init.d/gdm3 restart
+insserv -r \${iam}
+rm -f /etc/init.d/\${iam}
+touch /root/\${iam}_success
+rm -f /root/\${iam}_no_success
+echo "Done."
+
+EOF
+
+chmod +x $target/etc/init.d/$NVINST
+$ROOTCMD insserv -d $NVINST
+
+#vim: set ts=2 sw=2 et paste :

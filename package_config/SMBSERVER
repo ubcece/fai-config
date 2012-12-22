@@ -1,0 +1,16 @@
+PACKAGES aptitude
+# ChrisD says: packages with a trailing "-" are removed.
+
+ncdu
+pwcplxchk
+samba
+samba-common-bin
+samba-dbg
+samba-doc
+samba-doc-pdf
+smbc
+smbclient
+ldaputils
+libio-socket-ssl-perl
+libnet-libidn-perl
+libnet-ssleay-perl

@@ -1,0 +1,36 @@
+#!/bin/bash
+# 2008-02-20 Chris Dumont. zark4 has an NFS export.
+
+mkdir -p $target/data/home
+fcopy -Bm root,root,0600 /etc/ferm/ferm.conf
+cat << EOF > $target/etc/exports 
+/data/home  embd-bradq(rw,sync,root_squash,no_subtree_check)  fpga2(rw,sync,root_squash,no_subtree_check)
+EOF
+cat << EOF > $target/etc/default/nfs-common
+# 2007-10-26 Chris Dumont. Need idmapd; 2009-06-23 roozbeh: added STATDOPTS for given ports
+STATDOPTS="--port 32765 --outgoing-port 32766"
+NEED_LOCKD=
+NEED_IDMAPD=yes
+NEED_GSSD=
+EOF
+cat << EOF > $target/etc/default/nfs-kernel-server
+# Number of servers to start up
+RPCNFSDCOUNT=8
+
+# Runtime priority of server (see nice(1))
+RPCNFSDPRIORITY=0
+
+# Options for rpc.mountd.
+# If you have a port-based firewall, you might want to set up
+# a fixed port here using the --port option. For more information, 
+# see rpc.mountd(8) or http://wiki.debian.org/?SecuringNFS
+# 2009-06-23 roozbeh set the port number to use with firewall
+RPCMOUNTDOPTS="-p 32767"
+
+# Do you want to start the svcgssd daemon? It is only required for Kerberos
+# exports. Valid alternatives are "yes" and "no"; the default is "no".
+NEED_SVCGSSD=
+
+# Options for rpc.svcgssd.
+RPCSVCGSSDOPTS=
+EOF

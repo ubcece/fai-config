@@ -1,0 +1,30 @@
+# List of hosts for which we want Squeeze Backport. As of 2011-05-10 a backport
+# kernel is necessary for hardware too new for the 2.6.32 kernel. OTOH, since
+# the backports repository is missing a few packages I don't want to use 2.6.38
+# everywhere, yet.
+#
+# One hostname per line and they must be bare (no comment, no whitespace).
+hct1
+lampe7
+lampe8
+karthik-pc04
+karthik-pc05
+karthik-pc06
+mesbah-pc01
+mesbah-pc02
+mesbah-pc03
+mesbah-pc04
+photonics
+vleung11
+vleung12
+vleung13
+vleung14
+vleung15
+vleung16
+vleung17
+vleung18
+vleung19
+vleung20
+vleung21
+vleung22
+vwong-pc05

@@ -1,0 +1,18 @@
+#!/bin/bash
+# 2007-09-13 Chris Dumont
+
+# [ -f /.THIS_IS_THE_FAI_NFSROOT ] || target="/" 
+cd $target
+[ -d data ] || mkdir data
+
+if ifclass VZ_CONTAINER; then
+    chmod 1777 data
+elif [ "$FAI_ACTION" = dirinstall ]; then
+    : # Nothing to do
+elif /bin/mount | /usr/bin/awk '$3 ~ /\/data/ { M=1 } END { exit !M }'; then
+    chmod 1777 data
+    touch data/.FAI_DONT_OVERWRITE_THIS_PARTITION
+else
+    echo "$0: Hmmm. target:/data isn't mounted."
+    exit 1
+fi

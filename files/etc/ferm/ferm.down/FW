@@ -1,0 +1,9 @@
+# $Header: /etc/ferm/RCS/ferm.down,v 1.2 2007/11/08 18:20:34 root Exp $
+# vim: filetype=sh ts=2 sw=2 et:
+
+#option iptables
+#option automod
+#option clearall       #must be after "option iptables"
+#option createchains
+
+chain forward policy deny;

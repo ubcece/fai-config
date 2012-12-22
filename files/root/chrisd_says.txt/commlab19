@@ -1,0 +1,2 @@
+the "ati" driver for xorg doesn't work. "radeon" does but is limited in
+performance. "fglrx" is best. Do something like "m-a a-i fglrx-kernel" and edit xorg.conf

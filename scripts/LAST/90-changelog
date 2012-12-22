@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cat <<-EOF >>$target/root/LOG
+# vim: set filetype=changelog ts=2 sw=2 et paste fdm=indent:
+
+* `hostname` is located in (Fill this in) and performs the following functions:
+  * (Fill this in)
+
+`TZ=America/Vancouver date +%Y-%m-%d` Fully Automatic Installation <root@ece.ubc.ca>
+  * Installed
+EOF
+

@@ -1,0 +1,11 @@
+# /etc/network/interfaces
+# vim: set ts=2 sw=2 et si:
+# 2009-02-13 Chris Dumont. xflex1 is an IBM blade (in fact bc1-n14).
+# NIC1 is detected as eth0 and is connected to bc1 switch2 (Nortel/Alteon).
+# NIC2 is detected as eth1 and is connected to bc1 switch1 (IBM).
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp

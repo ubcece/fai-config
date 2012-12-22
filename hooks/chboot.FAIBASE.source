@@ -1,0 +1,3 @@
+# Chris Dumont 2007-06-20. Because fai can't find this when pxelinux.cfg/xxx:
+# ip=dhcp is used.
+SERVER=huey.ece.ubc.ca

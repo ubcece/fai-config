@@ -1,0 +1,10 @@
+# /etc/apt/sources.list $Rev: 938 $
+
+deb http://mirrors.ece.ubc.ca/debian            squeeze           main contrib non-free
+deb http://mirrors.ece.ubc.ca/debian            squeeze-updates   main contrib non-free
+deb http://mirrors.ece.ubc.ca/debian-security   squeeze/updates   main contrib non-free
+deb http://mirrors.ece.ubc.ca/debian-multimedia squeeze           main         non-free
+deb http://mirrors.ece.ubc.ca/debian-backports  squeeze-backports main contrib non-free
+deb http://mirrors.ece.ubc.ca/ubc-ece           squeeze           main contrib non-free
+deb http://download.virtualbox.org/virtualbox/debian squeeze           contrib non-free
+

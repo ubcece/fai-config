@@ -1,0 +1,14 @@
+#!/bin/bash
+
+function rebase_and_symlink() {
+    base="$1"
+    path="$2"
+    if [ ! -e "$target$base$path" ]; then
+        ( cd "$target" && tar cf - "./$path" ) | ( cd "$target$base" && tar xvpf - ) &&
+        rm -rf "$target$path"
+    fi
+    rm -rf "$target$path" && ln -s "$base$path" "$target$path"
+}
+
+rebase_and_symlink /data /var/lib/mysql
+rebase_and_symlink /data /var/lib/postgresql

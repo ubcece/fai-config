@@ -1,0 +1,18 @@
+# 2012-10-30 Chris Dumont. Custom for g32
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto eth0
+iface eth0 inet dhcp
+
+# The internal cluster interface
+auto eth1
+iface eth1 inet static
+        address 10.0.1.17
+        netmask 255.0.0.0
+        network 10.0.0.0
+        broadcast 10.255.255.255
+

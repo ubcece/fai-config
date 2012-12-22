@@ -1,0 +1,4 @@
+# 2010-06-01 Chris Dumont. This is workaround for a well-known bug to do with
+# tg3 and broadcom which is still not fixed in available Debian kernels.
+broadcom
+tg3

@@ -1,0 +1,22 @@
+#!/bin/sh
+# Add classes for special hardware.
+
+lspci | while read slot desc ; do
+    case "$desc" in
+      "System peripheral: Compaq Computer Corporation Integrated Lights Out Controller (rev 01)")
+        echo "HP_ILO HP_ILO_REV1 "
+        ;;
+      "System peripheral: Compaq Computer Corporation Integrated Lights Out Controller (rev 03)")
+        echo "HP_ILO HP_ILO_REV3 "
+        ;;
+      "System peripheral: Hewlett-Packard Company iLO3 Management Processor Support and Messaging (rev 04)")
+        echo "HP_ILO HP_ILO_REV4 "
+        ;;
+      "SCSI storage controller: LSI Logic / Symbios Logic 53c1030 PCI-X Fusion-MPT"*)
+	echo "MPT_SCSI"
+	;;
+      *"Adaptec AIC-79"*)
+	echo "AIC79XX"
+	;;
+    esac
+done

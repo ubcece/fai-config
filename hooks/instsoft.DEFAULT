@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# 2011-11-10 Derek Poon <derekp@ece.ubc.ca>
+# task_setup() sets the clock from a time server, but does not commit it to
+# the hardware clock, so after rebooting, it can forget the time and cause
+# cfengine to fail.  Therefore, we write to the hardware clock in the hook
+# for the instsoft task, which runs after the setup task, but does not run
+# in rescue mode.
+/sbin/hwclock --systohc

@@ -1,0 +1,6 @@
+#!/bin/bash
+# 2009-05-20 ChrisD.
+
+fcopy -BM /etc/initramfs-tools/modules
+chroot /target/ update-initramfs -u -k all
+

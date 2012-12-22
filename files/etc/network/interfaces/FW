@@ -1,0 +1,383 @@
+# 2007-09-13 Chris Dumont. bar a.k.a. bar-setup, a Rackable Systems box, has
+# two built-in and two add-in ethernet interfaces. Bar-setup will soon
+# (2008-11-10?) be renamed to bar and in production. This file mostly ripped
+# from original bar.
+
+auto lo
+iface lo inet loopback
+  up ferm /etc/ferm/ferm.up
+  up  ebtables -P FORWARD DROP
+  up  ebtables -F FORWARD
+  up  ebtables -A FORWARD -p IPv4 -j ACCEPT
+  up  ebtables -A FORWARD -p ARP -j ACCEPT
+
+# eth0 - Intel EtherExpress Pro/1000 LX (PCI/X)
+# sniffs world-side traffic
+auto eth0
+iface eth0 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  up ip addr del 169.254.1.1/16 dev eth0
+
+# eth1 - builtin TX Gb interface. Stickered as NIC2. Connected to m324a-sw02:5/19. Unused.
+#auto eth1
+#iface eth1 inet static
+
+# eth2 - Intel EtherExpress Pro/1000 SX (PCI/X)
+# sniffs ECE-side traffic
+auto eth2
+iface eth2 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  up ip addr del 169.254.1.1/16 dev eth2
+
+# eth3 - built-in 100Mb interface. Stickered as NIC1. Connected to m324a-sw02:5/23. Service interface. 
+auto eth3
+iface eth3 inet static
+  address 137.82.52.13
+  netmask 255.255.255.0
+  network 137.82.52.0
+  broadcast 137.82.52.255
+  gateway 137.82.52.254
+  dns-nameservers 137.82.52.165 137.82.52.170
+  dns-search ece.ubc.ca
+
+iface eth0.83 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.83
+
+iface eth2.83 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.83
+
+iface eth0.217 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.217
+
+iface eth2.217 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.217
+
+iface eth0.218 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.218
+
+iface eth2.218 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.218
+
+iface eth0.219 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.219
+
+iface eth2.219 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.219
+
+iface eth0.220 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.220
+
+iface eth2.220 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.220
+
+iface eth0.224 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.224
+
+iface eth2.224 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.224
+
+iface eth0.1000 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.1000
+
+iface eth2.1000 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.1000
+
+iface eth0.1396 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.1396
+
+iface eth2.1396 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.1396
+
+iface eth0.1500 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.1500
+
+iface eth2.1500 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.1500
+
+iface eth0.1894 inet static
+  vlan_raw_device eth0
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth0.1894
+
+iface eth2.1894 inet static
+  vlan_raw_device eth2
+  address 169.254.1.1
+  netmask 255.255.0.0
+  accept_source_route 0
+  accept_redirects 0
+  arp_filter 1
+  log_martians 1
+  proxy_arp 1
+  rp_filter 1
+  up ip addr del 169.254.1.1/16 dev eth2.1894
+
+auto br83
+iface br83 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.83 eth2.83
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br83
+
+auto br217
+iface br217 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.217 eth2.217
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br217
+
+auto br218
+iface br218 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.218 eth2.218
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br218
+
+auto br219
+iface br219 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.219 eth2.219
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br219
+
+auto br220
+iface br220 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.220 eth2.220
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br220
+
+auto br224
+iface br224 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.224 eth2.224
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br224
+
+auto br1000
+iface br1000 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.1000 eth2.1000
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br1000
+
+auto br1396
+iface br1396 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.1396 eth2.1396
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br1396
+
+auto br1500
+iface br1500 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.1500 eth2.1500
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br1500
+
+auto br1894
+iface br1894 inet static
+  address 169.254.1.1
+  netmask 255.255.0.0
+  bridge_ports eth0.1894 eth2.1894
+  bridge_stp 0
+  bridge_fd 0
+  bridge_hello 0
+  up ip addr del 169.254.1.1/16 dev br1894

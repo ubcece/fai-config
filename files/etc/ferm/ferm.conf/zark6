@@ -1,0 +1,63 @@
+#
+# -*- shell-script -*-
+#
+#  Configuration file for ferm(1).
+# 2009-06-23: roozbeh, allowing NFS mounts via given ports; only for /data/home temporary
+
+table filter {
+    chain INPUT {
+        policy DROP;
+
+        # connection tracking
+        mod state state INVALID DROP;
+        mod state state (ESTABLISHED RELATED) ACCEPT;
+
+        # allow local packages
+        interface lo ACCEPT;
+
+        # respond to ping, but limit that
+        proto icmp ACCEPT; 
+
+        # allow IPsec
+        proto udp dport 500 ACCEPT;
+        proto (esp ah) ACCEPT;
+
+     # allow nfs-clients to connect.
+       proto tcp dport ( nfs sunrpc 32764:32767 ) ACCEPT;
+       proto udp {
+         # allow nfs-clients to connect.
+	 ACCEPT dport ( nfs sunrpc 32764:32767 );
+	}
+    
+        # allow SSH connections
+        proto tcp dport ssh ACCEPT;
+
+        # allow cfengine connections
+        proto tcp saddr huey.ece.ubc.ca dport cfengine ACCEPT;
+     }
+    chain OUTPUT {
+        policy ACCEPT;
+
+        # connection tracking
+        #mod state state INVALID DROP;
+        mod state state (ESTABLISHED RELATED) ACCEPT;
+    }
+    chain FORWARD {
+        policy DROP;
+
+        # connection tracking
+        mod state state INVALID DROP;
+        mod state state (ESTABLISHED RELATED) ACCEPT;
+    }
+}
+
+# IPv6:
+#domain ip6 {
+#    table filter {
+#        chain INPUT {
+#            policy ACCEPT;
+#            # ...
+#        }
+#        # ...
+#    }
+#}

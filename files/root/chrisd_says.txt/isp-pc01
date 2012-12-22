@@ -1,0 +1,4 @@
+2008-02-15 Chris Dumont
+Since isp-pc01 has to use a legacy disk partitioning scheme FAI will likely get
+/boot/grub/menu.lst wrong. Manually change root (hd0,4) to root (hd0,1)
+

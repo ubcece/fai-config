@@ -1,0 +1,24 @@
+#!/bin/bash
+# 2010-12-16 Chris Dumont. Attempt to relieve laptop-style disks from excessive
+# wear. See for instance: http://ubuntuforums.org/showthread.php?t=591503. This
+# is a very thorny problem and this script may very well not fix the problem. 
+# For ECE this problem primarily affects BladeCenter hosts.
+
+[ "$target" == "" ] && target="/"
+
+# FIXME: Is Load_Cycle_Count a reliable indicator?
+smartctl -a /dev/sda | grep -q Load_Cycle_Count || exit 0
+
+# As of 2.6.32 (and sometime earlier) the first and likely only disk is sda.
+# hda no longer exists.
+# FIXME: Is 254 correct for all situations? Some people don't think so.
+cat <<EOF > ${target}/etc/hdparm.conf
+# 2010-12-16 Chris Dumont. From ...fai/config/scripts/FAIBASE/60-hdparm
+/dev/sda {
+	apm = 254
+}
+
+EOF
+
+exit 0
+

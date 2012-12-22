@@ -1,0 +1,14 @@
+#!/bin/bash
+
+fcopy -BM /root/WebGoat-5.2.war
+fcopy -Bm root,root,0600  /etc/tomcat5.5/tomcat-users.xml
+fcopy -BM /usr/share/tomcat5.5/common/classes/log4j.properties
+fcopy -BM   /etc/default/tomcat5.5
+fcopy -Bm root,root,0600  /etc/monit/monitrc
+fcopy -BM   /etc/default/monit
+set -e
+cd $target/usr/share/tomcat5.5/common/lib
+ln -s ../../../java/commons-logging.jar
+ln -s ../../../java/log4j-1.2.jar
+cd $target/root
+ln -s WebGoat-5.2.war WebGoat.war

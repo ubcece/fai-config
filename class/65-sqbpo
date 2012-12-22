@@ -1,0 +1,12 @@
+#! /bin/bash
+# 2011-05-10 Chris Dumont. 
+# At this time this class is only used for additional packages. This may change
+# to include scripts to install, e.g., nvidia differently.
+
+sqbpolist=$FAI/class/sqbpo
+
+[ -r $sqbpolist ] || ( "ERROR: .../class/sqbpo not readable" ; exec bash -i )
+
+if grep -q "^${HOSTNAME}$" $sqbpolist ; then
+	echo "SQBPO "
+fi

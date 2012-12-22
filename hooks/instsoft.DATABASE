@@ -1,0 +1,19 @@
+#!/bin/bash
+# 2009-10-02 Derek Poon <derekp@ece.ubc.ca>
+# Ensure that mysql and postgres UIDs and GIDs are consistent across
+# installations
+
+cat <<PASSWD >> $target/etc/passwd
+postgres:x:99:99:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+mysql:x:98:98:MySQL Server,,,:/var/lib/mysql:/bin/false
+PASSWD
+
+cat <<SHADOW >> $target/etc/shadow
+postgres:*:14520:0:99999:7:::
+mysql:*:14520:0:99999:7:::
+SHADOW
+
+cat <<GROUP >> $target/etc/group
+postgres:x:99:
+mysql:x:98:
+GROUP

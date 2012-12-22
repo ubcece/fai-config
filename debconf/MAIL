@@ -1,0 +1,3 @@
+apache          apache/init                         boolean false
+courier-base    courier-base/webadmin-configmode    boolean true
+ilohamail       ilohamail/webserver_type            select Other

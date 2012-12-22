@@ -1,0 +1,3 @@
+# 2010-09-08 ChrisD. For rschober01 (and others). The broadcom module isn't being included by default.
+# Additionally, it needs to be loaded before tg3 is loaded.
+broadcom

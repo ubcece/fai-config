@@ -1,0 +1,11 @@
+#!/bin/bash
+# 2008-02-20 Chris Dumont. zark4 has an NFS export.
+
+mkdir -p $target/disk/hdb1
+mkdir -p $target/exports/scr1
+ainsl $target/etc/fstab "# Next two lines FAI-generated. Modify at your peril."
+ainsl $target/etc/fstab "/dev/hdb1 /disk/hdb1 ext3 rw 0 0"
+ainsl $target/etc/fstab "/disk/hdb1/scr1 /exports/scr1 none rw,bind 0 0"
+cat << EOF > $target/etc/exports 
+/exports/scr1      @ee(rw,sync) pink(rw,sync)
+EOF

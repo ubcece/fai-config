@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Removing /etc/nologin"
+rm -f $target/etc/nologin

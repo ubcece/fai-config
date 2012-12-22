@@ -1,0 +1,3 @@
+autocmd BufRead,BufNewFile *.csv  setfiletype csv
+autocmd BufRead,BufNewFile *.haml setfiletype haml
+autocmd BufRead,BufNewFile *.tt2  setfiletype tt2

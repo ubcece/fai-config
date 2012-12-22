@@ -1,0 +1,29 @@
+# /etc/network/interfaces
+
+auto lo
+iface lo inet loopback
+
+auto vmbr0
+iface vmbr0 inet dhcp
+	bridge_ports eth0
+	bridge_stp 0
+	bridge_fd 0
+	bridge_hello 0
+
+auto vmbr1388
+iface vmbr1388 inet manual
+	bridge_ports eth0.1388
+	bridge_stp off
+	bridge_fd 0
+
+auto vmbr1891
+iface vmbr1891 inet manual
+	bridge_ports eth0.1891
+	bridge_stp off
+	bridge_fd 0
+
+auto vmbr1893
+iface vmbr1893 inet manual
+	bridge_ports eth0.1893
+	bridge_stp off
+	bridge_fd 0

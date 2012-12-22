@@ -1,0 +1,10 @@
+# custom for isp-pc01
+
+disk_config disk1
+primary  -	preserve1
+# sda2 was the legacy /boot but is now unused.
+primary  -	preserve2
+logical  /	12393-12395 rw,errors=remount-ro ; -m 5 -j ext3
+logical  swap	956-958     rw                   
+logical  /var	1827-1829   rw                   ; -m 5 -j ext3
+

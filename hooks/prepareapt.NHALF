@@ -1,0 +1,4 @@
+#!/bin/bash
+# 2009-03-04 Chris Dumont. In the case of (ETCH)NHALF override the cp -r apt/* in task_prepareapt.
+
+fcopy -iBMr /etc/apt/*

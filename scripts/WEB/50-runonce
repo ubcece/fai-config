@@ -1,0 +1,40 @@
+#!/bin/bash
+# Chris Dumont 2007-11-14.
+
+# This runs to completion when in network boot (FAI install?) mode. Creates
+# script to run on first local disk boot which, during successfule execution,
+# erases itself.
+
+if [ "$target" = "" ]; then
+	target="/"
+fi
+cd $target
+
+cat << EOF > root/webrunonce.sh
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:             webrunonce
+# Required-Start:       \$local_fs
+# Required-Stop:        \$local_fs
+# Should-Start:
+# Should-Stop:
+# Default-Start:        2
+# Default-Stop:         0 1 6
+# Short-Description:    Post-FAI script
+# Description:          Post-FAI script
+### END INIT INFO
+
+if [ -s /etc/apt/apt.conf.d/10fai ]; then
+    rm -f /etc/apt/apt.conf.d/10fai
+fi
+if [ \$? -eq 0 ]; then
+    touch /root/webrunonce_success
+    rm -f /root/webrunonce_no_success /root/webrunonce.sh
+else
+    touch /root/webrunonce_no_success
+fi
+rm -f /etc/rc2.d/S19zwebrunonce
+EOF
+chmod +x root/webrunonce.sh
+ln -sf /root/webrunonce.sh etc/rc2.d/S19zwebrunonce
+

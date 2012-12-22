@@ -1,0 +1,29 @@
+#!/bin/bash
+# 2009-03-05 Chris Dumont.
+# fai-server:/srv/fai/config/scripts/OMNI/80-maple-installer.
+
+
+if [ "$target" = "" ]; then
+  target="/"
+fi
+
+# idempotency!
+rm -rf $target/data/maple12/
+mkdir -p $target/usr/local/bin
+
+if [ ! -d $target/mnt/huey/exports/ ] || [ ! -r $target/mnt/huey/exports/maple/Maple12_i386.tgz ]; then
+	mkdir -p $target/mnt/huey/exports/
+	mount -t nfs4 huey:/ $target/mnt/huey/exports
+fi
+
+cd $target/
+if [ `uname -m` == "i686" ]; then
+	tar -xzf $target/mnt/huey/exports/maple/Maple12_i386.tgz
+elif [ `uname -m` == "x86_64" ]; then
+	tar -xzf $target/mnt/huey/exports/maple/Maple12_amd64.tgz
+else
+	echo "Don't know my own architecture."
+	exit 1
+fi
+umount $target/mnt/huey/exports/
+

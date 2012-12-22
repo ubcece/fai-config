@@ -1,0 +1,15 @@
+# 2007-09-19 Chris Dumont. Sleek, customized for ECE.
+# FAI_DEBMIRROR=yournfs debianmirror:/path/to/debianmirror
+LOGUSER=fai
+FAI_LOGPROTO=ssh
+LOGSERVER="huey.ece.ubc.ca"
+SERVER="huey.ece.ubc.ca"
+FAI_CONFIGDIR=/fai/config  # nfs4 cuts off the leading /exports
+FAI_CONFIG_SRC=nfs://${SERVER}${FAI_CONFIGDIR}
+MNTPOINT=/media/mirror # Unused.
+FAI=/var/lib/fai/config
+romountopt="-t nfs4 -o ro" # 2008-01-04 Unused?
+FAI_HSEXPORTS=/data/host-specific
+
+# This next line is a workaround for IMO a bug in fai-chboot
+NFSROOT=/exports/fai/nfsroot

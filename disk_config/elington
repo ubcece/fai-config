@@ -1,0 +1,12 @@
+# 2010-11-17 Chris Dumont. elington has a small disk so a custom config.
+#
+# 2009-10-06 Chris Dumont. It's strange I haven't run across this bug before
+# today but we need the "bootable:1" option (see man setup-storage) to work
+# around a bug. Hopefully this bug is fixed for Debian Squeeze.
+
+disk_config disk1 bootable:1
+primary  /             12000-12499 ext3 rw,errors=remount-ro
+logical  swap          1000-1100   swap rw
+logical  /var          3000-3999   ext3 rw
+logical  /data         50-         xfs  rw,nosuid
+

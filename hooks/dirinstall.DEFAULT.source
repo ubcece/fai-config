@@ -1,0 +1,61 @@
+#!/bin/bash
+# 2011-05-06 Chris Dumont. Due diligence before dirinstalling.
+# 2012-11-23 Derek Poon.  Skip checks if we are running in an OpenVZ container.
+
+set -e
+
+if ! ifclass VZ_CONTAINER; then
+MSG=$(mktemp /tmp/XXXXXX)
+cat >$MSG <<EOF
+If you're sure you want to wipe the /altroot tree you could copy'n'paste this:
+		rm -rf /altroot/var/*
+		umount /altroot/var
+		rm -rf /altroot/*
+		mkdir /altroot/var
+		mount -a
+EOF
+
+while ! grep -q "^[^#]*[[:space:]]/altroot[[:space:]]" /etc/fstab ; do 
+	echo "/altroot not in /etc/fstab. Will check again in 21s."
+	sleep 21
+done
+
+while ! grep -q "^[^#]*[[:space:]]/altroot/var[[:space:]]" /etc/fstab ; do 
+	echo "/altroot/var not in /etc/fstab. Will check again in 22s."
+	sleep 22
+done
+
+while true; do
+	mount -a || :
+
+	if ! mount | grep -q "[[:space:]]/altroot[[:space:]]" ; then 
+		echo "/altroot not mounted. Will check again in 23s."
+		sleep 23
+		continue
+	fi
+
+	if ! mount | grep -q "[[:space:]]/altroot/var[[:space:]]" ; then
+		echo "/altroot/var not mounted. Will check again in 24s."
+		sleep 24
+		continue
+	fi
+
+	if [ `find /altroot/var | wc -l` -gt 2 ]; then
+		echo "/altroot/var not empty. Will check again in 25s."
+		cat $MSG
+		sleep 25
+		continue
+	fi
+
+	if [ `find /altroot | wc -l` -gt 4 ]; then
+		echo "/altroot not empty. Will check again in 26s."
+		cat $MSG
+		sleep 26
+		continue
+	fi
+	break
+done
+echo "The /altroot tree appears to be mounted and empty. Continuing dirinstall."
+fi
+
+set +e
