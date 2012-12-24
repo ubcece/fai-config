@@ -297,12 +297,6 @@ ece_setup_hook
 # See "FAI and secrets.txt" for extensive background.
 # This script attempts to be idempotent.
 
-# This will skip when called by task_setup (early in the install) but should
-# go ahead when called by LAST/40-ssh (late in the install).
-if mount | grep -q " on ${target} type " || [ "$FAI_ACTION" = "dirinstall" ] && [ "x${NOWLAST}" = "xyes" ] ; then
-    ece_sync_hsfiles_to_target $ECE_PUB_HS_DIRS $ECE_PRIV_HS_DIRS
-fi
-
 ######################################################
 # 2012-02-21 Chris Dumont. This is for fai-client 3.4.7 and 3.4.8. In
 # /usr/lib/fai/subroutines task_setup (line 254?) calls ntpdate which is

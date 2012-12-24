@@ -1,7 +1,0 @@
-#!/bin/bash
-# 2008-02-04 Chris Dumont. "subroutines" deposits various files that the bulk
-# FAI may overwrite. We call it again to restore them to how we want.
-
-NOWLAST=yes
-. /var/lib/fai/config/hooks/subroutines
-
