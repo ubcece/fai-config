@@ -1,0 +1,16 @@
+[0-9][0-9][0-9][0-9]-*.patch
+*.orig
+.*.sw[a-z]
+*~
+*.bak
+*.old
+
+# Mac OS junk...
+._*
+.AppleDouble
+.DS_Store
+.DS_Store?
+.LSOverride
+.Spotlight-V100
+.Trashes
+Icon
