@@ -17,7 +17,7 @@ case $HOSTNAME in
         echo "FAIBASE DHCPC ECE SERVER GNOME KDE OMNI SLOW " ;;
     modigliani)
         # modigliani is not integrated with ECE.
-        echo "FAIBASE DHCPC ECE_DISK2 GNOME KDE OMNI OMNI64" ;;
+        echo "FAIBASE DHCPC ECE_DISK2 GNOME KDE OMNI" ;;
     kakadu|xanadu|[kmx]host*)
         echo "FAIBASE DHCPC ECE SERVER VM_HOST" ;;
 	# LOOKUPSEVER without ECE only applies packages.
@@ -48,7 +48,7 @@ case $HOSTNAME in
     bellini|bigboy|blop|cimarosa|morricone|paganini|respighi|vivaldi) 
         echo "FAIBASE DHCPC " ;;
     nano-mac03)
-        echo "FAIBASE DHCPC ECE ECE_DISK2 GNOME KDE OMNI OMNI64 NOMBR" ;;
+        echo "FAIBASE DHCPC ECE ECE_DISK2 GNOME KDE OMNI NOMBR" ;;
     frink)
         echo "FAIBASE DHCPC ECE GNOME KDE OMNI " ;;
     ibofh|trirotor)
