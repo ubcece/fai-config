@@ -1,0 +1,12 @@
+PACKAGES aptitude
+apache2-mpm-prefork
+fai-server
+git-core
+isc-dhcp-server
+make
+memtest86+
+nfs-kernel-server
+openssh-client
+openssh-server
+syslinux-common
+tftpd-hpa
