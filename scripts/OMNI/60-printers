@@ -1,7 +1,0 @@
-#!/bin/bash
-# 2008-01-31 Chris Dumont. Printer configuration files are available for some clients.
-
-exit 0 # 2008-03-26. printer setup being passed to cfengine.
-
-fcopy -iBM /etc/cups/printers.conf
-# There's a postinst that takes care of ppd files.
