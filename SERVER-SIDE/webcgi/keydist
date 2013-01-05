@@ -1,0 +1,124 @@
+#!/usr/bin/perl
+
+BEGIN {
+    require 'auth';
+};
+use CGI;
+use File::Find;
+use File::Spec;
+use POSIX qw(strftime);
+use Socket;
+use feature qw(say);
+use strict;
+
+use constant MAX_DELAY => 600;
+my $host_specific_file_root = '/var/lib/fai-keydist';
+
+# RFC 2616 Sec 3.3.1
+sub http_time_fmt {
+    my ($time) = @_;
+    strftime('%a, %d %b %Y %H:%M:%S GMT', gmtime($time));
+}
+
+sub serve_manifest {
+    my ($q, $host, $auth) = @_;
+
+    my %files;
+    for my $base (File::Spec->join($host_specific_file_root, $host),
+                  File::Spec->join($host_specific_file_root, 'DEFAULT')) {
+        File::Find::find({ follow => 1, no_chdir => 1, wanted => sub {
+                            if (-f) {
+                                s/^\Q$base\E//;
+                                $files{$_} = 1;
+                            }
+                         }},
+                         $base);
+    }
+
+    my @cookies = (
+        $q->cookie(-name => 'host', -value => $host),
+        $q->cookie(-name => 'auth', -value => $auth),
+    );
+
+    if ($q->Accept('text/html')) {
+        my $make_url;
+        if ($q->path_info eq '') {
+            (my $self_name = $q->script_name) =~ s#.*/##;
+            $make_url = sub { $self_name . shift; };
+        } else {
+            $make_url = sub { substr((shift), 1); };
+        }
+        print $q->header(-cookie => \@cookies),
+              $q->start_html('Host-specific file manifest',
+                             -meta => { robots => 'NOINDEX, FOLLOW' }),
+              (map { $q->a({ href => $make_url->($_) }, $_) . "\n" } sort keys %files),
+              $q->end_html;
+    } else {
+        print $q->header(-type => 'text/plain', -cookie => \@cookies),
+              map { "$_\n" } sort keys %files;
+    }
+}
+
+sub serve_file {
+    my ($q, $host, $path) = @_;
+
+    my $fs_path = File::Spec->join($host_specific_file_root, $host, $path);
+    my $fallback_fs_path = File::Spec->join($host_specific_file_root, 'DEFAULT', $path);
+    if (!-f $fs_path && !-f $fallback_fs_path) {
+        print $q->header(-status => '404 Not Found');
+        return;
+    }
+    unless (open F, '<', $fs_path or open F, '<', $fallback_fs_path) {
+        say STDERR "Could not open $fs_path or $fallback_fs_path: $!";
+        if (!-f $fs_path && !-f $fallback_fs_path) {
+            print $q->header(-status => '404 Not Found');
+        } elsif (!-r $fs_path && !-r $fallback_fs_path) {
+            print $q->header(-status => '403 Forbidden');
+        } else {
+            print $q->header(-status => '500 Internal Server Error');
+        }
+        return;
+    }
+
+    my $mtime = (stat F)[9];
+    local $/ = undef;
+    print $q->header(-type => 'application/octet-stream',
+                     -Content_Length => (-s F),
+                     -Date => http_time_fmt(time),
+                     -Last_Modified => http_time_fmt($mtime)),
+          <F>;
+    close F;
+}
+
+sub cgimain {
+    my ($q) = @_;
+
+    my $auth_param = $q->param('auth') || $q->cookie('auth') || '';
+    my $host = $q->param('host') || $q->cookie('host') || '';
+    my $hash_len = length FAI::ECE::Auth::hash;
+    my ($auth, $time) = ((substr $auth_param, 0, $hash_len), (substr $auth_param, $hash_len));
+
+    if (!FAI::ECE::Auth::verify_hash($auth, $time, $host, MAX_DELAY)) {
+        print $q->header(-status => '401 Unauthorized');
+        return;
+    }
+
+    # TODO: Sanity-check $host and $path
+    my $path = $q->path_info;
+    if ($path eq '' || $path eq '/') {
+        serve_manifest($q, $host, $auth_param);
+    } else {
+        serve_file($q, $host, $path);
+    }
+}
+
+sub main {
+    my @argv = @_;
+    die;
+}
+
+if ($ENV{GATEWAY_INTERFACE} =~ m!^CGI/1!) {
+    cgimain(CGI->new);
+} else {
+    main(@ARGV);
+}

@@ -1,0 +1,79 @@
+#!/usr/bin/perl
+
+BEGIN {
+    require 'auth';
+};
+use CGI;
+use File::Basename qw(basename);
+use File::Path qw(make_path);
+use File::Spec;
+use Socket;
+use feature qw(say);
+use strict;
+
+use constant MAX_DELAY => 7200;
+my $logdir = '/var/log/fai';
+
+sub cgimain {
+    my ($q) = @_;
+
+    my $auth_param = $q->param('auth') || '';
+    my $host = $q->param('host');
+    my $action = $q->param('action') || 'noaction';
+    my $rundate = $q->param('rundate');
+    my $hash_len = length FAI::ECE::Auth::hash;
+    my ($auth, $time) = ((substr $auth_param, 0, $hash_len), (substr $auth_param, $hash_len));
+
+    my $path = $q->path_info;
+
+    unless (# host must follow RFC 1123
+            defined($host)      && $host =~ /^[a-z0-9-]+(?:\.[a-z0-9-]+)*$/ &&
+            # rundate must be yyyymmdd_HHMMSS
+            defined($rundate)   && $rundate =~ /^\d{8}_\d{6}$/ &&
+            defined($action)    && $action =~ /^\w+$/
+           ) {
+        say "Status: 400 Bad Request\r\n";
+        return;
+    }
+    if (!FAI::ECE::Auth::verify_hash($auth, $time, $host, MAX_DELAY)) {
+        say "Status: 401 Unauthorized\r\n";
+        return;
+    }
+
+    my $make_path_err;
+    my $dest_dir = File::Spec->join($logdir, $host, "$action-$rundate");
+    unless (-d $dest_dir or
+            make_path($dest_dir, { mode => 0775, error => \$make_path_err})) {
+        say STDERR "Could not create directory $dest_dir: " .
+                   join("\n", @$make_path_err);
+        say "Status: 500 Internal Server Error\r\n";
+        return;
+    }
+
+    for my $file ($q->upload('file')) {
+        #my $info = $q->uploadInfo($file);
+        my $dest_file = File::Spec->join($dest_dir, basename($file));
+        unless (open (F, '>', $dest_file)) {
+            say STDERR "Could not open $dest_file: $!";
+            say "Status: 500 Internal Server Error\r\n";
+            return;
+        }
+
+        local $/ = undef;
+        my $fh = $file->handle;
+        print F (join '', <$fh>);
+        close F;
+    }
+    say "Status: 204 No Content\r\n";
+}
+
+sub main {
+    my @argv = @_;
+    die;
+}
+
+if ($ENV{GATEWAY_INTERFACE} =~ m!^CGI/1!) {
+    cgimain(CGI->new);
+} else {
+    main(@ARGV);
+}

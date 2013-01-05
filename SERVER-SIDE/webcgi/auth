@@ -1,0 +1,77 @@
+#!/usr/bin/perl
+
+package FAI::ECE::Auth;
+
+use Carp;
+use CGI;
+use Digest::SHA1 qw(sha1_hex);
+use Net::Domain qw(hostfqdn);
+use feature qw(say);
+use strict;
+
+my $host_specific_file_root = '/data/host-specific';
+
+my $host_fqdn = hostfqdn;
+my $secret_file = "$host_specific_file_root/$host_fqdn/etc/ssh/ssh_host_rsa_key";
+open SECRETFILE, '<', $secret_file or die "Could not open $secret_file: $!";
+my $secret = join '', <SECRETFILE>;
+close SECRETFILE;
+
+sub hash {
+    my ($time, $host) = @_;
+    return sha1_hex(sprintf('%s:%s:%s', $time, $secret, $host));
+}
+
+sub generate_hash {
+    my ($host) = @_;
+    my $time = time;
+    my $hash = hash($time, $host);
+    return {
+        auth => $hash,
+        time => $time,
+        host => $host,
+    };
+}
+
+sub verify_hash {
+    my ($auth, $time, $host, $max_delay) = @_;
+    my $hash = hash($time, $host);
+    return (time - $time < $max_delay) && ($hash eq $auth);
+}
+
+sub cgimain {
+    my ($q) = @_;
+
+    my $host = $q->param('host');
+    if (!defined $host || 0 == length $host) {
+        say "Status: 400 Request Error\r\n";
+        say "Content-Type: text/plain";
+        say "Missing host parameter";
+        return;
+    }
+    my $credentials = generate_hash($host);
+
+    say "Content-Type: text/plain\r\n";
+    say $credentials->{auth} . $credentials->{time};
+}
+
+sub main {
+    my @argv = @_;
+    my ($host) = @argv;
+    if (!defined $host || 0 == length $host) {
+        croak "Missing host parameter";
+    }
+
+    my $credentials = generate_hash($host);
+    say $credentials->{auth} . $credentials->{time};
+}
+
+package main;
+
+if (my $running_in_require_context = (caller(0))[7]) {
+    return 1;
+} elsif ($ENV{GATEWAY_INTERFACE} =~ m!^CGI/1!) {
+    FAI::ECE::Auth::cgimain(CGI->new);
+} else {
+    FAI::ECE::Auth::main(@ARGV);
+}

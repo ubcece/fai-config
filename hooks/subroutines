@@ -1,3 +1,5 @@
+# vim: set ts=4 sw=4 et si syntax=bash:
+
 # FAI executes these default tasks in the following order:
 #   confdir     Mount or obtain the $FAI configuration directory
 #   setup       Set clock, define $FAI_FLAGS, start VTs, start sshd
@@ -41,6 +43,174 @@
 # local variables.  The shell functions should be named ece_something() to
 # distinguish them from FAI builtin functions.
 
+######################################################################
+# Override functions in /usr/lib/fai/subroutines
+######################################################################
+
+task_chboot() {
+    echo "Running fai-chboot on server to disable PXE booting for this client"
+    wget -nv -O - --post-data="host=$HOSTNAME.$DOMAIN&auth=$auth" \
+         "https://$SERVER/fai/chboot"
+    if [ $? != 0 ]; then
+        task_error 3
+        echo "WARNING: fai-chboot failed."
+    fi
+}
+
+task_savelog() {
+    mkdir -p $FAI_ROOT/var/lib/{lib,log}/fai
+    fai-savelog -l
+    [ -f $LOGDIR/FAI_CLASSES ] && cp -pu $LOGDIR/FAI_CLASSES $FAI_ROOT/var/lib/fai
+    [ -f $LOGDIR/disk_var.sh ] && cp -pu $LOGDIR/disk_var.sh $FAI_ROOT/var/lib/fai
+    ece_savelog_remote
+}
+
+######################################################################
+# Additional functionality
+######################################################################
+
+# Obtains an auth key for FAI by authenticating with a username and password
+# against the FAI server.  On success, returns 0 and outputs the auth key to
+# STDOUT.  The username and password prompts as well as error messages are
+# printed to /dev/tty.
+#
+# Up to two arguments are accepted.  The first is the timeout, in seconds, for
+# the username prompt.  The default is to wait forever.  If no username is
+# input within the timeout interval, then the function returns 1.  The second
+# optional argument is the number of times to try authenticating.  The default
+# is to retry until it succeeds or is cancelled with Ctrl-C.
+ece_fai_auth() {
+    local timeout tries_left username password
+    local status
+
+    timeout="$1"
+    if [ -n "$timeout" ]; then
+        timeout="-t $timeout"
+    fi
+    tries_left="$2"
+
+    status=2
+    while [ -z "$tries_left" ] || [ "$tries_left" -gt 0 ] ; do
+        [ -z "$tries_left" ] || tries_left=$(( $tries_left - 1 ))
+
+        IFS= read -p 'Username: ' $timeout -e -r username
+        if [ $? != 0 ]; then
+            echo >/dev/tty
+            echo 'Timed out.' >/dev/tty
+            return $?
+        fi
+        if [ -z "$username" ]; then
+            continue
+        fi
+
+        # wget has idiotic password-prompting behavior.  You can pass the
+        # password on the command-line, which exposes it to `ps`, or you can
+        # use the --ask-password option.  With --ask-password, the input is
+        # read from /dev/tty, but the prompt is printed to STDOUT, which
+        # pollutes the output.  (src/main.c: prompt_for_password())
+        #wget -q -O- --user="$username" --ask-password "https://$SERVER/fai/auth?host=$HOSTNAME.$DOMAIN"
+        #case $? in
+        #  0) return 0 ;;
+        #  4) echo "ERROR: Network failure." >/dev/tty ;;
+        #  5) echo "ERROR: SSL verification failure for server $SERVER." >/dev/tty ;;
+        #  6) echo "ERROR: Authentication failure." >/dev/tty ;;
+        #  8) echo "ERROR: Unexpected problem on server $SERVER." >/dev/tty ;;
+        #  *) echo "ERROR: Unexpected wget exit status $?." >/dev/tty ;;
+        #esac
+
+        IFS= read -p 'Password: ' -e -r -s password
+        echo >/dev/tty
+
+        (
+            # curl's normal content output goes to curl's STDERR, which is this
+            # function's STDOUT.  curl's error messages go to its STDOUT, which
+            # is filtered by sed, whose STDOUT is connected to /dev/tty.
+            # Because the pipefail shell option is set, if curl fails, $? is
+            # set to curl's exit status rather than sed's exit status.
+            shopt -q -s -o pipefail
+            exec 2>&1 1>/dev/tty
+            echo "user=$username:$password" | \
+              curl -K- -fsS --output /dev/stderr --stderr - -G --data-urlencode host="$HOSTNAME.$DOMAIN" "https://$SERVER/fai/auth" | \
+              sed -e 's/^curl: (22) The requested URL returned error: 401$/ERROR: Authorization failure/' \
+                  -e 's/^curl: ([0-9]*)/ERROR:/'
+        )
+        status=$?
+        [ $status = 0 ] && return 0
+
+        [ -n "$tries_left" ] && echo "$tries_left more tries..." >/dev/tty
+    done
+    return $status
+}
+
+ECE_PUB_HS_DIRS=( /etc/ssh )
+
+# Downloads host-specific keys.  Error messages, if any, are directed to
+# STDOUT.  Exit status is that of wget.
+ece_setup_fetchkeys() {
+    local status wget_verbosity
+
+    wget_verbosity=-nv
+    (
+        umask 077 ;
+        wget $wget_verbosity --recursive -e robots=off --level=0 \
+             --directory-prefix=/tmp/keydist --no-host-directories --cut-dirs=2 \
+             --post-data="host=$HOSTNAME.$DOMAIN&auth=$auth" \
+             "https://$SERVER/fai/keydist"
+    )
+    status=$?
+    case $status in
+      0) : ;;
+      4) echo "ERROR: Network failure."
+         return $status ;;
+      5) echo "ERROR: SSL verification failure for server $SERVER."
+         return $status ;;
+      6) echo "ERROR: Authentication failure."
+         return $status ;;
+      8) echo "ERROR: Unexpected problem on server $SERVER."
+         return $status ;;
+      *) echo "ERROR: Unexpected wget exit status $?."
+         return $status ;;
+    esac
+
+    # Remove the manifest file
+    rm -f /tmp/keydist/keydist
+
+    find /tmp/keydist -type d -exec chmod 755 {} +
+    find /tmp/keydist -type f | while read f ; do
+        case ${f##*/} in
+          *.pub|*.crt|*.pem)
+            chmod 644 "$f"
+            ;;
+          *)
+            (
+              for dir in ${ECE_PUB_HS_DIRS[@]} ; do
+                [ "$f" = "$dir" ] && exit 0
+              done
+            ) || \
+            chmod 700 "${f%/*}"
+            ;;
+        esac
+    done
+
+    rsync -arR /tmp/keydist/./ /
+}
+
+ece_sync_keys_to_target() {
+    rsync -arR /tmp/keydist/./ "$target"
+}
+
+ece_savelog_remote() {
+    local uploads
+    for i in $LOGDIR/* ; do
+        uploads="$uploads -F file=@$i"
+    done
+    # wget does not support file uploads; use curl
+    curl -f -o- -F host="$HOSTNAME.$DOMAIN" -F auth="$auth" \
+                -F action="$FAI_ACTION" -F rundate="$fai_rundate" \
+                $uploads \
+                "https://$SERVER/fai/savelog"
+}
+
 ece_setup_git() {
     local saved_pwd old_ref new_ref
     local git_cmd
@@ -63,9 +233,50 @@ ece_setup_git() {
     $git_cmd log -n 1 --pretty=format:"Using git ref %h of $FAI_CONFIG_SRC"
 }
 
+ece_setup_fetchkeys_failure() {
+    local message
+    message="$1"
+
+    define_fai_flags
+    if [ "$root" != /dev/nfs ] || [ "$flag_createvt" ]; then
+        # Not PXE, or PXE with FAI_FLAGS=createvt.  It should be safe to drop
+        # to a root shell (or automatically reboot, if FAI_FLAGS includes
+        # "reboot").
+        echo "$message  Aborting $FAI_ACTION."
+        unset FAI_ACTION
+        return 1
+    else
+        # Dropping to a root shell would present a security risk.
+        echo "$message  Reboot!"
+        faireboot
+    fi
+}
+
 ece_setup_hook() {
+    local status
+
     case "$FAI_CONFIG_SRC" in
       git*) ece_setup_git ;;
+    esac
+
+    case "$FAI_ACTION" in
+      sysinfo|softupdate)
+        : ;;
+      *) # install|dirinstall|''
+        if ! ece_setup_fetchkeys ; then
+            # Only exit status 6 (authorization failure) is recoverable by
+            # authentication.  However, we will treat all errors as if they could
+            # be addressed by reauthenticating.
+            echo "ERROR: Failed to fetch keys.  Let's reauthenticate and try again."
+            auth=`ece_fai_auth 300 5`
+            status=$?
+            if [ $status != 0 ]; then
+                ece_setup_fetchkeys_failure "Authentication timed out.  Nobody there?"
+            elif ! ece_setup_fetchkeys ; then
+                ece_setup_fetchkeys_failure "Still failed to fetch keys."
+            fi
+        fi
+        ;;
     esac
 }
 
@@ -75,28 +286,6 @@ ece_setup_hook
 # 2007-09-16 Chris Dumont
 # See "FAI and secrets.txt" for extensive background.
 # This script attempts to be idempotent.
-#
-# 2008-01-04 Updated for new framework.
-#
-# 2009-10-07 Derek Poon <derekp@ece.ubc.ca>: Abort if rsync fails
-# 2011-11-21 Derek Poon <derekp@ece.ubc.ca>: chmod 600 /etc/ssh/*.[dr]sa
-
-# Should probably make this pay attention to classes.
-
-#. /etc/fai/fai.conf
-
-#sleepy() {
-#  sleep 161
-#}
-#trap sleepy ERR
-
-DIRS="/etc/ssh /root/.ssh /var/lib/cfengine2/ppkeys "
-
-SS="/etc/ssh/ssh_host_dsa_key /etc/ssh/ssh_host_rsa_key \
-/etc/ssh/*.rsa /etc/ssh/*.dsa \
-/root/.ssh/id_dsa /root/.ssh/id_rsa /var/lib/cfengine2/ppkeys/localhost.priv"
-
-SSD="/var/lib/cfengine2/ppkeys "
 
 # 2012-12-19 Derek Poon <derekp@ece.ubc.ca>
 # On machines with less than 512 MiB RAM, don't use a performance-boosting
@@ -106,63 +295,11 @@ if [ -z "$FAI_RAMDISKS" ]; then
     export FAI_RAMDISKS
 fi
 
-if [ -f /.THIS_IS_THE_FAI_NFSROOT ]; then
-  for i in $DIRS ; do
-    if ! mount | grep -q " on ${i} type " ; then
-      echo "Creating writable ${i}"
-      SCRATCH=`mktemp -d`
-      rsync -a ${i}/ ${SCRATCH}/ # Trailing slashes are important with rsync.
-      mount tmpfs $i -t tmpfs
-      rsync -a ${SCRATCH}/ ${i}/
-      rm -rf ${SCRATCH}
-    fi
-  done
-fi
-
-for i in $DIRS ; do
-  mkdir -p ${i}
-  if rsync -a fai@${SERVER}:${FAI_HSEXPORTS}/`hostname`/${i}/ ${i}/ ; then
-    echo "Sync'ed ${i}."
-  else
-    case "$FAI_ACTION" in
-      install)
-        echo "ERROR: Failed to sync ${i}.  No permission to perform FAI?"
-        sleep 3543
-        exit 1
-        ;;
-      dirinstall)
-        echo "Failed to sync. "
-        echo "If you're seeing this message in LAST/40-ssh then you're too late. Try again. :-) "
-        echo "While dirinstall is proceeding edit huey:/etc/security/sshd.conf and insert the line:"
-        echo "+:fai : `hostname -f`"
-        sleep 56
-        ;;
-      *)
-        echo "ERROR: Failed to sync ${i}.  No permission to perform FAI? Hope we're in 'rescue' or 'dirinstall' mode. "
-        ;;
-    esac
-  fi
-  chown -R root:root ${i}
-  find ${i} -type f -exec chmod 644 {} \;
-  find ${i} -type d -exec chmod 755 {} \;
-  # This must be done immediately otherwise the above rsync will fail on the
-  # iteration after doing /root.
-  for j in $SS ; do
-    [ -f $j ] && chmod 600 $j
-  done
-  for j in $SSD ; do
-    [ -d $j ] && chmod 700 $j
-  done
-done
 
 # This will skip when called by task_setup (early in the install) but should
 # go ahead when called by LAST/40-ssh (late in the install).
 if mount | grep -q " on ${target} type " || [ "$FAI_ACTION" = "dirinstall" ] && [ "x${NOWLAST}" = "xyes" ] ; then
-  for i in $DIRS ; do
-    mkdir -p ${target}/${i}
-    rsync -a ${i}/ ${target}/${i}/
-    echo "rsynced ${i}/ to ${target}/${i}/"
-  done
+    ece_sync_hsfiles_to_target $ECE_PUB_HS_DIRS $ECE_PRIV_HS_DIRS
 fi
 
 ######################################################

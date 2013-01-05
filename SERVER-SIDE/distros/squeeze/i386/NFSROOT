@@ -12,6 +12,7 @@ iproute udev subversion liblinux-lvm-perl
 # needed for the simple examples
 cfengine2 libapt-pkg-perl
 
+curl
 git-core
 # packages that Chris Dumont chrisd@ece.ubc.ca or Derek Poon derekp@ece.ubc.ca
 # have found useful

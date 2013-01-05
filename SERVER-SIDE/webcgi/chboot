@@ -1,0 +1,86 @@
+#!/usr/bin/perl
+
+BEGIN {
+    require 'auth';
+};
+use CGI;
+use Digest::SHA1 qw(sha1_hex);
+use IPC::Open2;
+use Net::Domain qw(hostfqdn);
+use feature qw(say);
+use strict;
+
+use constant MAX_DELAY => 2**31;
+
+# NOTE: the /srv/tftp/fai/pxelinux.cfg directory must be writable by the webserver user
+
+sub fai_chboot {
+    my ($host) = @_;
+
+    my @fai_chboot_cmd = ('/usr/sbin/fai-chboot', '-d', $host);
+
+    # Note: open2 can detect a failure to fork, but is incapable of detecting a
+    # failure to exec the command (Perl bug #39127).
+    my ($fai_chboot_stdout, $fai_chboot_stdin);
+    my $pid = open2($fai_chboot_stdout, $fai_chboot_stdin, @fai_chboot_cmd);
+    waitpid($pid, 0);
+    my $output = join '', <$fai_chboot_stdout>;
+    chomp($output);
+
+    if (!defined $pid) {
+        return (-1, sprintf('Could not execute %s: %s', (join ' ', @fai_chboot_cmd), $!));
+    }
+    my $fai_chboot_status = $? >> 8;
+    return ($fai_chboot_status, $output);
+}
+
+sub cgimain {
+    my ($q) = @_;
+
+    my $auth_param = $q->param('auth') || '';
+    my $host = $q->param('host') || '';
+    my $hash_len = length FAI::ECE::Auth::hash;
+    my ($auth, $time) = ((substr $auth_param, 0, $hash_len), (substr $auth_param, $hash_len));
+
+    if ('POST' ne $q->request_method) {
+        say "Status: 405 Method Not Allowed\r\n";
+        return;
+    }
+    if (!FAI::ECE::Auth::verify_hash($auth, $time, $host, MAX_DELAY)) {
+        say "Status: 401 Unauthorized\r\n";
+        return;
+    }
+
+    my ($status, $output) = fai_chboot($host);
+    if (0 != $status) {
+        say "Status: 500 Internal Server Error\r\n";
+        say $output;
+    } elsif (length $output) {
+        say "Status: 200 OK\r\n";
+        say $output;
+    } else {
+        say "Status: 204 No Content\r\n";
+    }
+}
+
+sub main {
+    my @argv = @_;
+    my ($host) = @argv;
+
+    my ($status, $output) = fai_chboot($host);
+    if (0 != $status) {
+        say "Error: $output";
+    } elsif (length $output) {
+        say "OK: $output";
+    } else {
+        say 'OK';
+    }
+    return $status;
+}
+
+if ($ENV{GATEWAY_INTERFACE} =~ m!^CGI/1!) {
+    cgimain(CGI->new);
+} else {
+    delete $ENV{LANG};
+    main(@ARGV);
+}
