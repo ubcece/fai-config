@@ -1,4 +1,4 @@
-PACKAGES aptitude NOTVZCT
+PACKAGES aptitude NOT_VZ_CONTAINER
 linux-image-amd64
 
 PACKAGES aptitude SQUEEZE

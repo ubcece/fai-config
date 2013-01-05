@@ -4,5 +4,5 @@
 # which needs no bootloader or kernel.
 
 if [ ! -d /proc/vz -o -f /proc/vz/version ]; then
-    echo "NOTVZCT GRUB2 "
+    echo GRUB2
 fi
