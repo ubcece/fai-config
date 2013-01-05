@@ -291,24 +291,3 @@ ece_setup_hook() {
 }
 
 ece_setup_hook
-
-
-# 2007-09-16 Chris Dumont
-# See "FAI and secrets.txt" for extensive background.
-# This script attempts to be idempotent.
-
-######################################################
-# 2012-02-21 Chris Dumont. This is for fai-client 3.4.7 and 3.4.8. In
-# /usr/lib/fai/subroutines task_setup (line 254?) calls ntpdate which is
-# deprecated. Check if the next bit is still a necessary replacement.
-
-if [ $do_init_tasks -eq 1 ] ; then
-  dpkg -l fai-client 2>&1 | egrep -q "fai-client *3.4.7 |fai-client *3.4.8 "
-  if [ $? -eq 1 ]; then
-    echo "fai-client version number has advanced. Maybe I'm no longer needed. Pausing so you can examine the situation"
-    sleep 3649
-  else
-    ntpd -g -q
-  fi
-fi
-######################################################
