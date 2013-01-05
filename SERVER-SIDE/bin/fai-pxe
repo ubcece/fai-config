@@ -1,0 +1,101 @@
+#!/bin/bash
+
+PATH=/usr/sbin:/usr/bin:/sbin:/bin
+
+git_ref=
+localboot=
+template=
+
+# If this script resides in a git work directory, let git_ref default to the
+# current tag or branch
+if [ -d "${0%/*}/../../.git" ]; then
+    export GIT_DIR=${0%/*}/../../.git
+    git_ref=`git describe --all | sed -e 's,^heads/\|^tags/,,'`
+fi
+
+help() {
+    echo \
+"Usage: `basename $0` [-t TEMPLATE] [-r GIT_REF] HOSTNAME [HOSTNAME ...]
+       `basename $0` -l HOSTNAME [HOSTNAME ...]
+
+    Configures the PXE server so that a host will run FAI (Fully Automated
+    Install) the next time it is rebooted.
+
+    Options:
+
+      -t TEMPLATE
+          Specifies which PXE template to use.  Valid templates are:"
+    LC_ALL=C fai-chboot -lt | while read type name rest ; do echo \
+"                ${name%.tmpl}"
+    done
+    echo \
+"          If no template is specified, the host will be set to boot from
+          the local disk.
+
+      -l
+          Specifies that the host(s) should be set to boot from the local
+          disk.
+
+      -r GIT_REF
+          Specifies a Git reference (tag, branch, or commit) to use for the
+          configuration.
+"
+    if [ -n "$git_ref" ]; then
+        echo \
+"          Known branches are:"
+    git branch -r --color=never | grep -v -- '->' | while read branch ; do echo \
+"                ${branch#*/}"
+    done
+    echo \
+"          The default is $git_ref.
+"
+    fi
+}
+
+while getopts :hlr:t: opt; do
+    case "$opt" in
+      h)    help
+            exit 0
+            ;;
+      l)    localboot=1
+            ;;
+      r)    git_ref="$OPTARG"
+            ;;
+      t)    template="$OPTARG"
+            ;;
+      :)    echo "Error: Missing argument to -$OPTARG" >&2
+            echo >&2
+            help >&2
+            exit 1
+            ;;
+      \?)   echo "Error: Invalid option -$OPTARG" >&2
+            echo >&2
+            help >&2
+            exit 1
+            ;;
+    esac
+done
+shift $(( $OPTIND - 1 ))
+
+if [ -z "$*" ]; then
+    help >&2
+    exit 1
+fi
+
+if [ -z "$localboot$template" ] || [ -n "$localboot" -a "$template" ]; then
+    echo "Error: Must specify either -l or -t." >&2
+    echo >&2
+    help >&2
+    exit 1
+fi
+
+if [ -n "$localboot" ]; then
+    LC_ALL=C fai-chboot -d $@
+elif [ -n "$template" ]; then
+    for hostname in $@ ; do
+        LC_ALL=C fai-chboot -c "$template" "$hostname" \
+            hostname="$hostname" \
+            auth=`/var/www/fai/auth "$hostname"` \
+            FAI_CONFIG_SRC_REF="$git_ref"
+    done
+fi
