@@ -2,10 +2,3 @@
 # 2009-10-07 Derek Poon <derekp@ece.ubc.ca>
 
 fcopy -iBM /etc/apt/sources.list.d/proxmox.list
-
-# pve-kernel-2.6.24-8-pve postinst script calls "update-grub -y" unless
-# a /proxmod_install_mode file is present.  The -y option is deprecated
-# in GRUB and is no longer tolerated in GRUB 2.
-#
-# This will be removed in a corresponding finish hook.
-touch $target/proxmox_install_mode
