@@ -1,0 +1,24 @@
+SUITE=`
+    TEMP=$(/usr/bin/getopt --options= -- $FAI_DEBOOTSTRAP 2>/dev/null)
+    eval set -- "$TEMP"
+    while true ; do
+      case "$1" in
+        --)     shift ; break ;;
+        *)      echo "10-release-id-hook-getopt-error" ; exit 1 ;;
+      esac
+    done
+    echo "$1"
+`
+
+ARCH=`
+    TEMP=$(/usr/bin/getopt --options= --longoptions=arch: -- $FAI_DEBOOTSTRAP_OPTS 2>/dev/null)
+    eval set -- "$TEMP"
+    while true ; do
+      case "$1" in
+        --arch) echo "$2" ; exit ;;
+        --)     shift ; break ;;
+        *)      echo "10-release-id-hook-getopt-error" ; exit 1 ;;
+      esac
+    done
+    dpkg --print-architecture
+`

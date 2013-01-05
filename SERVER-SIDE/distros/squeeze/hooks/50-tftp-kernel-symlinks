@@ -1,0 +1,14 @@
+# Make symlinks so that the kernel and initrd have a logical name that can
+# be referenced by the fai-chboot templates.
+
+# TFTP will not follow symlinks with an absolute path.  Use basename, since
+# one of the last tasks performed by make-fai-nfsroot is to copy the kernel
+# and initrd from $NFSROOT/boot to $TFTPROOT.
+
+for kernel in "$NFSROOT"/boot/vmlinuz-* ; do
+    ln -sf `basename "$kernel"` "$TFTPROOT/vmlinuz-$SUITE-$ARCH"
+done
+
+for initrd in "$NFSROOT"/boot/initrd.img-* ; do
+    ln -sf `basename "$initrd"` "$TFTPROOT/initrd-$SUITE-$ARCH"
+done

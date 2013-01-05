@@ -1,0 +1,4 @@
+# curl and wget need the ECE Root SSL Certificate to contact https://$SERVER
+
+cp /etc/ssl/certs/CA.ece.ubc.ca.pem $NFSROOT/etc/ssl/certs/
+c_rehash $NFSROOT/etc/ssl/certs

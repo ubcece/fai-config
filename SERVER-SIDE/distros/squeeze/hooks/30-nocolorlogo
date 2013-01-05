@@ -1,0 +1,5 @@
+# The red FAI banner interferes with Shift-PgUp scrolling.
+# The presence of the .nocolorlogo file suppresses the banner.
+# http://fai-project.org/fai-guide/_anchor_id_hints_xreflabel_hints_various_hints.html
+
+touch $NFSROOT/.nocolorlogo
