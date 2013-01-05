@@ -1,0 +1,9 @@
+# vim: set ts=4 sw=4 et si:
+
+# On machines with less than 512 MiB RAM, don't use a performance-boosting
+# ramdisk.  The ramdisk size is half of physical memory, so /var/lib/dpkg
+# could easily run out of space during installation.
+if [ -z "$FAI_RAMDISKS" ]; then
+    FAI_RAMDISKS=`free -m | awk '/Mem/ { if ($2 < 512) print "none" }'`
+    export FAI_RAMDISKS
+fi

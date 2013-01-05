@@ -297,15 +297,6 @@ ece_setup_hook
 # See "FAI and secrets.txt" for extensive background.
 # This script attempts to be idempotent.
 
-# 2012-12-19 Derek Poon <derekp@ece.ubc.ca>
-# On machines with less than 512 MiB RAM, don't use a performance-boosting
-# ramdisk
-if [ -z "$FAI_RAMDISKS" ]; then
-    FAI_RAMDISKS=`free -m | awk '/Mem/ { if ($2 < 512) print "none" }'`
-    export FAI_RAMDISKS
-fi
-
-
 # This will skip when called by task_setup (early in the install) but should
 # go ahead when called by LAST/40-ssh (late in the install).
 if mount | grep -q " on ${target} type " || [ "$FAI_ACTION" = "dirinstall" ] && [ "x${NOWLAST}" = "xyes" ] ; then
