@@ -5,12 +5,7 @@
 # script to run on first local disk boot which, during successfule execution,
 # erases itself.
 
-if [ "$target" = "" ]; then
-	target="/"
-fi
-cd $target
-
-cat << EOF > root/webrunonce.sh
+cat << EOF > $target/root/webrunonce.sh
 #!/bin/bash
 ### BEGIN INIT INFO
 # Provides:             webrunonce
@@ -35,6 +30,6 @@ else
 fi
 rm -f /etc/rc2.d/S19zwebrunonce
 EOF
-chmod +x root/webrunonce.sh
-ln -sf /root/webrunonce.sh etc/rc2.d/S19zwebrunonce
+chmod +x $target/root/webrunonce.sh
+ln -sf /root/webrunonce.sh $target/etc/rc2.d/S19zwebrunonce
 

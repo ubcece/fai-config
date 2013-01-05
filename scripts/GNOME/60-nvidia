@@ -4,7 +4,7 @@
 
 # 2011-03-01 Chris Dumont. 
 
-chroot $target update-pciids >/dev/null 2>/dev/null
+$ROOTCMD update-pciids >/dev/null 2>/dev/null
 
 /usr/bin/lspci | grep VGA | grep -q -i nVidia
 if [ $? -ne 0 ]; then
@@ -16,7 +16,6 @@ ARCH=`dpkg --print-architecture`
 
 #fcopy -iBM /etc/X11/xorg.conf
 
-[ "$target" == "" ] && target="/"
 NVINST="runonce_nvidxorg.sh"
 
 cat <<EOF > $target/etc/init.d/$NVINST

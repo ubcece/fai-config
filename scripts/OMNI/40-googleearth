@@ -3,7 +3,6 @@
 
 set -e
 
-[ "$target" == "" ] && target="/"
 rm -f $target/root/googleearth*.deb
 
 cat > $target/root/gooscript <<EOF

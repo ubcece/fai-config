@@ -1,10 +1,6 @@
 #!/bin/bash
 # 2007-11-09 Chris Dumont. Set up a comfy gnome desktop for root.
 
-if [ "$target" = "" ]; then
-	target="/"
-fi
-
 cd $target/root
 if [ -d .gnome/ ] ; then
 	echo "$0: Not overwriting existing .gnome and friends."

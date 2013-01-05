@@ -2,11 +2,6 @@
 # 2009-01-16 Chris Dumont.
 # fai-server:/srv/fai/config/scripts/OMNI/73-matlab-installer.
 
-
-if [ "$target" = "" ]; then
-  target="/"
-fi
-
 # idempotency!
 rm -rf $target/opt/Matlab_R2008b/
 mkdir -p $target/opt/Matlab_R2008b/

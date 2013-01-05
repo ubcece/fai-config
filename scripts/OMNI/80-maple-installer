@@ -2,11 +2,6 @@
 # 2009-03-05 Chris Dumont.
 # fai-server:/srv/fai/config/scripts/OMNI/80-maple-installer.
 
-
-if [ "$target" = "" ]; then
-  target="/"
-fi
-
 # idempotency!
 rm -rf $target/data/maple12/
 mkdir -p $target/usr/local/bin

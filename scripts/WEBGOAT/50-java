@@ -5,10 +5,6 @@
 # installation.
 
 
-if [ "$target" = "" ]; then
-  target="/"
-fi
-
 rm -f $target/root/java-bash
 rm -f $target/etc/rc2.d/S80java-bash
 
