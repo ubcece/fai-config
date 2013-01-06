@@ -1,0 +1,18 @@
+# /etc/network/interfaces
+# vim: set ts=2 sw=2 et si:
+# 2010-03-18 Derek Poon. xmail1 is an IBM blade (in fact bc1-n5).
+# NIC1 is detected as eth0 and is connected to bc1 switch1 (IBM).
+# NIC2 is detected as eth1 and is connected to bc1 switch2 (Nortel/Alteon).
+
+auto lo
+iface lo inet loopback
+
+auto eth0.1893
+iface eth0.1893 inet static
+  address 192.168.1.40
+  netmask 255.255.255.0
+  network 192.168.1.0
+  broadcast 192.168.1.255
+
+auto eth1
+iface eth1 inet dhcp

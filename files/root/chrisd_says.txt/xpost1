@@ -1,0 +1,38 @@
+2010-04-06 ChrisD. xpost1 is the same as xmx1.
+
+2009-06-12. This is an IBM HS20 Blade that is newer than the rest of our
+blades. A peculiarity is that while an Ethernet port can be disabled in the
+BIOS and it apparently disappears from the OS point of view there is something
+not quite right. The enabled Ethernet port is not at all reliable in this mode.
+Since both ports need to be enabled and the port that we want to FAI on is,
+then, eth1 there is a problem. It doesn't seem possible to specify eth1 as the
+nfsroot port. This is a problem in, perhaps, the live-initramfs package. It's
+not an fai-client or fai-nfsroot problem since the boot never gets that far.
+Step one of the solution is to alter
+huey:/data/fai/lennynfsroot/live/filesystem.dir/usr/share/initramfs-tools/scripts/live
+(and update-initramfs, etc.). I don't have a proper diff but here's the
+relevant section:
+
+                udevsettle
+        fi
+
+        # 2009-06-12 Chris Dumont. We want "full-featured" networking.
+        OLDHOSTNAME=${HOSTNAME}
+        #ipconfig ${DEVICE} | tee /netboot.config
+        configure_networking
+
+        # source relevant ipconfig output
+        . /tmp/net-${DEVICE}.conf
+
+Now the live boot process will properly listen to kernel command line
+parameters. Step two is that /srv/tftp/fai/pxelinux.cfg/89523449 which is
+created at install time needs to be edited. During the countdown change:
+ip=dhcp
+to:
+ip=:::::eth1:dhcp
+
+Another way to tackle this problem is to edit
+huey:/data/fai/lennynfsroot/live/filesystem.dir/etc/initramfs-tools/initramfs.conf
+and change DEVICE=eth0 to eth1, update-initram etc., etc. This is an ugly
+solution. Perhaps have multiple pre-prepared initrd's? Also a maintenance
+headache.

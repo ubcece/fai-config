@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<tomcat-users>
+  <role rolename="admin"/>
+  <role rolename="manager"/>
+  <role rolename="server_admin"/>
+  <role rolename="webgoat_admin"/>
+  <role rolename="webgoat_user"/>
+  <user username="webgoat" password="w3bg04+" roles="admin,manager,server_admin,webgoat_admin"/>
+  <user username="webg_ta" password="LdxTEI" roles="webgoat_admin"/>
+  <user username="group01" password="yejCSD" roles="webgoat_user"/>
+  <user username="group02" password="CdsFna" roles="webgoat_user"/>
+  <user username="group03" password="ZfxPfH" roles="webgoat_user"/>
+  <user username="group04" password="leygsZ" roles="webgoat_user"/>
+  <user username="group05" password="BWJDzo" roles="webgoat_user"/>
+  <user username="group06" password="qIVhwb" roles="webgoat_user"/>
+  <user username="group07" password="wqTfva" roles="webgoat_user"/>
+  <user username="group08" password="eXkrpa" roles="webgoat_user"/>
+  <user username="group09" password="DzLgUu" roles="webgoat_user"/>
+  <user username="group10" password="HhNvig" roles="webgoat_user"/>
+  <user username="group11" password="HGKQWg" roles="webgoat_user"/>
+  <user username="group12" password="dKZMEt" roles="webgoat_user"/>
+  <user username="group13" password="NPXxsZ" roles="webgoat_user"/>
+  <user username="group14" password="snVqlb" roles="webgoat_user"/>
+  <user username="group15" password="EqaizD" roles="webgoat_user"/>
+</tomcat-users>

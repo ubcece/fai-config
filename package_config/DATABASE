@@ -1,0 +1,13 @@
+PACKAGES aptitude
+# ChrisD says: packages with a trailing "-" are removed.
+
+ferm
+mylvmbackup
+mysql-client
+mysql-server
+mytop
+postgresql
+postgresql-contrib
+postgresql-doc
+postgresql-server-dev-9.0
+ptop

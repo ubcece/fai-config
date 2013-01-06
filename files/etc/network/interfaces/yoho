@@ -1,0 +1,36 @@
+# /etc/network/interfaces
+
+auto lo
+iface lo inet loopback
+  # 2010-07-21 Derek Poon <derekp@ece.ubc.ca>
+  # Not necessary to use ferm, since mysql is no longer hosted here
+  # up ferm /etc/network/firewall/ferm.up
+
+auto br0
+iface br0 inet static
+  address 137.82.52.83
+  netmask 255.255.255.0
+  network 137.82.52.0
+  broadcast 137.82.52.255
+  gateway 137.82.52.254
+  bridge_ports    eth0
+  bridge_stp      off
+  bridge_maxwait  0
+  bridge_fd       0
+
+
+# ChrisD: Not sure if we're going to host vertxd.
+#auto br0:18
+#iface br0:18 inet static
+#  address 137.82.52.18
+#  netmask 255.255.255.0
+#  network 137.82.52.0
+#  broadcast 137.82.52.255
+
+auto br0:47
+iface br0:47 inet static
+  address 137.82.52.47
+  netmask 255.255.255.0
+  network 137.82.52.0
+  broadcast 137.82.52.255
+

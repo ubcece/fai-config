@@ -1,0 +1,4 @@
+#!/bin/sh
+# 2009-10-07 Derek Poon <derekp@ece.ubc.ca>
+
+fcopy -iBM /etc/apt/sources.list.d/hp.list

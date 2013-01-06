@@ -1,0 +1,64 @@
+# update.conf       $Rev: 1027 $
+# vim: set ts=2 sw=2 et si:
+
+control:
+  actionsequence  = ( processes copy )
+  domain          = ( ece.ubc.ca )
+  policyhost      = ( huey )
+  dstdir          = ( /etc/cfengine )
+
+  !Testing::
+    srcdir          = ( /var/local/cfengine ) 
+  Testing::
+    srcdir          = ( "/var/tmp/cfengine-test/$(CFTEST)" )
+    IfElapsed       = ( 0 )
+
+import:
+  any::
+    classes-hosts.conf
+
+processes:
+  Testing::
+    "cfservd|cfexecd|cfenvd"
+      signal=term
+
+copy:
+    $(srcdir)/public            dest=$(dstdir)
+                                recurse=inf
+                                purge=true
+                                type=binary
+                                backup=false
+                                server=$(policyhost)
+                                trustkey=true
+
+    $(srcdir)/servers           dest=$(dstdir)/servers
+                                recurse=inf
+                                purge=true
+                                type=binary
+                                backup=false
+                                server=$(policyhost)
+                                encrypt=true
+
+    $(srcdir)/ldap_servers      dest=$(dstdir)/ldap_servers
+                                recurse=inf
+                                purge=true
+                                type=binary
+                                backup=false
+                                server=$(policyhost)
+                                encrypt=true
+
+    $(srcdir)/radius_servers    dest=$(dstdir)/radius_servers
+                                recurse=inf
+                                purge=true
+                                type=binary
+                                backup=false
+                                server=$(policyhost)
+                                encrypt=true
+
+    /var/local/netdata          dest=$(dstdir)/netdata
+                                recurse=inf
+                                purge=true
+                                type=binary
+                                backup=false
+                                server=$(policyhost)
+                                encrypt=true

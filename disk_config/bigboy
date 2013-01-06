@@ -1,0 +1,30 @@
+# Use setup-storage, not setup_harddisks
+
+# 2009-07-10 ChrisD. Now using this for hct1, wankel as well as stabile. bigboy was
+# renamed stabile.debian.org.
+
+# 2009-05-20 ChrisD. The /dev/sdXX device assigned to each disk on bigboy
+# should be considered volatile. E.g. if kernel module 3w_9xxx is inserted
+# before sata_nv then the 160GB Samsung drive might be /dev/sdao instead of
+# /dev/sda. For that reason use UUID's.
+# Addendum: in order to work around a GRUB limitation:
+# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=514967 
+# bigboy *must* have sata_nv loaded before 3w_9xxx. Then,  the 160GB Samsung is
+# /dev/sda and the 160GB Seagate is /dev/sdb.
+
+disk_config sda 
+primary  -     20000 - -
+logical  swap  1000-1100   swap rw                   
+logical  -     5000 - -
+logical  -     50- - -
+
+disk_config sdb 
+primary  -     20000 - -
+logical  swap  1000-1100   swap rw                   
+logical  -     5000 - -
+logical  -     50- - -
+
+disk_config raid fstabkey:uuid
+raid1	/	sda1,sdb1 ext3 rw,errors=remount-ro
+raid1	/var	sda6,sdb6 ext3 rw
+raid1	/data	sda7,sdb7 xfs  rw

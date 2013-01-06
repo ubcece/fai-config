@@ -1,0 +1,9 @@
+auto lo eth1
+
+iface lo inet loopback
+
+iface eth0 inet dhcp
+    hwaddress ether 00:17:f2:0f:ca:ba
+
+iface eth1 inet dhcp
+    pre-up /sbin/ip link set eth0 address 00:17:f2:0f:ca:ba

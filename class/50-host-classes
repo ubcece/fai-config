@@ -1,0 +1,62 @@
+#! /bin/bash
+# 2008-02-29 Chris Dumont. 
+
+# 2009-10-19 Derek Poon <derekp@ece.ubc.ca>
+# Moved detection of GRUB eligibility to 51-grub (now 62-grub says chrisd)
+
+# Assign classes to hosts. There are also implied classes, e.g., the hostname
+# itself.
+case $HOSTNAME in
+    [kmxv]sql?)
+        echo "FAIBASE DHCPC ECE SERVER WEB DATABASE RT RAID" ;;
+    commlab12|rafiq)
+        # commlab12|rafiq is not integrated with ECE. commlab12 will be renamed ivplc when re-located outside the firewall.
+        echo "FAIBASE DHCPC GNOME KDE OMNI " ;;
+    lersse1)
+        # lersse1 is integrated with ECE but is limited to mounting netapp4:/vol/ECE_vol3/kb/data/backup.
+        echo "FAIBASE DHCPC ECE SERVER GNOME KDE OMNI SLOW " ;;
+    modigliani)
+        # modigliani is not integrated with ECE.
+        echo "FAIBASE DHCPC ECE_DISK2 GNOME KDE OMNI OMNI64" ;;
+    kakadu|xanadu|[kmx]host*)
+        echo "FAIBASE DHCPC ECE SERVER VM_HOST" ;;
+	# LOOKUPSEVER without ECE only applies packages.
+    [kmxv]lookup?|[kmxv]ldap?)
+        echo "FAIBASE DHCPC ECE SERVER LOOKUPSERVER " ;;
+    msmb1)
+        echo "FAIBASE DHCPC ECE SERVER SMBSERVER RAID " ;;
+    [kmxv]smb?)
+        echo "FAIBASE DHCPC ECE SERVER SMBSERVER" ;;
+    [kmxv]web1|[kmx]vweb1)
+        echo "FAIBASE DHCPC ECE SERVER WEB RT" ;;
+    [kmxv]web?|[kmx]vweb?)
+        echo "FAIBASE DHCPC ECE SERVER WEB" ;;
+    [kmxv]mx?|[kmx]mail?)
+        echo "FAIBASE DHCPC ECE SERVER MAIL WEB" ;;
+    [kmxv]flex?|vintr1|yoink)
+        echo "FAIBASE DHCPC ECE SERVER " ;;
+    mmatlab1|mmatlab2|psserv|ssh-linux[1234]|vb|vklinux[345])
+        echo "FAIBASE DHCPC ECE SERVER GNOME KDE OMNI" ;;
+    node*) # to be clear: these are nodes on Rafeef/morty.
+        echo "FAIBASE DHCPC SLOW ECE GRID GNOME KDE OMNI" ;;
+    morty)
+        echo "FAIBASE DHCPC SLOW RAID ECE GRID GNOME KDE OMNI" ;;
+    scow|thud)
+        echo "FAIBASE DHCPC GNOME NET " ;;
+    webgoat) 
+        echo "FAIBASE DHCPC GNOME WEBGOAT" ;;
+    bellini|bigboy|blop|cimarosa|morricone|paganini|respighi|vivaldi) 
+        echo "FAIBASE DHCPC " ;;
+    nano-mac03)
+        echo "FAIBASE DHCPC ECE ECE_DISK2 GNOME KDE OMNI OMNI64 NOMBR" ;;
+    frink)
+        echo "FAIBASE DHCPC ECE GNOME KDE OMNI " ;;
+    ibofh|trirotor)
+        echo "FAIBASE DHCPC ECE GNOME " ;;
+    yoho)
+        echo "FAIBASE DHCPC ECE SERVER RAID WEB GNOME " ;;
+    ssh-linux[5678])
+        echo "FAIBASE DHCPC ECE SERVER GNOME KDE OMNI " ;;
+    *)
+        echo "FAIBASE DHCPC SLOW ECE GNOME KDE OMNI" ;;
+esac

@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+# 2011-05-03 Chris Dumont. When action=dirinstall do some special things.
+
+die "'action' environment variable isn't defined. \n" unless ( defined $ENV{FAI_ACTION} ) ;
+unless ( $ENV{FAI_ACTION} =~ /dirinstall/ ) {
+	print "Not a dirinstall. No action. \n";
+	exit;
+}
+
+unless ( defined $ENV{target} ) {
+	print "target environment variable not defined. /etc/fstab not created. \n";
+} else {
+	my $target = $ENV{target};
+	open( FSTIN, "<", "/etc/fstab" ) ||
+		die "Could not open /etc/fstab \n";
+
+	open( FSOUT, ">", "$target/etc/fstab" ) ||
+		die "Could not open /$target/etc/fstab \n";
+
+	my $line;
+
+	while ( $line = <FSTIN> ) {
+		chomp $line;
+		if ( $line =~ m|^[^#]+\s/\s| ) {
+			$line =~ s|(\s)/(\s)|\1/altroot\2|;
+			print FSOUT $line . "\n";
+			next;
+		}
+		if ( $line =~ m|^[^#]+\s/altroot\s| ) {
+			$line =~ s|(\s)/altroot(\s)|\1/\2\t|;
+			print FSOUT $line . "\n";
+			next;
+		}
+		if ( $line =~ m|^[^#]+\s/var\s| ) {
+			$line =~ s|(\s)/var(\s)|\1/altroot/var\2|;
+			print FSOUT $line . "\n";
+			next;
+		}
+		if ( $line =~ m|^[^#]+\s/altroot/var\s| ) {
+			$line =~ s|(\s)/altroot/var(\s)|\1/var\2\t|;
+			print FSOUT $line . "\n";
+			next;
+		}
+		print FSOUT $line . "\n";
+	}
+	close FSTIN;
+	close FSOUT;
+	print "$target/etc/fstab created. \n";
+
+	mkdir("/altroot/altroot",0755) || print $!;
+	mkdir("/altroot/data",1777) || print $!;
+	my $result = system("/usr/sbin/update-grub");
+}

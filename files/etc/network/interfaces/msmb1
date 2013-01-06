@@ -1,0 +1,36 @@
+# /etc/network/interfaces
+# vim: set ts=2 sw=2 et si:
+
+auto lo
+iface lo inet loopback
+
+# Built-in Ethernet: management interface and webserver
+auto eth0
+iface eth0 inet dhcp
+
+auth eth0.1893
+iface eth0.1893 inet static
+  address 192.168.1.13
+  network 192.168.1.0
+  netmask 255.255.255.0
+
+# 1Gb Ethernet card: Samba server
+auto eth1
+iface eth1 inet static
+  address 137.82.52.26
+  network 137.82.52.0
+  netmask 255.255.255.0
+  up   ip addr add 137.82.52.27/24 dev eth1
+  down ip addr del 137.82.52.27/24 dev eth1
+  up   ip addr add 137.82.52.94/24 dev eth1
+  down ip addr del 137.82.52.94/24 dev eth1
+  up   ip addr add 137.82.52.113/24 dev eth1
+  down ip addr del 137.82.52.113/24 dev eth1
+  up   /bin/ip route add default via 137.82.52.254 dev eth1 table SMB
+  down /bin/ip route del default via 137.82.52.254 dev eth1 table SMB
+  up   /bin/ip rule add from 137.82.52.26/31 lookup SMB
+  down /bin/ip rule del from 137.82.52.26/31 lookup SMB
+  up   /bin/ip rule add from 137.82.52.94/32 lookup SMB
+  down /bin/ip rule del from 137.82.52.113/32 lookup SMB
+  up   /bin/ip rule add from 137.82.52.113/32 lookup SMB
+  down /bin/ip rule del from 137.82.52.94/32 lookup SMB

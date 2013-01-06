@@ -1,0 +1,11 @@
+xserver-xorg xserver-xorg/config/inputdevice/keyboard/model string pc105
+xserver-xorg    xserver-xorg/config/monitor/vert-refresh        string  57-77
+xserver-xorg    xserver-xorg/config/monitor/horiz-sync  string  28-71
+sun-java5-jre   sun-java5-jre/jcepolicy note
+sun-java5-jre   sun-java5-jre/stopthread        boolean true
+sun-java5-bin   shared/accepted-sun-dlj-v1-1    boolean true
+sun-java5-jdk   shared/accepted-sun-dlj-v1-1    boolean true
+sun-java5-jre   shared/accepted-sun-dlj-v1-1    boolean true
+sun-java5-bin   shared/present-sun-dlj-v1-1     note
+sun-java5-jdk   shared/present-sun-dlj-v1-1     note
+sun-java5-jre   shared/present-sun-dlj-v1-1     note

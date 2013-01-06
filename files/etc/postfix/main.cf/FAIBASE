@@ -1,0 +1,11 @@
+# This file was copied from cfengine: $Rev: 70 $ but should be useful for any
+# host.
+mydomain = ece.ubc.ca
+myorigin = $mydomain
+mydestination =
+mynetworks = 127.0.0.0/8
+relayhost = mail.ece.ubc.ca
+inet_interfaces = loopback-only
+inet_protocols = ipv4
+masquerade_domains = ece.ubc.ca
+# vim: set ft=pfmain:

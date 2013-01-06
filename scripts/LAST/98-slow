@@ -1,0 +1,6 @@
+#!/bin/bash
+
+! ifclass SLOW && exit 0
+
+sleep 3600
+

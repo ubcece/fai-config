@@ -1,0 +1,14 @@
+# /etc/network/interfaces
+# vim: set ts=2 sw=2 et si:
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+  up   ip addr add 137.82.52.26/24 dev eth0
+  down ip addr del 137.82.52.26/24 dev eth0
+  up   ip addr add 137.82.52.27/24 dev eth0
+  down ip addr del 137.82.52.27/24 dev eth0
+  up   ip addr add 137.82.52.94/24 dev eth0
+  down ip addr del 137.82.52.94/24 dev eth0

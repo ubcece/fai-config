@@ -1,0 +1,28 @@
+PACKAGES aptitude
+bridge-utils
+minicom
+#kqemu-common
+#kqemu-source
+#kvm
+drbd8-utils
+kpartx
+libvirt-bin
+libvirt-doc
+parted
+partimage
+partimage-doc
+pve-firmware
+# proxmox-ve-2.6.32 # Post-install script requires OpenVZ kernel to be running
+pve-kernel-2.6.32-10-pve # .. so just install the kernel
+pve-kernel-2.6.32-14-pve # Newer kernel crashes immediately on boot
+#qemuctl
+#qemulator
+#uml-utilities
+vde2
+vzprocps
+xauth
+#xen-hypervisor
+#xen-shell
+#xen-tools
+#xen-utils
+#xenwatch

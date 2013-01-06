@@ -1,0 +1,18 @@
+# /etc/network/interfaces
+# vim: set ts=2 sw=2 et si:
+# 2008-05-06 Derek Poon. xweb3 is an IBM blade (in fact bc1-n8).
+# NIC1 is detected as eth0 and is connected to bc1 switch2 (Nortel/Alteon).
+# NIC2 is detected as eth1 and is connected to bc1 switch1 (IBM).
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1.1893
+iface eth1.1893 inet static
+        address 192.168.1.46
+        netmask 255.255.255.0
+        network 192.168.1.0
+        broadcast 192.168.1.255

@@ -1,0 +1,36 @@
+#!/bin/bash
+# 2009-01-16 Chris Dumont.
+# fai-server:/srv/fai/config/scripts/OMNI/73-matlab-installer.
+
+
+if [ "$target" = "" ]; then
+  target="/"
+fi
+
+# idempotency!
+rm -rf $target/opt/Matlab_R2008b/
+mkdir -p $target/opt/Matlab_R2008b/
+
+if [ ! -d $target/mnt/huey/exports/ ] || [ ! -r $target/mnt/huey/exports/matlab/r2008b_amd64.bz2 ]; then
+	mkdir -p $target/mnt/huey/exports/
+	mount -t nfs4 huey:/ $target/mnt/huey/exports
+fi
+
+cd $target/opt/
+if [ `uname -m` == "i686" ]; then
+	tar -xzf $target/mnt/huey/exports/matlab/r2008b_i386.tgz
+elif [ `uname -m` == "x86_64" ]; then
+	tar -xzf $target/mnt/huey/exports/matlab/r2008b_amd64.tgz
+else
+	echo "Don't know my own architecture."
+	exit 1
+fi
+umount $target/mnt/huey/exports/
+
+mkdir -p $target/usr/local/bin
+cd $target/usr/local/bin
+ln -sf /opt/Matlab_R2008b/bin/matlab
+ln -sf /opt/Matlab_R2008b/bin/mbuild
+ln -sf /opt/Matlab_R2008b/bin/mcc
+ln -sf /opt/Matlab_R2008b/bin/mex
+

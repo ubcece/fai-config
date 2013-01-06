@@ -1,0 +1,10 @@
+#!/bin/bash
+# 2010-02-25 Chris Dumont. The nodes have no direct KVM, only RSA, so gdm is
+# not useful.
+
+[ "$target" == "" ] && target="/"
+
+if [ "`hostname`" != "morty" ]; then
+  chroot $target update-rc.d -f gdm remove
+fi
+

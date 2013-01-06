@@ -1,0 +1,61 @@
+/etc/init.d/ferm stop
+update-rc.d -f ferm remove
+mkdir -p /zoo/wankel /zoo/ken_mp3
+vim /etc/fstab
+mount -a
+df -h
+music123 /zoo/wankel/music/Younger\ Brother/Live\ At\ Camp\ Brisco/01\ -\ Live\ At\ Camp\ Brisco\ V\ 2006-08-27.mp3 
+alsamixer
+cpan
+scp -r /usr/local/otto/ 137.82.52.76:/usr/local/
+cd /usr/local/otto/
+cp -r auxilliary/shout-perl-2.0.2/ /tmp/
+cd /tmp/shout-perl-2.0.2/
+perl Makefile.PL
+make
+make install
+cd /usr/local/otto/
+perl /usr/local/otto/lib/Otto.pm
+mysql -e "create database otto"
+mysql otto < /usr/local/otto/etc/schema.sql
+/etc/init.d/mysql start
+mysql -e "create database otto"
+mysql otto < /usr/local/otto/etc/schema.sql
+mysql mysql < /usr/local/otto/etc/webuser.sql
+mysqladmin reload
+adduser --disabled-password --home /usr/local/otto/home/ottochris ottochris
+addgroup ottochris audio
+addgroup www-data  audio
+mkdir /var/log/otto
+chown ottochris:audio /var/log/otto
+chmod 775 /var/log/otto
+EDITOR=vim ; visudo
+scp /etc/apache2/sites-available/ottochris 137.82.52.76:/etc/apache2/sites-available/ottochris
+scp /etc/apache2/sites-enabled/000-default 137.82.52.76:/etc/apache2/
+ln -s /usr/local/otto/www /var/www/chris
+/etc/init.d/apache2 reload
+/usr/local/otto/bin/otto load
+/usr/local/otto/bin/otto start
+/usr/local/otto/bin/otto start
+modprobe snd_pcm_oss
+apt-get install darkice-full
+scp -r /etc/darkice 137.82.52.76:/etc/
+scp -r /etc/init.d/otto 137.82.52.76:/etc/init.d/
+scp -r /etc/init.d/darkice 137.82.52.76:/etc/init.d/
+scp /etc/icecast2/icecast.xml 137.82.52.76:/etc/icecast2/
+update-rc.d otto defaults 25 75
+apt-get install icecast2
+vim /etc/default/icecast2 
+/etc/init.d/icecast2 start
+update-rc.d darkice defaults 21 79
+/etc/init.d/darkice start
+/usr/bin/darkice -c /etc/darkice/ottochris.cfg 
+cd /var/lib/mysql
+mv otto/ pre-restore_otto
+scp -r otto/ 137.82.52.76:/var/lib/mysql/
+chown -R mysql:mysql otto/
+/etc/init.d/mysql start
+/etc/init.d/otto start
+/etc/init.d/apache2 restart
+exit
+

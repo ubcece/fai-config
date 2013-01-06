@@ -1,0 +1,526 @@
+# vim: set filetype=changelog ts=2 sw=2 et paste fdm=indent:
+
+* morty is located in X720 and performs the following functions:
+  * morty cluster head node
+
+2010-03-01 Fully Automatic Installation <root@ece.ubc.ca>
+  * Installed
+
+------- One time setup for morty nodes ---------
+  cd /data/host-specific/
+  rsync -av morty/ node04/
+  rsync -av morty/ node03/
+  rsync -av morty/ node02/
+  rsync -av morty/ node01/
+  cd node01
+  rm -rf etc/ root/
+  cd ../node02
+  rm -rf etc/ root/
+  cd ../node03
+  rm -rf etc/ root/
+  cd ../node04
+  rm -rf etc/ root/
+  cd /root/users/chrisd
+  ./add_host_to_fai node01
+  ./add_host_to_fai node02
+  ./add_host_to_fai node03
+  ./add_host_to_fai node04
+  having morty in netgroup.base is enough for whole cluster
+  cfengine needs hostnames in classes-hosts.conf but morty's public key in huey's
+  ppkeys directory suffices for the whole cluster.
+
+------- Obsolete if huey == nodes fai-server ------
+  tftpd-hpa
+  get kernel and initrd into /srv/tftp/fai/
+  populate /srv/tftp/fai/pxelinux.cfg/ 
+  populate /etc/fai
+  get users/chrisd/... scripts from huey
+  fai-setup (calls make-fai-nfsroot)
+  get nfsroot-amd64
+  nfsroot*/**/etc/hosts has static entries for node01, etc.
+  /etc/fstab bind mounts
+  /etc/exports
+  addgroup --system fai
+  adduser fai fai
+  custom add_host_to_fai
+  edit /etc/pam.d/ssh to subvert cfengine's control of access.conf
+    account         requisite       pam_access.so accessfile=/etc/security/sshd.conf
+  add /etc/security/sshd.conf
+  populate /srv/fai/config/
+
+------- For nodes ---------------------------------
+  unlink /etc/init.d/gdm on nodes at least
+
+------------------ Start of 'official' old LOG -------------------------------------
+  2007-06-12 Chris Dumont <chrisd@ece.ubc.ca>
+    * Did initial etch install on 2006-06-01 :
+       - vim /etc/gdm/gdm.conf # AllowRoot=true
+       - apt-get --purge remove network-manager gnome-network-manager resolvconf avahi-daemon
+       - vim /etc/resolv.conf  # Fix "damage" from resolvconf
+       - vim /etc/X11/xorg.conf 
+       - vim /etc/apt/sources.list
+       - apt-get update
+       - apt-get install openssh-server vim-full tcpdump ntpdate ntp
+       - The RSA's use a Java interface so Sun's JRE is installed on morty.
+
+    * FAI install :
+      - grrr. /srv/ is hardcoded in executables.
+      - mdadm --create /dev/md2 --raid-devices=2 --level=1 /dev/sda7 /dev/sdb7
+      - mkfs.ext3 /dev/md2
+      - vim /etc/fstab # mount /dev/md2 on /srv
+      - vim /etc/inetd.conf # Comment out everything.
+      - mkdir -p /srv/tftp/fai
+      - vim /etc/default/tftpd-hpa # OPTIONS="-l -a 192.168.14.254 -s /srv/tftp"
+      - vim /etc/default/dhcp3-server # INTERFACES="eth0"
+      - vim /etc/dhcp3/dhcpd.conf # add all node MAC addresses
+      - vim /etc/hosts # add all node and RSA IP addresses
+      - vim /etc/fai/fai.conf
+      - apt-get install nis # Not sure why at this point.
+      - (temporarily?) abandon FAI in favour of DCC at Luca's request.
+
+    * DCC install :
+      - There is a installation HOWTO at 
+      http//www.irb.hr/en/cir/projects/internal/dcc/00007/ 
+      - Development of DCC has slowed (stopped?) and only sarge packages are
+      available so I had to make a detour to rebuild dcc-hpc and torque-*.
+      - dcc-front depends on shorewall-dcc and slapd-dcc. shorewall-dcc depends
+      on /etc/network/options which has been replaced with /etc/sysctl.conf I
+      think. slapd-dcc pegs CPU usage during install. Removed both as
+      dependencies in dcc-front.
+      - dcc is hopeless. A struggle to install and now a struggle to use. It
+      seems that it isn't at all tolerant of anything other than a sarge
+      environment. Back to FAI.
+
+    * *** ServeRAID 8i must be setup on nodes (x3850's) **** :
+      - To be clear, I'm not talking about morty, an x346, but the cluster nodes
+      which are x3850 Type 8863.
+      - As delivered from IBM the hard disks will not be recognized by an 
+      OS (Linux or Windows).
+      - Pressing Ctrl-A at the appropriate time during the BIOS will bring up a
+      utility that, among other tasks, will let you create an array.
+      - Linux OS's need the module aacraid (and friends). They'll probably be
+      automatically installed.
+
+  2007-06-21 Chris Dumont <chrisd@ece.ubc.ca>
+    * FAI continued. :
+      - Set node BIOS to always boot network first. The file
+      morty:/src/tftp/fai/pxelinux.cfg/C0A8xxx (hex IP address) (this is a
+      grub-style menu.lst file) can tell the node to boot from disk or network
+      or whatever. In other words morty controls how a node boots.
+      - After the FAI (which worked out of the box, BTW) is done
+      one of the node's last tasks is to send a command to morty to change the
+      "menu.lst" for the node to boot from its' local disk from now on. This
+      doesn't work since the node doesn't have passwordless ssh set up. 
+      - Added morty:/srv/fai/config/hooks/chboot.FAIBASE.source.
+      - Added morty:/srv/fai/config/scripts/FAIBASE/50-ssh
+
+  2007-06-26 Chris Dumont <chrisd@ece.ubc.ca>
+    * FIXME Find a kernel that works:
+      - I haven't found a kernel that works on an x3850 (the nodes.) FAI
+      installed linux-image-2.6-486 and I think we want
+      linux-image-2.6-686-bigmem (which hopefully is SMP as well).
+      morty:/srv/fai/config/package_config# vim FAIBASE (see FAI guide sect.
+      6.8). Hmmm, "bigmem" kernel panics during boot. Trying
+      linux-image-2.6-686. Hmmm. No good either. The 2.6-486 works but so far
+      nothing else does. The 2.6-486 is uni-processor and doesn't recognize all
+      32GB of RAM.
+    * Found a kernel 2007-08-07:
+      - After a month vacation when I install 686-bigmem it boots. Yay! Did Debian
+      fix the kernel?
+    * Custom kernel 2007-08-27:
+      - Stock kernel flaky and has BUGs. Seems that the x3850 has the
+      Subarchitecture Type of Summit/EXA. Also needs other special settings like
+      "Number of CPUs" up to 64 or 128. But, at the moment still no
+      hyper-threading. Should have two chips x two cores x two hyper-threads =
+      eight CPUs. Some debate on net regarding hyper-threading. It's generally
+      agreed that on a desktop it's a good idea but, depending upon the type of
+      task, it's a bad idea on cluster machines.
+    * Finally, a kernel that works 2007-08-31:
+      - Choose Summit/EXA Subarchitecture type. Increase "number of cpus" to
+      128. Choose P4 processor type (some debate whether these are Core-Duo or
+      P4-based Xeons). Make sure Power Management->ACPI is enabled.
+
+  2007-06-26 Chris Dumont <chrisd@ece.ubc.ca>
+    * FAI tips and tricks:
+      - Make the default for all hosts to boot using its' own local hard disk: fai-chboot -o default
+      - Install mode: fai-chboot -BI -k HOST=node01 node01
+      - An FAI task is to ssh back to morty and disable it's entry so next time
+      it boots the default (which on the next line sets it to be local-disk).
+      - Force default (local) boot by disabling node-specific boot: fai-chboot -vd node01
+      - "rescue" mode: fai-chboot -f sshd -k HOST=node01 -i node01
+      - cat /srv/tftp/fai/pxelinux.cfg/C0A80E01.* to check on current boot mode.
+
+  2007-06-26 Chris Dumont <chrisd@ece.ubc.ca>
+    * RSA firmware update:
+      - As delivered the RSA II adapters in the x3850's need their firmware
+      updated. For example, the "Power/Restart" Task is not available.
+      - With X-forwarding on or at morty's console start iceweasel and go to
+      rsa101 (or other). USERID and PASSW0RD are the factory defaults.  You can
+      tell if it needs the update since the web interface tells you immediately
+      after logging in. 
+      - I downloaded into morty:/root/ibm_fw_rsa2_zuep56a_anyos_noarch.zip and
+      upzipped the contents into morty:/root/ibm/
+      - Using the web interface "Browse" to /root/ibm/ and first pick
+      PAETBRUS.PKT follow the instructions but don't restart. Next, using the
+      "Firmware Update" Task pick PAETMNUS.PKT and after the update then
+      restart.
+      - Success is indicated by the presence of the "Power/Restart" Task.
+      - As of today I've updated only two systems.
+
+    * RSA MAC addresses:
+      - See IBM's boo-boo:
+      http://www-304.ibm.com/jct01004c/systems/support/supportsite.wss/docdisplay?lndocid=MIGR-65530&brandind=5000020
+      "Remote Supervisor Adapter II Slimlines (RSA II Slimline) have identical
+      MAC addresses - System Management"
+      - So, they not only all have the same IP address but the same MAC 
+      address (with a couple of exceptions).
+
+  2007-08-09 Chris Dumont <chrisd@ece.ubc.ca>
+    * FAI continued: 
+      - Created RAFEEF class in morty:/srv/fai/config/scripts/ 
+      - Added packages to /srv/fai/config/package_config/FAIBASE (probably should
+      have created a RAFEEF)
+      - Created scripts to, minimally, set up an environment on the nodes that
+      will allow /mirrors/ecefreeware/do_cfengine.sh to run.
+      - On bofh, netapp1, and service created a new netgroup so that morty can
+      only mount netapp1:/vol0/ece/ra (users will need root access and this will
+      limit ECE's exposure.)
+      - Don't forget that /srv/fai/config/class/FAIBASE.var sets some things
+      like timezone and root password.
+      - Although tempting don't modify anything in /srv/fai/nfsroot. 
+      - Yikes! User fai's homedir is /var/log/fai Don't erase /var/log/fai/.ssh
+
+      ypcat hosts (to verify nis)
+      ls /ubc/ece/home/staff (to verify autofs)
+      id chrisd (to verify ldap)
+
+  2007-08-15 Chris Dumont <chrisd@ece.ubc.ca>
+    * Temporary arrangements for duration of cluster install:
+      - Give Ashish su or sudo access to morty and nodes so he can help with the
+      install. But he doesn't want access to user homedir's.
+      - Restrict NFS mount to netapp1:/ubc/ece/home/ra/data. Automounting
+      doesn't work so manually  mount netapp1:/vol/ece0/ra/data /na_data/
+      - Create second root account for Ashish named rootau.
+
+  2007-08-15 Chris Dumont <chrisd@ece.ubc.ca>
+    * Custom package procedure:
+      - Wanted the custom kernel mentioned above to apt-gettable so that FAI can
+      install it. Created /srv/www and pointed apache (1.3 is running on morty)
+      to it as the Document Root. Added: 
+        deb http://morty.bisicl.ad.ece.ubc.ca/apt ./
+      to /etc/fai/apt/sources.list and /srv/fai/nfsroot/etc/apt/sources.list (I
+      think there's a better way to propagate changes in /etc/fai to
+      /srv/fai/nfsroot). Get kernel package created with make-kpkg
+      and put it into /srv/www/apt (along with other cruft). Then do:
+        cd /srv/www/apt
+        dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+        dpkg-scanpackages . /dev/null > Packages
+        dpkg-scansources . /dev/null | gzip -9c > Sources.gz
+        dpkg-scansources . /dev/null > Sources
+
+  2007-09-04 Chris Dumont <chrisd@ece.ubc.ca>
+    * FAI softupdate:
+      - Actually (on morty):
+        dsh -a "fai -N softupdate"
+      - Briefly, does (alleged to be) sensible update/upgrade and the FAI scripts.
+      - For it to work the targets need fai-client and /etc/fai/fai.conf
+      configured with :
+      FAI_CONFIG_SRC=nfs://morty/$FAI_CONFIGDIR
+      - Note that all FAI scripts need to be idempotent for this to work.
+      - Note that all FAI scripts need to be able to work on the target in local
+      disk boot mode as well as the nfs-root install mode.
+  TODO: finish the above. cfagent mangles ${variables}
+
+  2007-09-11 Chris Dumont <chrisd@ece.ubc.ca>
+    * /root/.bashrc:
+      - has some important stuff like: "export SGE_ROOT=/srv/sge_root/"
+
+  2007-09-11 Chris Dumont <chrisd@ece.ubc.ca>
+    * Apache is used:
+      - apache is installed on morty so that we can provide locally built
+      .deb's. See /root/bin/local_apt_rep_update for a bit more info.
+      - The document_root is /srv/www
+
+  Notes:
+
+    * x3850 + linux :
+      - http://weblog.pell.portland.or.us/~orc/2007/05/01/000/index.html
+      - http://www-304.ibm.com/jct01004c/systems/support/supportsite.wss/docdisplay?lndocid=MIGR-63462&brandind=5000020
+      - http://www.redbooks.ibm.com/redbooks/pdfs/sg246797.pdf page 93. Not sure
+      this is relevant to the x3850.
+      - Maybe we should install Ubuntu?:
+      https://bugs.launchpad.net/ubuntu/+source/linux-source-2.6.20/+bug/82382
+      - http://www.adaptec.com/NR/exeres/35B611BC-9789-4B5B-82C6-85A2CCA8A46A.htm
+
+      - Log in to web interface of RSAII adapter at, e.g., rsa101 for node01.
+
+  ------------------ <snipped uninteresting update/upgrade entries>-------------
+
+------------------ Start of Ashish's LOG -------------------------------------
+  morty: lshw htop
+  ?Why is morty running apache
+
+  node08: lshw htop
+  both now in FAI - chrisd
+  http://www.howtoforge.com/kernel_compilation_debian_etch
+
+  apt-get install kernel-package libncurses5-dev fakeroot wget bzip2 build-essential
+  chose core 2/xeon, 64GB ram, 
+  manually updated menu.lst
+  booted with errors, but cpu num and memory seem ok.
+
+
+  # less /proc/acpi/processor/
+  CP00/  CP01/  CP02/  CP03/  CP05/  
+  ? Why 6 cpus..?
+
+
+  ?Why does the RSA page not show temp information for CPU 2 and 3?
+
+  ?Why does the BIOS say '2 CPU packages installed' ?
+
+  ?Why does lshw list only 2 L2 cache and 2 L1 cache?
+
+  Need to figure out how to get 8 processing units, meaning htop should show 8 units (?)
+
+
+  new compile:
+  15 kernel log buffer (14) (so that output of dmesg is not chopped off)
+  turned off power management
+  16 cpu number (8)
+  compiling as nopowermangement
+  update menu.lst
+  Can now only see two entries in cpuinfo (is this two cores or two cpus?)
+  Going back to intial custom kernel
+
+
+
+  Disable HT in the BIOS. Now I see only two entries in the /proc/cpuinfo,
+  both with same physical id (core id 0 and 1) indicating that only ONE
+  physical CPU was detected.
+  ht re-enabled in bios 2007-08-28 0723 - chrisd
+
+  18:50/27 Aug 
+  added /sge_root as nfs export (ro)
+
+
+  18:55/27 Aug
+  node08 has all cores detected, assume Chris configured kernel correctly
+  and will update FAI.
+  not yet 2007-08-27 1009  -- chrisd
+  not yet (four cores but no hyper-threading) 2007-08-27 1447  -- chrisd
+  19:00/27
+  installed xemacs21
+  now in FAI (i.e. will be included during next install) - chrisd
+
+  ran util/setfileperm.sh $SGE_ROOT
+
+
+  could not get /sge_root to mount on node7 via nfs, /proc/fs/nfs/exports
+  had entires I couldnt make sense of :(
+
+
+  /etc/init.d/nfs-common restart and /etc/init.d/nfs-kernel-server restart fixed
+  it. Shouldn't have had to do that, though. Ashish, pls check /etc/exports since
+  I changed it so many times I forgot what you wanted. 2007-08-28 1429 -- chrisd
+
+
+  scp'ing /sge_root to node7 to try execution host installation
+  (master host installation complete)
+
+
+  Ashish, is there a convention that sge_root goes in "/" ? Usually stuff like
+  this would be /opt, /usr/local/ or in ECE we often use /export[.*]. On morty I
+  created /srv/ since FAI has that path hardcoded in some of its' utilities (bad
+  FAI!). The /srv partition has lots of space so I wouldn't mind putting sge
+  there especially if there is any chance of sge getting bigger. But, it's not
+  imperative that it be moved; it's just my personal preference.
+
+
+  13:30/29 Aug
+  Attempted to uninstall sge using the info in the admin guide, nothing to uninstall..
+  Moved /sge_root to /srv/
+
+
+  14:50/29 Aug
+  Installing SGE on a node caused problems due to this entry in /etc/hosts
+  192.168.14.6 node06.cluster ece.ubc.ca node06
+  installation proceeded after I commented this out. Some issue with the FQ name being 
+  node06.cluster, which the master node (morty) does not recognize. Was hacking around,
+  and commenting this line helped. 
+  If we dont need this, can this be removed from all nodes please?
+
+  repeated this on node07
+  Done, 2007-09-04 -- chrisd
+
+  14:55/29 Aug
+  dsh -a echo "'morty:/srv/sge_root /srv/sge_root nfs rw,intr,auto 0 0' >> /etc/fstab"
+  dsh -a reboot
+
+  Have to do this before getting started with SGE commands (tcsh)
+  /srv/sge_root# source default/common/settings.csh
+
+
+  15:51/29 Aug
+  seeing strange outputs from whoami. I can not control SGE when whoami shows rootau :(
+
+  now i see:
+  morty|15:51|sge_root|>whoami
+  root
+
+  and was able to add execution hosts..
+
+  16:22/29 Aug
+  Triying the auto installer as such
+
+  cd /srv/sge_root
+  rm -rf default
+  ./inst_sge -m -x -auto ./util/install_modules/bisicl_cluster.conf
+
+  doesnt seem to install teh nodes :(
+
+
+  16:35/29 Aug
+  i hate quotes. Couldnt figure out how to send this via dsh. did it manually for each node :|
+   perl -i.bak -n -e 'if ( /cluster/ ) { print "#$_" ; } else{print}' /etc/hosts
+
+
+  16:39/29 Aug
+  wohoo!
+  morty|16:40|/root|>qstat -f
+  queuename                      qtype used/tot. load_avg arch          states
+  ----------------------------------------------------------------------------
+  all.q@node01                   BIP   0/1       0.03     lx24-x86      
+  ----------------------------------------------------------------------------
+  all.q@node02                   BIP   0/1       0.00     lx24-x86      
+  ----------------------------------------------------------------------------
+  all.q@node03                   BIP   0/1       0.01     lx24-x86      
+  ----------------------------------------------------------------------------
+  all.q@node04                   BIP   0/1       0.01     lx24-x86      
+  ----------------------------------------------------------------------------
+  all.q@node05                   BIP   0/1       0.00     lx24-x86      
+  ----------------------------------------------------------------------------
+  all.q@node06                   BIP   0/1       0.00     lx24-x86      
+  ----------------------------------------------------------------------------
+  all.q@node07                   BIP   0/1       0.00     lx24-x86      
+  ----------------------------------------------------------------------------
+  all.q@node08                   BIP   0/4       0.01     lx24-x86      
+
+
+  16:58/ 29 Aug
+
+  morty|16:57|lx24-x86|>qmon 
+  qmon: error while loading shared libraries: libXm.so.3: cannot open shared object file: No such file or directory
+
+  morty|16:56|motif_install|>wget http://http.us.debian.org/debian/pool/non-free/o/openmotif/libmotif3_2.2.3-1_i386.deb
+
+
+  morty|16:58|lx24-x86|>ldd qmon
+          linux-gate.so.1 =>  (0xffffe000)
+          libXltree.so => /srv/sge_root/bin/lx24-x86/../../lib/lx24-x86/libXltree.so (0xb7fc3000)
+          libdl.so.2 => /lib/tls/i686/cmov/libdl.so.2 (0xb7fae000)
+          libXm.so.3 => not found
+          libXpm.so.4 => /usr/lib/libXpm.so.4 (0xb7f9e000)
+          libXt.so.6 => /usr/lib/libXt.so.6 (0xb7f4f000)
+          libXext.so.6 => /usr/lib/libXext.so.6 (0xb7f41000)
+          libXmu.so.6 => /usr/lib/libXmu.so.6 (0xb7f2c000)
+          libX11.so.6 => /usr/lib/libX11.so.6 (0xb7e3f000)
+          libSM.so.6 => /usr/lib/libSM.so.6 (0xb7e36000)
+          libICE.so.6 => /usr/lib/libICE.so.6 (0xb7e1e000)
+          libXp.so.6 => /usr/lib/libXp.so.6 (0xb7e17000)
+          libm.so.6 => /lib/tls/i686/cmov/libm.so.6 (0xb7df2000)
+          libpthread.so.0 => /lib/tls/i686/cmov/libpthread.so.0 (0xb7de0000)
+          libc.so.6 => /lib/tls/i686/cmov/libc.so.6 (0xb7cae000)
+          /lib/ld-linux.so.2 (0xb7fd2000)
+          libXm.so.3 => not found
+          libXau.so.6 => /usr/lib/libXau.so.6 (0xb7cab000)
+          libXdmcp.so.6 => /usr/lib/libXdmcp.so.6 (0xb7ca6000)
+
+  but..
+  morty|16:58|lx24-x86|>locate libXm.so.3
+  /usr/X11R6/lib/libXm.so.3
+
+
+  17:29/29 Aug
+  ldconfig -v /usr/X11R6/lib/
+  solved :D
+
+
+  09:12/30 Aug
+  making kernel, used chris's config. Already had core 2
+  (btw.. I meant cpu family .. not stepping :-s)
+
+
+  20:05/09 Sept
+  'uninstallation'
+  /etc/init.d/sgemaster stop
+  dsh -a /etc/init.d/sgeexecd stop
+  rm -rf default /etc/init.d/sgemaster
+
+
+  20:28/09 Sept
+  Installing ITK
+  >dsh -a apt-get install cmake
+  >dsh -a apt-get install -y gcc
+  >dsh -a apt-get install -y g++
+
+  cmake.. done. installed at
+  /na_data/tools/itk/install
+
+  21:10/09 Sept
+  make /na_data /w/ (will make code changes easier)
+
+
+  10:35/11 Sept
+  installing rxvt on all nodes
+  morty|10:37|/root|>dsh -a apt-get install rxvt
+  sigh, SGE needs xterm for qsh
+  morty|10:39|/root|>dsh -a apt-get install -y xterm
+
+  morty|10:39|/root|>dsh -a apt-get install -y cmake
+
+
+  TODO: ask chris about a list of 'allowable users'
+  TODO: mmckeown's home dir
+  TODO: xfer and meddata
+
+
+  /etc/init.d/sgemaster stop
+  dsh -a /etc/init.d/sgeexecd stop
+  rm -rf default /etc/init.d/sgemaster
+  ./inst_sge -m -x -auto /srv/sge_root/util/install_modules/bisicl_cluster.conf
+
+  # user lists, needs to be specified later for Q definition
+  qconf -Au /srv/sge_root/util/install_modules/ece.accesslist
+  qconf -Au /srv/sge_root/util/install_modules/med.accesslist
+
+  qconf -Aq /srv/sge_root/util/install_modules/ece.q
+  qconf -Aq /srv/sge_root/util/install_modules/med.q
+
+  #remove default queue which is 'open' to all
+  qconf -dq all.q
+  #add manager id. Can remove/add/modify queues on the fly
+  qconf -am bisiclad
+
+  ------------------ End   of Ashish's LOG -------------------------------------
+
+------------------ Start of 'official' (preinstall) LOG ----------------------
+
+2010-03-01 Chris Dumont <chrisd@ece.ubc.ca>
+  * Another RSA update:
+    - Due to firmware java application bug the "Remote Control" application in
+    the RSAs doesn't run on a stock Lenny box due to errors. IBM has issued
+    updated firmware (summer 2009). Installed that but found that it still
+    doesn't work with the latest java (6u12). So, use java5 instead.
+
+
+2010-03-01 Chris Dumont <chrisd@ece.ubc.ca>
+  * morty is no longer an FAI server:
+    - With correct configuration through cfengine and fai the nodes can use FAI
+      from huey. The only service needed on morty (wrt to installing nodes) is
+      a dhcp server. 
+  * mortry is an SGE Master:
+    - Configure SGE via instructions in
+      /usr/share/doc/gridengine-common/README.Debian. Use cdumont for manager. 
+
+

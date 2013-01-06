@@ -1,0 +1,49 @@
+######################################################################
+# NOTE: The disk enumeration order can vary after each boot.  When
+# the smaller hardware RAID disk is identified as disk2 (/dev/sdb),
+# then FAI fails since it cannot allocate such a large partition on
+# it.  If that happens, just re-run FAI until it works.  There is no
+# point in editing this file, since that won't improve your chances
+# of success.  -- Derek Poon <derekp@ece.ubc.ca>, July 2011
+######################################################################
+
+# Hardware RAID disk...
+disk_config disk1 disklabel:gpt fstabkey:uuid
+primary             -             200M-300M   msdos -
+primary             /             9000-10000  ext3 rw,errors=remount-ro
+primary             swap          1000-1100   swap rw
+primary             /tmp          20G-        ext3 rw
+primary             /var          5000-8000   ext3 rw
+
+# Large SATA disk to be degenerate RAID member...
+disk_config disk2 disklabel:gpt fstabkey:uuid
+primary             -             200M        msdos -
+primary             -             1600G-      -     -
+
+## msql1 does not have another SATA disk to be RAID1 member...
+#disk_config disk3 disklabel:gpt fstabkey:uuid
+#primary             -             200M        msdos -
+#primary             -             1600G-      -     -
+
+disk_config raid preserve_reinstall:1
+# Define md0...
+raid1               -   disk2.2               -     -
+
+disk_config lvm preserve_reinstall:sata_vg-data fstabkey:uuid
+vg sata_vg md0
+sata_vg-data        /data         1500G       xfs  rw,noatime
+# Leave some unused space in sata_vg for snapshot volume
+
+
+######################################################################
+# The old single-disk configuration...
+######################################################################
+#disk_config disk1
+#primary  /             9000-10000  ext3 rw,errors=remount-ro
+#logical  swap          1000-1100   swap rw
+#logical  /var          5000-6000   ext3 rw
+#logical  -             20G-        -    -
+#
+#disk_config lvm fstabkey:device
+#vg        data         sda7
+#data-data /data        90%         ext3 rw,nosuid

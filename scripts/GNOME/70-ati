@@ -1,0 +1,39 @@
+#!/bin/bash
+# 2008-12-18 Chris Dumont
+# Do we have an ATI card? Uninstall nvidia stuff and replace with ati stuff.
+#set -x
+[ "$target" == "" ] && target="/"
+
+chroot $target update-pciids >/dev/null 2>/dev/null
+
+HAS_ATI=`chroot $target lspci | grep VGA | grep ATI`
+if [ -z $HAS_ATI ]; then
+	exit 0
+fi
+
+set +x
+fcopy -iBM /etc/X11/xorg.conf
+
+cat <<EOF > $target/root/lennyxorg
+#!/bin/bash
+#set -e
+iam=\`basename \$0\`
+apt-get -qq update
+apt-get -qq -y install fglrx-control fglrx-driver
+# 2011-05-02 not needed for Squeeze, yet. apt-get -qq -y install module-assistant fglrx-amdcccle fglrx-atieventsd fglrx-control fglrx-driver fglrx-glx fglrx-kernel-src 
+# 2011-05-02 not needed for Squeeze, yet. for i in \`COLUMNS=180; dpkg -l | awk '{print \$2}' |  grep "linux-image-2.6\." | sed -e 's/linux-image-//'\`; do
+	# 2011-05-02 not needed for Squeeze, yet. m-a --quiet -t --non-inter -l \$i a-i fglrx
+# 2011-05-02 not needed for Squeeze, yet. done
+apt-get -qq -y --purge remove nvidia-*
+if [ \$? -eq 0 ]; then
+    touch /root/\${iam}_success
+    rm -f /root/\${iam}_no_success
+else
+    touch /root/\${iam}_no_success
+    rm -f /root/\${iam}_success
+fi
+
+EOF
+chmod +x $target/root/lennyxorg
+chroot $target /root/lennyxorg
+

@@ -1,0 +1,7 @@
+# List of hosts for which the install NIC is not eth0. 
+# This file examined by /root/users/chrisd/install_lenny
+#
+# One hostname, whitespace, and desired NIC per line. No comments, no trailing
+# spaces.
+thud		eth2
+g32 		eth1

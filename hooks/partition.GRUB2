@@ -1,0 +1,20 @@
+#!/bin/bash
+
+vg_name="vg" # FIXME: Maybe should add some intelligence to which vg is being
+	     # removed. This name is set in various disk_configs.
+/sbin/vgremove -f ${vg_name}
+
+ifclass SLOW || exit 0
+
+# 2008-11-19 Chris Dumont. Let's have a long pause before partitioning the
+# disk. 
+
+for i in $disklist ; do
+	parted -s /dev/$i unit GB print free
+done
+setup-storage -d 2>&1 | grep mkpart
+echo " "
+echo "Don't like what you see? Press Ctrl-C to abort overwriting the disk."
+echo "Like what you see? ssh to $HOSTNAME and 'killall sleep'"
+sleep 10000
+

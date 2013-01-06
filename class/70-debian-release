@@ -1,0 +1,31 @@
+#!/bin/bash
+# 2009-02-26 Chris Dumont. As we switch from etch to lenny it has become
+# apparent that it's necessary to install different packages according to
+# distribution.
+# 2011-01-13 Updated for squeeze.
+
+# 2011-05-29 This script will have to be updated upon new releases of Debian.
+
+# Hardcoding the current codename of the Debian stable release.
+stable="SQUEEZE"
+
+# Perhaps we deliberately set the release in 50-host-classes. 
+# These are all the workable classes as of 2011-05-29.
+( ifclass SQUEEZE || ifclass WHEEZY || ifclass SID ) && exit 0
+
+if [ X$FAI_ACTION = Xdirinstall ] || [ X$action = Xdirinstall ]; then
+        echo $stable
+        exit 0
+fi
+
+case `cat /etc/issue` in
+  "Debian GNU/Linux 4"*)
+  	echo "ETCH" ;;
+  "Debian GNU/Linux 5"*)
+  	echo "LENNY" ;;
+  "Debian GNU/Linux 6"*)
+  	echo "SQUEEZE" ;;
+  # FIXME: I haven't done a wheezy install yet. What does /etc/issue contain?
+  *)
+  	: ;;
+esac

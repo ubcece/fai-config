@@ -1,0 +1,50 @@
+# /etc/network/interfaces
+# vim: set ts=2 sw=2 et si:
+
+auto lo
+iface lo inet loopback
+  # dns1.ece.ubc.ca and dns2.ece.ubc.ca
+  npath-virtual-server-ipv4 137.82.52.165 137.82.52.170
+
+# EECE01-ECE
+auto eth0
+iface eth0 inet static
+  address 137.82.52.87
+  netmask 255.255.255.0
+  network 137.82.52.0
+  broadcast 137.82.52.255
+  gateway 137.82.52.254
+  # dns-* options are implemented by the resolvconf package, if installed
+  dns-nameservers 137.82.1.1 142.103.1.1
+  dns-search ece.ubc.ca
+  #up   ip addr add 137.82.52.114 dev eth0 label eth0:nis1
+  #down ip addr del 137.82.52.114 dev eth0 label eth0:nis1
+  #up   ip addr add 137.82.52.230 dev eth0 label eth0:ntp1
+  #down ip addr del 137.82.52.230 dev eth0 label eth0:ntp1
+
+# BIG-IP pool member of dns1.iun.ubc.ca (137.82.37.2) and dns2.iun.ubc.ca
+# (137.82.37.3) with nPath routing.  BIG-IP forwards incoming requests to us
+# via the primary eth0 address (137.82.52.130).  Responses should be tagged for
+# the ICCS01-IUN (1510) VLAN.  Furthermore, the default gateway should be
+# 137.82.37.254 if the source address is in 137.82.37.0/24.
+#auto vlan1510
+#iface vlan1510 inet static
+#  vlan_raw_device eth0
+#  address 137.82.37.2
+#  netmask 255.255.255.0
+#  network 137.82.37.0
+#  broadcast 137.82.37.255
+#  pre-up sysctl -q -w net/ipv4/conf/all/arp_announce=2
+#  up     sysctl -q -w net/ipv4/conf/vlan1510/arp_ignore=8
+#  up   ip addr  add 137.82.37.3/24 dev vlan1510
+#  down ip addr  del 137.82.37.3/24 dev vlan1510
+#  up   ip addr  add 137.82.37.6/24 dev vlan1510
+#  down ip addr  del 137.82.37.6/24 dev vlan1510
+#  up   ip route add 137.82.37.0/24 dev vlan1510 table iun
+#  up   ip route add default via 137.82.37.254 dev vlan1510 table iun
+#  up   ip route add default via 137.82.52.254 dev eth0 table default
+#  down ip route del default via 137.82.52.254 dev eth0 table default
+#  up   ip rule  add from 137.82.37.0/24 lookup iun
+#  down ip rule  del from 137.82.37.0/24 lookup iun
+#  up   ip rule  add from 137.82.52.0/24 lookup default
+#  down ip rule  del from 137.82.52.0/24 lookup default

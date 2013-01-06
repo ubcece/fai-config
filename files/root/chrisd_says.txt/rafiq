@@ -1,0 +1,16 @@
+# As of 2009-04-17 rafiq can't use a stock lenny kernel. It needs sid whaich ATM is 2.6.29-1
+
+# Just prior to installation:
+huey:~# chmod +x /data/fai/config/scripts/LAST/99-sleep
+
+# Then on rafiq:
+vim /etc/apt/sources.list # add sid
+apt-get update
+apt-get install module-assistant build-essential nvidia-kernel-common linux-image-2.6.29-1-amd64
+apt-get install nvidia-kernel-source=180.44-2 # Obviously the version number is quite volatile.
+m-a -t a-i nvidia
+apt-get install nvidia-glx=180.44-2
+vim /etc/apt/sources.list # remove sid
+apt-get update
+
+

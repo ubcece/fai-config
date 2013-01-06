@@ -1,0 +1,25 @@
+# 2009-10-07 Derek Poon <derekp@ece.ubc.ca>
+# In FAI 3.2.17, setup-storage has a bug: if an LVM volume group already
+# exists, running setup-storage a second time causes an error:
+# "Cannot satisfy pre-depends for vgreduce data /dev/block/104:5: vg_extended_data,pv_done_/dev/block/104:5 -- system left untouched."
+# A workaround is to first run "/sbin/vgremove data"
+
+disk_config cciss/c0d0 disklabel:gpt bootable:2
+primary  -             200M-300M   msdos        -
+primary  swap          8G          swap         rw
+primary  -             14G-18G     -            -
+#primary  -             30G-        -            -
+
+disk_config lvm fstabkey:device
+vg       vg            cciss/c0d0p3
+vg-root1 /             2G-3G       ext3         rw,errors=remount-ro
+vg-var1  /var          5G-6G       ext3         rw
+vg-root2 /altroot      2G-3G       ext3         rw,errors=remount-ro
+vg-var2  /altroot/var  5G-6G       ext3         rw
+
+# If the host filesystem is not ext[234] then disk quotas will not work in
+# OpenVZ containers.  http://wiki.openvz.org/Disk_quota
+#disk_config lvm fstabkey:device
+#vg        data         cciss/c0d0p4
+#data-data /data        4G-6G       xfs          rw,nosuid
+#data-vz   /var/lib/vz  90%         ext4         rw

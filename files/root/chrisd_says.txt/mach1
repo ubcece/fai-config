@@ -1,0 +1,12 @@
+Copy the folowing into /root/LOG
+
+* mach1 is located in KAIS 4102 and performs the following functions:
+  * workstation for cleung
+  * Non-standard setup: cleung has a local home directory.
+    /dev/hdb1 (/dev/sdb1?) 
+    mach1:/etc# grep -r cleung *
+    passwd:cleung:x:207:200:Cyril Leung,,,:/home/cleung:/usr/bin/tcsh
+    shadow:cleung:$1$wr95veW/$J/ADcnb657tQH3kU5gZjs0:12899:0:99999:7:::
+    mach1:~# cat /etc/fstab | grep hdb
+    /dev/hdb1       /mnt/home      ext3    rw 0       1
+

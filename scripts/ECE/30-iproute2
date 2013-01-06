@@ -1,0 +1,11 @@
+#! /bin/bash
+
+! ifclass LOOKUPSERVER && exit 0
+
+error=0 ; trap "error=$((error|1))" ERR
+
+# here fcopy is mostly used, when installing a client for running in a
+# different subnet than during the installation  
+fcopy -iM /etc/iproute2/rt_tables /etc/iproute2
+
+exit $error

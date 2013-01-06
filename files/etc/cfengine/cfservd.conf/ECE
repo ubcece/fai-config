@@ -1,0 +1,24 @@
+# cfservd.conf      $Rev: 182 $
+# vim: set ts=2 sw=2 et si:
+
+control:
+  domain = ( ece.ubc.ca )
+  cfrunCommand = ( "/usr/sbin/cfagent" )
+  AllowUsers = ( root )
+
+  huey::
+    MaxConnections = ( 100 )
+    #TrustKeysFrom = ( 137.82.52 )
+
+  !huey::
+    AllowConnectionsFrom = ( 137.82.52.110 )
+    #TrustKeysFrom = ( 137.82.52.110 )
+
+grant:
+  any::
+    /usr/sbin/cfagent           huey.ece.ubc.ca
+
+  huey::
+    /var/local/cfengine         *
+    /var/local/netdata          *
+    /var/tmp/cfengine-test      *

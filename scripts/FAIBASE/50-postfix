@@ -1,0 +1,7 @@
+#!/bin/bash
+# 2008-09-15 Chris Dumont. Although most ECE boxes are integrated and therefore
+# have postfix configured via cfengine there are on occasion boxes that aren't.
+# This script configures those that aren't. Depends on manually keeping
+# .../main.cf/FAIBASE up to date.
+
+fcopy -BM /etc/postfix/main.cf

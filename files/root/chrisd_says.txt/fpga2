@@ -1,0 +1,61 @@
+#!/bin/bash pseudo-code
+# on fpga2 it detects the ethernet ports backwards. Edit:
+
+cat <<EOF > /etc/udev/rules.d/z25_persistent-net.rules
+
+SUBSYSTEM=="net", DRIVERS=="?*", ATTRS{address}=="00:1d:09:63:a6:2c", NAME="eth1"
+
+SUBSYSTEM=="net", DRIVERS=="?*", ATTRS{address}=="00:1d:09:63:a6:2a", NAME="eth0"
+EOF
+
+/etc/init.d/ferm stop
+update-rc.d -f ferm remove
+
+vim /etc/apt/preferences # reduce stable pinning from 1001 to 800.
+apt-cache search xen-linux-system
+if [ `uname -m` == "x86_64" ] ; then
+  apt-get install xen-linux-system-2.6.18-6-xen-amd64  bridge-utils xfsprogs
+else
+  apt-get install xen-linux-system-2.6.18-6-xen-686 bridge-utils libc6-xen xfsprogs
+fi
+apt-get -t etch-backports install xen-tools
+echo "loop max_loop=255" >> /etc/modules
+reboot
+uname -a
+mkdir -p /data/xen/domains
+cat <<EOF > /etc/xen-tools/xen-tools.conf 
+dir = /data/xen
+install-method = debootstrap
+size   = 4Gb      # Disk image size.
+memory = 128Mb    # Memory size
+swap   = 128Mb    # Swap size
+fs     = ext3     # use the EXT3 filesystem for the disk image.
+dist   = etch     # Default distribution to install.
+image  = sparse   # Specify sparse vs. full disk images.
+gateway   = 192.168.1.1
+netmask   = 255.255.255.0
+broadcast = 192.168.1.255
+passwd = 1
+kernel      = /boot/vmlinuz-`uname -r`
+initrd      = /boot/initrd.img-`uname -r`
+arch=amd64
+mirror = http://mirrors.ece.ubc.ca/debian/
+ext3_options   = noatime,nodiratime,errors=remount-ro
+ext2_options   = noatime,nodiratime,errors=remount-ro
+xfs_options    = defaults
+reiser_options = defaults
+disk_device = xvda
+EOF
+cat <<EOF > /etc/xen/xend-config.sxp 
+(network-script network-nat)
+(vif-script     vif-nat)
+(dom0-min-mem 196)
+(dom0-cpus 0)
+EOF
+/etc/init.d/xend restart
+xen-create-image --hostname=ibofh --ip=192.168.1.22 --netmask=255.255.255.0 --gateway=137.82.52.1 --passwd
+xm create /etc/xen/ibofh.cfg
+xm console ibofh
+xm list
+xm shutdown ibofh
+

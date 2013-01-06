@@ -1,0 +1,6 @@
+#!/bin/bash
+
+[ -s $target/etc/kernel-img.conf ] || fcopy -iBM /etc/kernel-img.conf
+
+chroot $target apt-get update
+

@@ -1,0 +1,20 @@
+#! /usr/sbin/cfagent -f
+# 2007-08-15 Chris Dumont
+# 2007-09-26 Chris Dumont. Mostly commented out. All of this should be done in
+# cfengine. Here, only do what needs to be done before cfengine is run for the
+# first time.
+
+control:
+   any::
+   actionsequence = ( editfiles )
+   #actionsequence = ( editfiles files )
+   EditFileSize = ( 10000 )
+
+editfiles:
+   any::
+	# Bootlog helps with debugging.
+        { ${target}/etc/default/bootlogd
+	  LocateLineMatching "BOOTLOGD_ENABLE=.*"
+	  ReplaceLineWith "BOOTLOGD_ENABLE=Yes"
+        }
+

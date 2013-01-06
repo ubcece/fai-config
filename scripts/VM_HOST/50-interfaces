@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# The pveca command parses /etc/network/interfaces and expects a static IP
+# address
+sed -i $target/etc/network/interfaces -f- <<-SED_SCRIPT
+	/^iface vmbr0 inet dhcp/ a\\
+	  address $IPADDR
+	SED_SCRIPT

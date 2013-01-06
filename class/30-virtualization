@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ -d /proc/vz -a ! -f /proc/vz/version ]; then
+    echo "VZ_CONTAINER"
+fi
+
+# dmidecode can fail.  For example, in OpenVZ containers, it fails with
+# "/dev/mem: Operation not permitted".
+/usr/sbin/dmidecode -q -s system-product-name 2>/dev/null | while read desc ; do
+    case "$desc" in
+      "Bochs")
+        echo "VM_GUEST BOCHS_GUEST"
+        ;;
+      "VMware Virtual Platform")
+        echo "VM_GUEST VMWARE_GUEST"
+        ;;
+    esac
+done

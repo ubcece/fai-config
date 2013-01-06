@@ -1,0 +1,55 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          ece_integration
+# Required-Start:    $network ntp $time $local_fs $syslog sshd
+# Required-Stop:     $network $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Runs cfagent after OS install.
+# Description:       Runs cfagent after OS install. Should only 
+#                    need to be run once ever in the life of the OS.
+### END INIT INFO
+
+set -e 
+
+[ "$1" = "start" ] || exit 0
+
+echo "Integrating `hostname` into ECE (this will take a while, please be patient). "
+
+# derekp: munin-node's postinst script fails in an FAI environment (some error
+# running df).  Workaround.
+if [ -x /usr/sbin/munin-node-configure ]; then
+    /usr/sbin/munin-node-configure --shell | /bin/sh &&     /etc/init.d/munin-node restart
+fi
+
+[ -x /usr/sbin/cfagent ] && /usr/sbin/cfagent -v -DHourly.Daily | tee /root/cfagent.log.`date +%Y-%m-%d_%H:%M:%S` 
+
+if id monitor >/dev/null 2>/dev/null ; then
+    touch /root/runonce_success
+    insserv -r runonce
+    rm -f /root/runonce_no_success /etc/init.d/runonce
+
+    # 2011-11-03 Derek and Chris:
+    # Workstations tend to need rebooting, especially to since the nouveau
+    # video driver cannot be unloaded.  Servers (that don't have an X server)
+    # may be able to get away without a reboot.
+    if [ -x /etc/init.d/gdm3 ]; then
+        /etc/init.d/gdm3 stop
+        chvt 1
+        echo
+        echo "Integration of `hostname` into ECE done."
+        echo "Therefore a reboot is necessary. Will reboot in 10s."
+        sleep 10
+        /sbin/shutdown -r now
+    fi
+else
+    touch /root/runonce_no_success
+    echo "Not successful. Depends on cfagent starting, out of normal order, nslcd."
+    echo -n "Was nslcd running? "
+    if pgrep -x -f /usr/sbin/nslcd >/dev/null ; then
+      echo "Yes."
+    else
+      echo "No."
+    fi
+fi

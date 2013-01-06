@@ -1,0 +1,24 @@
+PACKAGES aptitude I386
+memtest86+
+
+PACKAGES aptitude CHROOT
+linux-image-486-
+
+PACKAGES aptitude AMD64
+memtest86+
+
+PACKAGES aptitude DHCPC
+dhcp3-client
+
+PACKAGES aptitude ECE_DISK2
+grub lilo-
+
+PACKAGES aptitude GRUB
+grub lilo-
+
+PACKAGES aptitude GRUB2
+grub2 lilo-
+os-prober
+
+PACKAGES aptitude LILO
+lilo grub-

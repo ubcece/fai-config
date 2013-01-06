@@ -1,0 +1,47 @@
+Package: *
+Pin: release a=stable
+Pin-Priority: 1001
+
+Package: *
+Pin: release a=unstable
+Pin-Priority: 10
+
+Package: libpq5
+Pin: release a=squeeze-backports
+Pin-Priority: 1001
+
+Package: libpq-dev
+Pin: release a=squeeze-backports
+Pin-Priority: 1001
+
+Package: postgresql
+Pin: release a=squeeze-backports
+Pin-Priority: 1001
+
+Package: postgresql-9.0
+Pin: release a=squeeze-backports
+Pin-Priority: 1001
+
+Package: postgresql-client
+Pin: release a=squeeze-backports
+Pin-Priority: 1001
+
+Package: postgresql-client-common
+Pin: release a=squeeze-backports
+Pin-Priority: 1001
+
+Package: postgresql-common
+Pin: release a=squeeze-backports
+Pin-Priority: 1001
+
+Package: postgresql-contrib
+Pin: release a=squeeze-backports
+Pin-Priority: 1001
+
+Package: postgresql-doc
+Pin: release a=squeeze-backports
+Pin-Priority: 1001
+
+Package: postgresql-server-dev-9.0
+Pin: release a=squeeze-backports
+Pin-Priority: 1001

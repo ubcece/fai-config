@@ -70,3 +70,113 @@ ece_setup_hook() {
 }
 
 ece_setup_hook
+
+
+# 2007-09-16 Chris Dumont
+# See "FAI and secrets.txt" for extensive background.
+# This script attempts to be idempotent.
+#
+# 2008-01-04 Updated for new framework.
+#
+# 2009-10-07 Derek Poon <derekp@ece.ubc.ca>: Abort if rsync fails
+# 2011-11-21 Derek Poon <derekp@ece.ubc.ca>: chmod 600 /etc/ssh/*.[dr]sa
+
+# Should probably make this pay attention to classes.
+
+#. /etc/fai/fai.conf
+
+#sleepy() {
+#  sleep 161
+#}
+#trap sleepy ERR
+
+DIRS="/etc/ssh /root/.ssh /var/lib/cfengine2/ppkeys "
+
+SS="/etc/ssh/ssh_host_dsa_key /etc/ssh/ssh_host_rsa_key \
+/etc/ssh/*.rsa /etc/ssh/*.dsa \
+/root/.ssh/id_dsa /root/.ssh/id_rsa /var/lib/cfengine2/ppkeys/localhost.priv"
+
+SSD="/var/lib/cfengine2/ppkeys "
+
+# 2012-12-19 Derek Poon <derekp@ece.ubc.ca>
+# On machines with less than 512 MiB RAM, don't use a performance-boosting
+# ramdisk
+if [ -z "$FAI_RAMDISKS" ]; then
+    FAI_RAMDISKS=`free -m | awk '/Mem/ { if ($2 < 512) print "none" }'`
+    export FAI_RAMDISKS
+fi
+
+if [ -f /.THIS_IS_THE_FAI_NFSROOT ]; then
+  for i in $DIRS ; do
+    if ! mount | grep -q " on ${i} type " ; then
+      echo "Creating writable ${i}"
+      SCRATCH=`mktemp -d`
+      rsync -a ${i}/ ${SCRATCH}/ # Trailing slashes are important with rsync.
+      mount tmpfs $i -t tmpfs
+      rsync -a ${SCRATCH}/ ${i}/
+      rm -rf ${SCRATCH}
+    fi
+  done
+fi
+
+for i in $DIRS ; do
+  mkdir -p ${i}
+  if rsync -a fai@${SERVER}:${FAI_HSEXPORTS}/`hostname`/${i}/ ${i}/ ; then
+    echo "Sync'ed ${i}."
+  else
+    case "$FAI_ACTION" in
+      install)
+        echo "ERROR: Failed to sync ${i}.  No permission to perform FAI?"
+        sleep 3543
+        exit 1
+        ;;
+      dirinstall)
+        echo "Failed to sync. "
+        echo "If you're seeing this message in LAST/40-ssh then you're too late. Try again. :-) "
+        echo "While dirinstall is proceeding edit huey:/etc/security/sshd.conf and insert the line:"
+        echo "+:fai : `hostname -f`"
+        sleep 56
+        ;;
+      *)
+        echo "ERROR: Failed to sync ${i}.  No permission to perform FAI? Hope we're in 'rescue' or 'dirinstall' mode. "
+        ;;
+    esac
+  fi
+  chown -R root:root ${i}
+  find ${i} -type f -exec chmod 644 {} \;
+  find ${i} -type d -exec chmod 755 {} \;
+  # This must be done immediately otherwise the above rsync will fail on the
+  # iteration after doing /root.
+  for j in $SS ; do
+    [ -f $j ] && chmod 600 $j
+  done
+  for j in $SSD ; do
+    [ -d $j ] && chmod 700 $j
+  done
+done
+
+# This will skip when called by task_setup (early in the install) but should
+# go ahead when called by LAST/40-ssh (late in the install).
+if mount | grep -q " on ${target} type " || [ "$FAI_ACTION" = "dirinstall" ] && [ "x${NOWLAST}" = "xyes" ] ; then
+  for i in $DIRS ; do
+    mkdir -p ${target}/${i}
+    rsync -a ${i}/ ${target}/${i}/
+    echo "rsynced ${i}/ to ${target}/${i}/"
+  done
+fi
+
+######################################################
+# 2012-02-21 Chris Dumont. This is for fai-client 3.4.7 and 3.4.8. In
+# /usr/lib/fai/subroutines task_setup (line 254?) calls ntpdate which is
+# deprecated. Check if the next bit is still a necessary replacement.
+
+if [ $do_init_tasks -eq 1 ] ; then
+  dpkg -l fai-client 2>&1 | egrep -q "fai-client *3.4.7 |fai-client *3.4.8 "
+  if [ $? -eq 1 ]; then
+    echo "fai-client version number has advanced. Maybe I'm no longer needed. Pausing so you can examine the situation"
+    sleep 3649
+  else
+    ntpd -g -q
+  fi
+fi
+######################################################
