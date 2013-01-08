@@ -212,7 +212,7 @@ ece_savelog_remote() {
 }
 
 ece_setup_git() {
-    local saved_pwd old_ref new_ref
+    local saved_pwd old_ref new_ref ref desc
     local git_cmd
 
     git_cmd="git --work-tree=$FAI --git-dir=$FAI/.git"
@@ -230,7 +230,17 @@ ece_setup_git() {
             return
         fi
     fi
-    $git_cmd log -n 1 --pretty=format:"Using git ref %h of $FAI_CONFIG_SRC"
+
+    case "$FAI_CONFIG_SRC_REF" in
+      ''|master)
+        # If on the master branch, generate a Subversion-like revision number
+        # by counting the number of commits in the history
+        desc="master r`$git_cmd rev-list --first-parent --abbrev-commit HEAD | wc -l`" ;;
+      *)
+        desc="`$git_cmd describe --all`" ;;
+    esac
+    ref=`$git_cmd rev-list --max-count=1 --abbrev-commit HEAD`
+    echo "Using git ref $ref of $FAI_CONFIG_SRC ($desc)"
 }
 
 ece_setup_fetchkeys_failure() {
