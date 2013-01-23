@@ -290,4 +290,6 @@ ece_setup_hook() {
     esac
 }
 
-ece_setup_hook
+if [ "$ece_setup_hook_run" != 1 ]; then
+    ece_setup_hook && ece_setup_hook_run=1
+fi
