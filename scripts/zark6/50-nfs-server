@@ -1,5 +1,5 @@
 #!/bin/bash
-# 2008-02-20 Chris Dumont. zark4 has an NFS export.
+# 2008-02-20 Chris Dumont. zark6 has an NFS export.
 
 mkdir -p $target/data/home
 fcopy -Bm root,root,0600 /etc/ferm/ferm.conf
