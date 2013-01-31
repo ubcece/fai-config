@@ -230,6 +230,7 @@ python-matplotlib-doc
 python-newt
 python-pyvtk
 python-scipy
+python-tk
 python-vtk
 python-qt3
 python-semanage
