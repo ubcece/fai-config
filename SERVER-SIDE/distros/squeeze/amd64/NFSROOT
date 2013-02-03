@@ -31,6 +31,7 @@ fuse-utils
 gptsync
 kexec-tools
 locales
+ncurses-term
 ntfsprogs
 perl-doc
 uuid-runtime
