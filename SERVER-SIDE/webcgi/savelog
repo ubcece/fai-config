@@ -41,7 +41,8 @@ sub cgimain {
     }
 
     my $make_path_err;
-    my $dest_dir = File::Spec->join($logdir, $host, "$action-$rundate");
+    my $dest = "$action-$rundate";
+    my $dest_dir = File::Spec->join($logdir, $host, $dest);
     unless (-d $dest_dir or
             make_path($dest_dir, { mode => 0775, error => \$make_path_err})) {
         say STDERR "Could not create directory $dest_dir: " .
@@ -64,6 +65,14 @@ sub cgimain {
         print F (join '', <$fh>);
         close F;
     }
+
+    my $last_action_link = File::Spec->join($logdir, $host, "last-$action");
+    my $last_link = File::Spec->join($logdir, $host, 'last');
+    unlink $last_action_link;
+    symlink $dest, $last_action_link;
+    unlink $last_link;
+    symlink $dest, $last_link;
+
     say "Status: 204 No Content\r\n";
 }
 
