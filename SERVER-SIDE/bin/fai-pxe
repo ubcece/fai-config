@@ -57,12 +57,12 @@ help() {
           Specifies a Git reference (tag, branch, or commit) to use for the
           configuration.
 "
-    if [ -n "$git_ref" ]; then
         echo \
 "          Known branches are:"
-    git branch -r --color=never | grep -v -- '->' | while read branch ; do echo \
-"                ${branch#*/}"
+    git ls-remote -h "$FAI_CONFIG_SRC" | while read hash head ; do echo \
+"                ${head#refs/heads/}"
     done
+    if [ -n "$git_ref" ]; then
     echo \
 "          The default is $git_ref.
 "
