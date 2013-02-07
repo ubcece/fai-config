@@ -2,6 +2,7 @@
 
 # These values should match those in fai.conf
 SERVER=fai.ece.ubc.ca
+FAI_CONFIG_SRC=git+http://dev.ece.ubc.ca/git/fai-config.git
 
 SELF="$0"
 [ -f "$SELF" ] || SELF=`which $0`
@@ -9,6 +10,16 @@ SELF="$0"
 git_ref=
 localboot=
 template=
+
+case "$FAI_CONFIG_SRC" in
+  git+*)
+    FAI_CONFIG_SRC="${FAI_CONFIG_SRC#git+}"
+    ;;
+  *)
+    echo "ERROR: `basename $0` expects the FAI configuration to be stored in Git." >&2
+    exit 9
+    ;;
+esac
 
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 
@@ -56,6 +67,42 @@ help() {
 "          The default is $git_ref.
 "
     fi
+}
+
+show_remote_commit() {
+    local git_ref checkout tmp
+    git_ref="$1"
+
+    case "`git --version`" in
+      1.0.*|1.1.*|1.2.*|1.3.*|1.4.*)
+        tmp=`git ls-remote "$FAI_CONFIG_SRC" "${git_ref:-HEAD}"`
+        if [ -z "$tmp" ]; then
+            echo "fatal: Remote branch $git_ref not found in upstream origin" >&2
+            echo "Maybe you forgot to \`git push\` your branch?" >&2
+            exit 128
+        else
+            [ -n "$git_ref" ] && echo "Using git ref $git_ref"
+            echo "$tmp"
+        fi
+        ;;
+
+      *)
+        # Get a little more information than `git ls-remote`
+        tmp="`mktemp --tmpdir -d fai-pxe.XXXXX`"
+        trap "rm -rf \"$tmp\"" EXIT
+
+        [ -n "$git_ref" ] && checkout="-b $git_ref"
+        if ! git clone -q --depth 1 --bare $checkout "$FAI_CONFIG_SRC" "$tmp" ; then
+            status=$?
+            echo "Maybe you forgot to \`git push\` your branch?" >&2
+            exit $status
+        fi
+        [ -n "$git_ref" ] && echo "Using git ref $git_ref"
+        GIT_DIR="$tmp" PAGER= git log -n 1 \
+          --pretty=format:"Last commit: %h by %aN: %s%n" 2>/dev/null || \
+        GIT_DIR="$tmp" PAGER= git log -n 1 --pretty=oneline
+        ;;
+    esac
 }
 
 while getopts :hlr:t: opt; do
@@ -117,6 +164,7 @@ fi
 if [ -n "$localboot" ]; then
     LC_ALL=C $fai_chboot -d $@
 elif [ -n "$template" ]; then
+    show_remote_commit "$git_ref"
     for hostname in $@ ; do
         LC_ALL=C $fai_chboot -c "$template" "$hostname" \
             hostname="$hostname" \
