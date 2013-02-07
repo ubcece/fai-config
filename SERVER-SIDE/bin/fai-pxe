@@ -1,15 +1,21 @@
 #!/bin/bash
 
-PATH=/usr/sbin:/usr/bin:/sbin:/bin
+# These values should match those in fai.conf
+SERVER=fai.ece.ubc.ca
+
+SELF="$0"
+[ -f "$SELF" ] || SELF=`which $0`
 
 git_ref=
 localboot=
 template=
 
+PATH=/usr/sbin:/usr/bin:/sbin:/bin
+
 # If this script resides in a git work directory, let git_ref default to the
 # current tag or branch
-if [ -d "${0%/*}/../../.git" ]; then
-    export GIT_DIR=${0%/*}/../../.git
+if [ -d "`dirname "$SELF"`/../../.git" ]; then
+    export GIT_DIR="`dirname "$SELF"`/../../.git"
     git_ref=`git describe --all | sed -e 's,^heads/\|^tags/,,'`
 fi
 
@@ -89,13 +95,32 @@ if [ -z "$localboot$template" ] || [ -n "$localboot" -a "$template" ]; then
     exit 1
 fi
 
+fai_chboot=/usr/sbin/fai-chboot
+function auth() {
+    local hostname
+    hostname="$1"
+    if [ -x "`dirname $SELF`/../webcgi/auth" ]; then
+        LC_ALL=C "`dirname $SELF`/../webcgi/auth" "$hostname"
+    elif [ -x /var/www/fai/auth ]; then
+        LC_ALL=C /var/www/fai/auth "$hostname"
+    else
+        echo "NOTICE: Unable to pre-authorize host $hostname" >&2
+    fi
+}
+if [ ! -x "$fai_chboot" ]; then
+    fai_chboot="ssh root@$SERVER LC_ALL=C $fai_chboot"
+    function auth() {
+        echo "\`LC_ALL=C /var/www/fai/auth \"$1\"\`"
+    }
+fi
+
 if [ -n "$localboot" ]; then
-    LC_ALL=C fai-chboot -d $@
+    LC_ALL=C $fai_chboot -d $@
 elif [ -n "$template" ]; then
     for hostname in $@ ; do
-        LC_ALL=C fai-chboot -c "$template" "$hostname" \
+        LC_ALL=C $fai_chboot -c "$template" "$hostname" \
             hostname="$hostname" \
-            auth=`/var/www/fai/auth "$hostname"` \
+            auth="`auth "$hostname"`" \
             FAI_CONFIG_SRC_REF="$git_ref"
     done
 fi
