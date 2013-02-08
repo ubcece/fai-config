@@ -4,22 +4,16 @@
 SERVER=fai.ece.ubc.ca
 FAI_CONFIG_SRC=git+http://dev.ece.ubc.ca/git/fai-config.git
 
+case "$FAI_CONFIG_SRC" in
+  git+*) FAI_CONFIG_SRC="${FAI_CONFIG_SRC#git+}" ;;
+esac
+
 SELF="$0"
 [ -f "$SELF" ] || SELF=`which $0`
 
 git_ref=
 localboot=
 template=
-
-case "$FAI_CONFIG_SRC" in
-  git+*)
-    FAI_CONFIG_SRC="${FAI_CONFIG_SRC#git+}"
-    ;;
-  *)
-    echo "Error: `basename $0` expects the FAI configuration to be stored in Git." >&2
-    exit 9
-    ;;
-esac
 
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 
