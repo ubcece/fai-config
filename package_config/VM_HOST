@@ -1,4 +1,13 @@
 PACKAGES aptitude
+
+# These conflict with the pve-firmware package, which is required by proxmox-ve
+firmware-bnx2-
+firmware-bnx2x-
+firmware-linux-
+firmware-linux-free-
+firmware-linux-nonfree-
+firmware-qlogic-
+
 bridge-utils
 minicom
 #kqemu-common
@@ -11,10 +20,7 @@ libvirt-doc
 parted
 partimage
 partimage-doc
-pve-firmware
-# proxmox-ve-2.6.32 # Post-install script requires OpenVZ kernel to be running
-pve-kernel-2.6.32-10-pve # .. so just install the kernel
-pve-kernel-2.6.32-14-pve # Newer kernel crashes immediately on boot
+proxmox-virtual-environment
 #qemuctl
 #qemulator
 #uml-utilities
