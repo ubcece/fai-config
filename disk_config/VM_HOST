@@ -1,25 +1,33 @@
-# 2009-10-07 Derek Poon <derekp@ece.ubc.ca>
-# In FAI 3.2.17, setup-storage has a bug: if an LVM volume group already
-# exists, running setup-storage a second time causes an error:
-# "Cannot satisfy pre-depends for vgreduce data /dev/block/104:5: vg_extended_data,pv_done_/dev/block/104:5 -- system left untouched."
-# A workaround is to first run "/sbin/vgremove data"
+# 2010-11-07 Derek Poon <derekp@ece.ubc.ca>
+# Volume groups are named "host" and "hostdata" rather than "vg" and "data"
+# in case you want to manually loopback-mount a KVM guest's raw disk image
+# using kpartx.  You don't want the guest and the host's volume group names
+# to collide, as that would cause confusion.
 
-disk_config cciss/c0d0 disklabel:gpt bootable:2
+# TODO: Consider potential filesystem block alignment issues:
+# http://captainkvm.com/2011/09/revisiting-file-system-alignment-for-linux/
+# http://askubuntu.com/questions/118140/unaligned-aio-dio
+
+disk_config disk1 disklabel:gpt bootable:2
 primary  -             200M-300M   msdos        -
 primary  swap          8G          swap         rw
 primary  -             14G-18G     -            -
-#primary  -             30G-        -            -
+primary  /data         4G-6G       xfs          rw
 
 disk_config lvm fstabkey:device
-vg       vg            cciss/c0d0p3
-vg-root1 /             2G-3G       ext3         rw,errors=remount-ro
-vg-var1  /var          5G-6G       ext3         rw
-vg-root2 /altroot      2G-3G       ext3         rw,errors=remount-ro
-vg-var2  /altroot/var  5G-6G       ext3         rw
+vg         host          disk1.3
+host-root1 /             2G-3G       ext3         rw,errors=remount-ro
+host-var1  /var          5G-6G       ext3         rw
+host-root2 /altroot      2G-3G       ext3         rw,errors=remount-ro
+host-var2  /altroot/var  5G-6G       ext3         rw
 
-# If the host filesystem is not ext[234] then disk quotas will not work in
-# OpenVZ containers.  http://wiki.openvz.org/Disk_quota
-#disk_config lvm fstabkey:device
-#vg        data         cciss/c0d0p4
-#data-data /data        4G-6G       xfs          rw,nosuid
-#data-vz   /var/lib/vz  90%         ext4         rw
+# setup-storage may complain of "disk too small" if partition 2.1 is set to
+# 100%, probably due to failure to account for overhead.
+disk_config disk2 disklabel:gpt preserve_lazy:1
+primary  -             99%-        -            -
+
+# If the /var/lib/vz filesystem is not ext[234] then disk quotas will not work
+# in OpenVZ containers.  http://wiki.openvz.org/Disk_quota
+disk_config lvm fstabkey:device preserve_lazy:hostdata-vz
+vg        hostdata       disk2.1
+hostdata-vz   /var/lib/vz  90%         ext4         rw
