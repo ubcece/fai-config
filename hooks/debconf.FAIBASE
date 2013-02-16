@@ -1,6 +1,0 @@
-#!/bin/bash
-# 2010-06-14 Chris Dumont. I don't understand why we didn't need this before. The locales.config ignores debconf preseeding and instead reads /etc/environment into locales/default_environment_locale.
-
-echo "Setting /etc/environment. Keywords: debconf locales LANG LC_ALL en_CA None"
-echo 'LANG="en_CA.UTF-8"' > $target/etc/environment
-
