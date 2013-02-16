@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# The instsoft.VM_HOST hook created this file; let's clean it up now.
+rm -f $target/proxmox_install_mode
+
+# Run the post-install script for the Proxmox kernel, which was previously
+# suppressed by the presence of the /proxmox_install_mode file.  The script
+# should create the initrd.img and run update-grub.
+for script in $target/var/lib/dpkg/info/pve-kernel-*.postinst ; do
+    $ROOTCMD "${script#$target}" configure
+done
