@@ -5,8 +5,13 @@ if [ -f /tmp/fai/variables.log ]; then
     # Suppress the error when trying to set the BASHOPTS read-only variable
     . /tmp/fai/variables.log 2>/dev/null
     eval `while IFS='=' read var val ; do echo export "$var" ; done < /tmp/fai/variables.log`
-
-    . /usr/lib/fai/subroutines
-    [ -f "$FAI/hooks/subroutines" ] && . "$FAI/hooks/subroutines"
 fi
+
+. /usr/lib/fai/subroutines
+[ -f "$FAI/hooks/subroutines" ] && . "$FAI/hooks/subroutines"
+
+# Override the die() function in /var/lib/fai/subroutines
+die() {
+    echo $@
+}
 BASH_PROFILE
