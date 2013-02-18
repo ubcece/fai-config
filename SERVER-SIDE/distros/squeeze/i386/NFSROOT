@@ -29,6 +29,7 @@ firmware-linux-free
 firmware-linux-nonfree
 fuse-utils
 gptsync
+hpacucli
 kexec-tools
 locales
 ncurses-term
