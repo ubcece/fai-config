@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Try to install the VirtualBox Guest Additions from the virtual optical disc
+$ROOTCMD mount /media/cdrom
+$ROOTCMD sh /media/cdrom/VBoxLinuxAdditions.run

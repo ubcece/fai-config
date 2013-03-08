@@ -19,5 +19,8 @@ fi
       "VMware Virtual Platform")
         echo "VM_GUEST VMWARE_GUEST"
         ;;
+      "VirtualBox")
+        echo "VM_GUEST VIRTUALBOX_GUEST"
+        ;;
     esac
 done
