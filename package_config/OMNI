@@ -94,7 +94,6 @@ gdb
 gdb-doc
 gdebi
 gdesklets
-gdesklets-data
 gfortran
 gimp
 gimp-data
@@ -111,6 +110,7 @@ glipper
 gnome-btdownload
 gnome-power-manager
 gnome-screensaver
+gnome-themes-more
 gnome-themes-extras
 gnuhtml2latex
 gnuplot
@@ -122,13 +122,11 @@ gsfonts-other
 gsfonts-x11
 gstreamer0.10-ffmpeg
 gstreamer0.10-plugins-ugly
-gtk2-engines-spherecrystal
 gv
 hpijs-ppds
 hplip
 hplip-data
 html2text
-hyperlatex
 iamerican
 ibritish
 icedax
@@ -142,7 +140,6 @@ installation-report
 intltool-debian
 iproute
 iputils-arping
-irb
 jadetex
 jove
 jython
@@ -171,7 +168,6 @@ libnet-ldap-perl # mutt -> lbdb -> libnet-ldap-perl
 libssl-dev
 libstdc++6-4.3-dev
 liferea
-liferea-xulrunner
 linuxdoc-tools
 lockfile-progs
 lynx
@@ -214,12 +210,10 @@ pilot
 po-debconf
 policycoreutils
 poppler-utils
-printconf
 procmail
 pstoedit
 psutils
 python-apt
-python-foomatic
 python-gnome2
 python-gnome2-extras
 python-gnupginterface
@@ -275,7 +269,6 @@ texi2html
 texinfo
 texlive-full
 texmaker
-textutils
 totem-mozilla
 tig
 transcode
