@@ -10,7 +10,7 @@ fi
 . /usr/lib/fai/subroutines
 [ -f "$FAI/hooks/subroutines" ] && . "$FAI/hooks/subroutines"
 
-# Override the die() function in /var/lib/fai/subroutines
+# Override the die() function in /usr/lib/fai/subroutines
 die() {
     echo $@
 }
