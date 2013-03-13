@@ -1,0 +1,7 @@
+# It's nice to have kexec-tools installed, but we don't want to use it by
+# default.
+
+if [ -f "$NFSROOT/etc/default/kexec" ]; then
+    sed -i -e 's/^LOAD_KEXEC=.*/# LOAD_KEXEC=false/' \
+        "$NFSROOT/etc/default/kexec"
+fi
