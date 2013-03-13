@@ -8,6 +8,20 @@ firmware-linux-free-
 firmware-linux-nonfree-
 firmware-qlogic-
 
+# pve-cluster requires rsyslog, which conflicts with syslog-ng
+syslog-ng-
+
+# libcorosync4-pve conflicts with libcorosync4
+libcorosync4-
+
+# redhat-cluster-pve conflicts with multiple packages
+# https://bugzilla.proxmox.com/show_bug.cgi?id=349
+cman-
+libcman3-
+libdlm3-
+libdlmcontrol3-
+liblogthread3-
+
 bridge-utils
 minicom
 #kqemu-common
