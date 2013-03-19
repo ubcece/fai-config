@@ -1,0 +1,149 @@
+#!/bin/sh
+
+# The Perl script below rewrites any udev rules file.  This shell script
+# snippet calls the Perl script to rewrite *persistent-net.rules.
+case "$FAI_ACTION" in
+  install|dirinstall) : ;;
+  *) exit
+esac
+for i in /etc/udev/rules.d/*persistent-net.rules ; do
+    if [ -e "$i" -a -n "$target" ]; then        # Ignore null glob
+        mkdir -p "$target/etc/udev/rules.d"
+        LC_ALL=C /usr/bin/perl -x -S -- "$0" < "$i" > "$target/$i"
+    fi
+done
+exit $?
+
+#!perl
+
+# renum-netdev: Rewrite udev rules such that network interfaces with
+# consecutive (or nearly consecutive) MAC addresses are named in ascending
+# order.
+
+# Copyright (C) 2013 Derek Poon <derekp@ece.ubc.ca> and the University of
+# British Columbia.
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program.  If not, see <http://www.gnu.org/licenses/>.
+
+use strict;
+
+sub parse_mac_addr {
+    my ($s) = @_;
+    my $i = 0;
+    for (split /:/, $s) {
+        $i = ($i << 8) | unpack W => pack('H2', $_);
+    }
+    return $i;
+}
+
+# Parse the rule definitions
+my @lines = map {
+    my $text = $_;
+    chop;
+    s/#.*//;
+
+    my ($cond, $assign) = ({}, {});
+    for (split /,\s*/) {
+        if (/([^=]+)\s*==\s*"([^"]*)"/) {
+            $cond->{$1} = $2;
+        } elsif (/([^=]+)\s*=\s*"([^"]*)"/) {
+            $assign->{$1} = $2;
+        }
+    }
+
+    {
+        text => $text,
+        cond => $cond,
+        assign => $assign,
+    };
+} (<>);
+
+# Process all lines where ACTION=='add' and SUBSYSTEM=='net', grouped by
+# interface name prefix
+my %ifprefix;
+for my $l (0..$#lines) {
+    my $line = $lines[$l];
+
+    my $ifname = $line->{assign}->{NAME};
+    my ($ifprefix) = $ifname =~ /^([\D]+)/;
+
+    if ( $line->{cond}->{ACTION} eq 'add' &&
+         $line->{cond}->{SUBSYSTEM} eq 'net' &&
+         defined $line->{cond}->{'ATTR{address}'} &&
+         defined $ifprefix) {
+        $ifprefix{$ifprefix} ||= [];
+
+        $line->{name} = $ifname;
+        $line->{addr} = parse_mac_addr($lines[$l]->{cond}->{'ATTR{address}'}),
+        push @{$ifprefix{$ifprefix}}, $line;
+    }
+}
+
+# For each device type, sort the hardware addresses and find clusters.
+# Interfaces whose addresses differ by less than 4 are considered are subject
+# to renumbering.
+for (values %ifprefix) {
+    my @list = sort { $a->{addr} <=> $b->{addr} } @$_;
+
+    my @clusters = ( [$list[0]] );
+    for (@list[1..$#list]) {
+        my $lastaddr = $clusters[-1][-1]->{addr};
+        if ($_->{addr} - $lastaddr < 4) {
+            push @{$clusters[-1]}, $_;
+        } else {
+            push @clusters, [$_];
+        }
+    }
+
+    for (@clusters) {
+        # Skip singleton clusters
+        next if 1 == @$_;
+
+        # @names lists interfaces with consective (or nearly consecutive)
+        # addresses, in order of ascending addresses.
+        my @names = map { $_->{name} } @$_;
+
+        # @new_names takes those interface names and sorts them.
+        my @new_names = sort {
+            my ($a_ifnum) = $a =~ /(\d+)/;
+            my ($b_ifnum) = $b =~ /(\d+)/;
+            $a_ifnum <=> $b_ifnum;
+        } @names;
+
+        # Rename interfaces such that when enumerating them in ascending order
+        # of addresses, their names are also in ascending order.
+        #print STDERR "Cluster:\n";
+        for (my $i = 0; $i <= $#names; $i++) {
+            if ($new_names[$i] ne $names[$i]) {
+                #print STDERR "  renaming $names[$i] => $new_names[$i]\n";
+                $_->[$i]->{newname} = $new_names[$i];
+            }
+        }
+    }
+}
+
+# Rewrite rules
+if ($ARGV ne '-') {
+    open OUT, '>', $ARGV;
+    select OUT;
+}
+for (@lines) {
+    if ($_->{newname}) {
+        my ($text, $name, $newname) = ($_->{text}, $_->{name}, $_->{newname});
+        $text =~ s/\bNAME="\Q$name\E"/NAME="$newname"/;
+        print $text;
+    } else {
+        print $_->{text};
+    }
+}

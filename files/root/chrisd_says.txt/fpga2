@@ -1,12 +1,4 @@
 #!/bin/bash pseudo-code
-# on fpga2 it detects the ethernet ports backwards. Edit:
-
-cat <<EOF > /etc/udev/rules.d/z25_persistent-net.rules
-
-SUBSYSTEM=="net", DRIVERS=="?*", ATTRS{address}=="00:1d:09:63:a6:2c", NAME="eth1"
-
-SUBSYSTEM=="net", DRIVERS=="?*", ATTRS{address}=="00:1d:09:63:a6:2a", NAME="eth0"
-EOF
 
 /etc/init.d/ferm stop
 update-rc.d -f ferm remove
