@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# dmidecode can fail.  For example, in OpenVZ containers, it fails with
+# "/dev/mem: Operation not permitted".
+if /usr/sbin/dmidecode -q --type 11 2>/dev/null | grep -q 'OEM Strings' ; then
+    echo "IPMI"
+fi

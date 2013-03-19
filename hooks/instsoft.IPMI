@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# The ipmitool postinst script tries to start ipmievd.  If ipmievd fails to
+# start (due to /dev/ipmi0 not existing, for example), then it is ipmievd will
+# be configured not to start in the future.  Therefore, we should load the
+# ipmi_devintf module to create /dev/ipmi0 before installing ipmitool.
+/sbin/modprobe ipmi_devintf
