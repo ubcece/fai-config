@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Remove LVM logical volumes named FAI_DELETEME*.  The disk configuration may
+# include such logical volumes to reserve space in the volume group for making
+# snapshots.
+for lv in /dev/mapper/*-FAI_DELETEME* ; do
+    [ -b "$lv" ] && lvremove -f "$lv"
+done
