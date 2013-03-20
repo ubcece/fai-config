@@ -17,9 +17,13 @@ case $HOSTNAME in
         echo "ECE_DISK2 GNOME KDE OMNI" ;;
     kakadu|xanadu|[kmx]host*)
         echo "ECE SERVER VM_HOST" ;;
+    hooz)
+        echo "ECE SERVER VM_HOST RAID" ;;
 	# LOOKUPSEVER without ECE only applies packages.
-    [kmxv]lookup?|[kmxv]ldap?)
-        echo "ECE SERVER LOOKUPSERVER " ;;
+    [kmxv]ldap?|master)
+        echo "ECE SERVER LOOKUPSERVER" ;;
+    [kmxv]lookup?)
+        echo "ECE SERVER LOOKUPSERVER VERTXSERVER" ;;
     msmb1)
         echo "ECE SERVER SMBSERVER RAID " ;;
     [kmxv]smb?)

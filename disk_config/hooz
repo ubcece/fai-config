@@ -1,0 +1,34 @@
+# This disk_config is suitable for a server with four >70GB and <2TB hard disks to be put in RAID5.
+
+disk_config	disk1	disklabel:gpt	fstabkey:uuid	bootable:1
+primary		-	200M	vfat    -
+primary		swap	4G	swap	rw
+primary		-	60G-	-	-
+
+disk_config	disk2	disklabel:gpt	fstabkey:uuid	bootable:1
+primary		-	200M	vfat    -
+primary		swap	4G	swap	rw
+primary		-	60G-	-	-
+
+disk_config	disk3	disklabel:gpt	fstabkey:uuid	bootable:1
+primary		-	200M	vfat    -
+primary		swap	4G	swap	rw
+primary		-	60G-	-	-
+
+disk_config	disk4	disklabel:gpt	fstabkey:uuid	bootable:1
+primary		-	200M	vfat    -
+primary		swap	4G	swap	rw
+primary		-	60G-	-	-
+
+disk_config	raid	fstabkey:uuid
+raid5		-	disk1.3,disk2.3,disk3.3,disk4.3	-	-
+
+disk_config	lvm	fstabkey:device preserve_lazy:hostvg-hostdata
+vg		hostvg	md0
+hostvg-root1	/		5G	ext4	rw,errors=remount-ro
+hostvg-var1	/var		10G-20G	ext4	rw
+hostvg-root2	/altroot	5G	ext4	rw
+hostvg-var2	/altroot/var	10G-20G	ext4	rw
+hostvg-data	/data		10G-30G	xfs	rw
+hostvg-hostdata	/var/lib/vz	80G-	ext4	rw
+hostvg-FAI_DELETEME	-	5-8G	-	-

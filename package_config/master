@@ -1,0 +1,9 @@
+PACKAGES aptitude
+git-svn
+ldaputils
+netdisco-backend
+netdisco-frontend
+postgresql
+slapd-shadowlastchange
+slapd-smbk5pwd
+subversion
