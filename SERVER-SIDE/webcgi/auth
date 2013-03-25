@@ -9,10 +9,10 @@ use Net::Domain qw(hostfqdn);
 use feature qw(say);
 use strict;
 
-my $host_specific_file_root = '/data/host-specific';
+our $keydist_file_root = '/var/lib/fai-keydist';
 
 my $host_fqdn = hostfqdn;
-my $secret_file = "$host_specific_file_root/$host_fqdn/etc/ssh/ssh_host_rsa_key";
+my $secret_file = "$keydist_file_root/$host_fqdn/etc/ssh/ssh_host_rsa_key";
 open SECRETFILE, '<', $secret_file or die "Could not open $secret_file: $!";
 my $secret = join '', <SECRETFILE>;
 close SECRETFILE;

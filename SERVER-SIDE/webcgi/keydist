@@ -12,7 +12,7 @@ use feature qw(say);
 use strict;
 
 use constant MAX_DELAY => 600;
-my $host_specific_file_root = '/var/lib/fai-keydist';
+my $keydist_file_root = $FAI::ECE::Auth::keydist_file_root;
 
 # RFC 2616 Sec 3.3.1
 sub http_time_fmt {
@@ -24,8 +24,8 @@ sub serve_manifest {
     my ($q, $host, $auth) = @_;
 
     my %files;
-    for my $base (File::Spec->join($host_specific_file_root, $host),
-                  File::Spec->join($host_specific_file_root, 'DEFAULT')) {
+    for my $base (File::Spec->join($keydist_file_root, $host),
+                  File::Spec->join($keydist_file_root, 'DEFAULT')) {
         File::Find::find({ follow => 1, no_chdir => 1, wanted => sub {
                             if (-f) {
                                 s/^\Q$base\E//;
@@ -62,8 +62,8 @@ sub serve_manifest {
 sub serve_file {
     my ($q, $host, $path) = @_;
 
-    my $fs_path = File::Spec->join($host_specific_file_root, $host, $path);
-    my $fallback_fs_path = File::Spec->join($host_specific_file_root, 'DEFAULT', $path);
+    my $fs_path = File::Spec->join($keydist_file_root, $host, $path);
+    my $fallback_fs_path = File::Spec->join($keydist_file_root, 'DEFAULT', $path);
     if (!-f $fs_path && !-f $fallback_fs_path) {
         print $q->header(-status => '404 Not Found');
         return;
