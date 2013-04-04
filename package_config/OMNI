@@ -312,3 +312,5 @@ xtightvncviewer
 xresprobe
 zip
 zlib1g-dev
+
+libfile-which-perl                      # RT 169425
