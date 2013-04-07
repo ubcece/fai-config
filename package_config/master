@@ -1,9 +1,17 @@
 PACKAGES aptitude
+ipcalc
 git-svn
 ldaputils
+libcrypt-openssl-random-perl
+libio-socket-ssl-perl
 netdisco-backend
 netdisco-frontend
+nmap
 postgresql
 slapd-shadowlastchange
 slapd-smbk5pwd
 subversion
+
+PACKAGES aptitude SQUEEZE
+# For building Ruby gems
+ruby1.8-dev
