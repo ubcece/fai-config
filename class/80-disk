@@ -20,16 +20,16 @@ if ifclass SERVER ; then
 	#size=$(/usr/lib/fai/disk-info | cut -d' ' -f2 | sort -n | head -n 1)
 	size=`lastdisksize`
 
-	[ $size -lt 10000000 ] && die "The hard disk is too small (10 GB minimum)."
-        [ $size -ge 10000000 ] && [ $size -lt  35000000 ] && echo "TINYS" && exit 0
-	if [ $size -ge 35000000 ] && [ $size -lt  70000000 ] ; then
+	[ "$size" -lt 10000000 ] && die "The hard disk is too small (10 GB minimum)."
+        [ "$size" -ge 10000000 ] && [ "$size" -lt  35000000 ] && echo "TINYS" && exit 0
+	if [ "$size" -ge 35000000 ] && [ "$size" -lt  70000000 ] ; then
 		if ifclass RAID ; then
 			echo "RAID1SS" && exit 0
 		else
 			echo "SMALLS" && exit 0
 		fi
 	fi
-	if [ $size -ge 70000000 ] && [ $size -lt 500000000 ] ; then
+	if [ "$size" -ge 70000000 ] && [ "$size" -lt 500000000 ] ; then
 		if ifclass RAID ; then
 			echo "RAID1MS" && exit 0
 		else
@@ -44,17 +44,17 @@ else
 	size=`lastdisksize`
 
         if ifclass ECE_DISK2 ; then
-		[ $size -lt 10000000 ] && die "The hard disk is too small (10 GB minimum)."
-        	[ $size -ge 10000000 ] && [ $size -lt  35000000 ] && echo "TINYW" && exit 0
-        	[ $size -ge 35000000 ] && [ $size -lt  70000000 ] && echo "SMALLW2" && exit 0
-        	[ $size -ge 70000000 ] && [ $size -lt 500000000 ] && echo "MEDIUMW2" && exit 0
+		[ "$size" -lt 10000000 ] && die "The hard disk is too small (10 GB minimum)."
+        	[ "$size" -ge 10000000 ] && [ "$size" -lt  35000000 ] && echo "TINYW" && exit 0
+        	[ "$size" -ge 35000000 ] && [ "$size" -lt  70000000 ] && echo "SMALLW2" && exit 0
+        	[ "$size" -ge 70000000 ] && [ "$size" -lt 500000000 ] && echo "MEDIUMW2" && exit 0
         	echo "HUGE2"
         	exit 0
 	else
-		[ $size -lt 10000000 ] && die "The hard disk is too small (10 GB minimum)."
-        	[ $size -ge 10000000 ] && [ $size -lt  35000000 ] && echo "TINYW" && exit 0
-        	[ $size -ge 35000000 ] && [ $size -lt  70000000 ] && echo "SMALLW" && exit 0
-        	[ $size -ge 70000000 ] && [ $size -lt 500000000 ] && echo "MEDIUMW" && exit 0
+		[ "$size" -lt 10000000 ] && die "The hard disk is too small (10 GB minimum)."
+        	[ "$size" -ge 10000000 ] && [ "$size" -lt  35000000 ] && echo "TINYW" && exit 0
+        	[ "$size" -ge 35000000 ] && [ "$size" -lt  70000000 ] && echo "SMALLW" && exit 0
+        	[ "$size" -ge 70000000 ] && [ "$size" -lt 500000000 ] && echo "MEDIUMW" && exit 0
         	echo "HUGE"
         	exit 0
 	fi
