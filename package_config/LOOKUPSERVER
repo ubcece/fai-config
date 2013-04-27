@@ -8,6 +8,7 @@ bind9
 db4.8-util
 dhcp3-server
 dnssec-tools
+dnstop
 #ferm
 freeradius-ldap
 ldap-utils
