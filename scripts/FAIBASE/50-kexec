@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# Workaround for http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=551919
-
-$ROOTCMD sed -i -e 's/^ *LOAD_KEXEC=true/LOAD_KEXEC=false/' /etc/default/kexec
