@@ -9,12 +9,12 @@
 # The 1M partition is for gpt's sake. Somewhat like the old way of having a
 # separate /boot but for quite different reasons.
 
-disk_config	disk1	disklabel:gpt	fstabkey:uuid	bootable:3
+disk_config	disk1	disklabel:gpt	fstabkey:uuid	bootable:3 align_at:8k
 primary		-							200M	-	-
 primary		swap					8G	swap	rw
 primary		-							60G-	-	-
 
-disk_config	disk2	disklabel:gpt	fstabkey:uuid	bootable:3
+disk_config	disk2	disklabel:gpt	fstabkey:uuid	bootable:3 align_at:8k
 primary		-							200M	-	-
 primary		swap					8G	swap	rw
 primary		-							60G-	-	-
@@ -22,7 +22,7 @@ primary		-							60G-	-	-
 disk_config	raid	fstabkey:uuid
 raid1			-							disk1.3,disk2.3	-	-
 
-disk_config	lvm	fstabkey:uuid
+disk_config	lvm	fstabkey:uuid align_at:8k
 vg				vg						md0
 vg-root1	/							10G-20G	ext3	rw,errors=remount-ro
 vg-var1		/var					10G-20G	ext3	rw

@@ -11,12 +11,12 @@
 # separate /boot but for quite different reasons.
 
 #disk_config disk1 disklabel:gpt preserve_reinstall:1 fstabkey:uuid bootable:3
-disk_config disk1 disklabel:gpt fstabkey:uuid bootable:3
+disk_config disk1 disklabel:gpt fstabkey:uuid bootable:3 align_at:8k
 primary		-							200M	-	-
 primary		swap					8G	swap	rw
 primary		-							90G-	-	-
 
-disk_config lvm fstabkey:uuid
+disk_config lvm fstabkey:uuid align_at:8k
 vg				vg						disk1.3
 #vg				vg						sda3
 vg-root1	/							20G	ext3	rw,errors=remount-ro

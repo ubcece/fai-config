@@ -10,12 +10,12 @@
 # The 200M partition is for gpt's sake. Somewhat like the old way of having a
 # separate /boot but for quite different reasons.
 
-disk_config disk2 disklabel:gpt preserve_reinstall:1 fstabkey:uuid bootable:3
+disk_config disk2 disklabel:gpt preserve_reinstall:1 fstabkey:uuid bootable:3 align_at:8k
 primary		-							200M	msdos	-
 primary		swap					2G	swap	rw
 primary		-							30G-	-	-
 
-disk_config lvm fstabkey:uuid
+disk_config lvm fstabkey:uuid align_at:8k
 vg				vg						disk2.3
 vg-root 	/							20G	ext3 rw,errors=remount-ro
 vg-var 		/var					5G-	ext3 rw

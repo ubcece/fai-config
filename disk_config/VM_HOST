@@ -8,13 +8,13 @@
 # http://captainkvm.com/2011/09/revisiting-file-system-alignment-for-linux/
 # http://askubuntu.com/questions/118140/unaligned-aio-dio
 
-disk_config disk1 disklabel:gpt bootable:2
+disk_config disk1 disklabel:gpt bootable:2 align_at:8k
 primary  -             200M-300M   msdos        -
 primary  swap          8G          swap         rw
 primary  -             14G-18G     -            -
 primary  /data         4G-6G       xfs          rw
 
-disk_config lvm fstabkey:device
+disk_config lvm fstabkey:device align_at:8k
 vg         host          disk1.3
 host-root1 /             2G-3G       ext3         rw,errors=remount-ro
 host-var1  /var          5G-6G       ext3         rw
@@ -23,11 +23,11 @@ host-var2  /altroot/var  5G-6G       ext3         rw
 
 # setup-storage may complain of "disk too small" if partition 2.1 is set to
 # 100%, probably due to failure to account for overhead.
-disk_config disk2 disklabel:gpt preserve_lazy:1
+disk_config disk2 disklabel:gpt preserve_lazy:1 align_at:8k
 primary  -             99%-        -            -
 
 # If the /var/lib/vz filesystem is not ext[234] then disk quotas will not work
 # in OpenVZ containers.  http://wiki.openvz.org/Disk_quota
-disk_config lvm fstabkey:device preserve_lazy:hostdata-vz
+disk_config lvm fstabkey:device preserve_lazy:hostdata-vz align_at:8k
 vg        hostdata       disk2.1
 hostdata-vz   /var/lib/vz  90%         ext4         rw
