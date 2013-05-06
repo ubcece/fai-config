@@ -1,0 +1,3 @@
+# fai-make-nfsroot, in copy_fai_files(), removes /etc/fai/nfsroot.conf
+# from the NFS root.  Restore it so that dirinstall can run from the NFS root.
+cp "$cfdir"/nfsroot.conf "$NFSROOT"/etc/fai/

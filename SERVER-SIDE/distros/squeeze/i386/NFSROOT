@@ -1,63 +1,71 @@
 # package list for creating the NFSROOT
 
 PACKAGES aptitude
-nfs-common fai-nfsroot module-init-tools ssh rdate lshw portmap
+nfs-common fai-nfsroot module-init-tools ssh rdate lshw rpcbind
 rsync lftp less dump reiserfsprogs e2fsprogs usbutils
 hwinfo psmisc pciutils hdparm smartmontools parted mdadm lvm2
-dnsutils ntpdate dosfstools jove xfsprogs xfsdump
-procinfo dialog discover
+dnsutils ntpdate dosfstools xfsprogs xfsdump
+procinfo numactl dialog
 console-tools console-common
-iproute udev subversion liblinux-lvm-perl
+iproute udev subversion
+xz-utils
+cupt
 
-# needed for the simple examples
-cfengine2 libapt-pkg-perl
+# some network cards needs firmware
+firmware-bnx2 firmware-bnx2x firmware-realtek
 
-curl
-git-core
-# packages that Chris Dumont chrisd@ece.ubc.ca or Derek Poon derekp@ece.ubc.ca
-# have found useful
+# dracut can replace live-boot
+dracut-network live-boot- live-boot-initramfs-tools-
+
+# squeeze also needs initramfs-tools, even with dracut
+initramfs-tools
+
+# choose if you like live-boot or dracut inside the nfsroot
+#live-boot live-boot-doc
+
 bash-completion
+cfengine2
 cryptsetup
+curl
 debian-backports-keyring
 debian-multimedia-keyring
+discover
 dmsetup
 eject
 fai-doc
-firmware-bnx2
-firmware-linux
 firmware-linux-free
 firmware-linux-nonfree
 fuse-utils
+git-core
 gptsync
 hpacucli
 kexec-tools
+liblinux-lvm-perl
 locales
 ncurses-term
 ntfsprogs
 perl-doc
 uuid-runtime
 
+linux-base/unstable
+firmware-linux/unstable
+
+# architecture dependent list of packages that are installed
+
 PACKAGES aptitude I386
 grub read-edid
 linux-image-686
-linux-image-2.6.38-bpo.2-686 linux-base/unstable firmware-linux/unstable
+linux-image-2.6.38-bpo.2-686
 # The ".2" in "bpo.2" is likely to go stale quickly. This is current as of 2011-05-06.
+
+# packages for Ubuntu natty/oneiric/precise:
+# linux-image-generic live-boot
 
 PACKAGES aptitude AMD64
 grub
 linux-image-amd64
-linux-image-2.6.38-bpo.2-amd64 linux-base/unstable firmware-linux/unstable
+linux-image-2.6.38-bpo.2-amd64
 # The ".2" in "bpo.2" is likely to go stale quickly. This is current as of 2011-05-06.
 
-PACKAGES aptitude IA64
-elilo gnu-efi efibootmgr
-
-PACKAGES aptitude SPARC
-silo sparc-utils
-
-PACKAGES aptitude ALPHA
-aboot
-
-PACKAGES aptitude POWERPC
-linux-image-2.6-powerpc
-yaboot
+# packages for Ubuntu natty/oneiric/precise:
+# linux-image-generic live-boot

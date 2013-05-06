@@ -1,3 +1,4 @@
+deb     http://fai-project.org/download             wheezy            koeln
 deb     http://mirrors.ece.ubc.ca/debian            squeeze           main contrib non-free
 deb-src http://mirrors.ece.ubc.ca/debian            squeeze           main contrib non-free
 deb     http://mirrors.ece.ubc.ca/debian            squeeze-updates   main contrib non-free

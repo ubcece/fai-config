@@ -1,4 +1,4 @@
-NFSROOT_CONFS = $(wildcard */*/make-fai-nfsroot.conf)
+NFSROOT_CONFS = $(wildcard */*/nfsroot.conf)
 NFSROOT_SUITE_ARCHS = $(dir $(NFSROOT_CONFS))
 NFSROOTS = $(NFSROOT_SUITE_ARCHS:%=PHONY/%)
 
@@ -16,4 +16,4 @@ $(FAI_CHBOOT_TMPLS): $(PXELINUX_CFG_DIR)/%: fai-chboot-templates/%
 	cp -f $< $@
 
 $(NFSROOTS): PHONY/%: %
-	make-fai-nfsroot -C '$<'
+	/usr/sbin/fai-make-nfsroot -f -C '$<'
