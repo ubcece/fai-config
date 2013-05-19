@@ -248,7 +248,11 @@ ece_setup_fetchkeys_failure() {
     message="$1"
 
     define_fai_flags
-    if [ "$root" != /dev/nfs ] || [ "$flag_createvt" ]; then
+    if [ -z "$FAI_ACTION" ]; then
+        # We were going to enter rescue mode anyway.
+        echo "$message  Entering rescue mode without fetching keys."
+        return 1
+    elif [ "$root" != /dev/nfs ] || [ "$flag_createvt" ]; then
         # Not PXE, or PXE with FAI_FLAGS=createvt.  It should be safe to drop
         # to a root shell (or automatically reboot, if FAI_FLAGS includes
         # "reboot").
