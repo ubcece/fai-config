@@ -19,7 +19,9 @@ case $HOSTNAME in
         echo "ECE SERVER VM_HOST" ;;
     hooz)
         echo "ECE SERVER VM_HOST RAID" ;;
-	# LOOKUPSEVER without ECE only applies packages.
+        # LOOKUPSEVER without ECE only applies packages.
+    huey)
+        echo "ECE SERVER" ;;
     [kmxv]ldap?|master)
         echo "ECE SERVER LOOKUPSERVER" ;;
     [kmxv]lookup?)
