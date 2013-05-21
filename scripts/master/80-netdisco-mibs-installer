@@ -1,0 +1,4 @@
+#!/bin/bash
+
+$ROOTCMD /usr/sbin/netdisco-mibs-download
+$ROOTCMD /usr/sbin/netdisco-mibs-install

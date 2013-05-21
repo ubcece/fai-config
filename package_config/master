@@ -6,6 +6,7 @@ libcrypt-openssl-random-perl
 libio-socket-ssl-perl
 netdisco-backend
 netdisco-frontend
+netdisco-mibs-installer
 nmap
 postgresql
 slapd-shadowlastchange
