@@ -1,0 +1,38 @@
+#!/usr/sbin/cfagent --no-preconf -f
+# cfengine: $Rev: 1198 $
+
+# When modifying this configuration file, please commit to both
+# cfengine/cfengine2/cf.preconf and fai-config/var/lib/cfengine2/.
+
+control:
+  actionsequence  = ( directories copy )
+  server          = ( cfmaster.ece.ubc.ca )
+  srcdir          = ( /var/local/cfengine/cfengine2 )
+  dstdir          = ( /etc/cfengine )
+  IfElapsed       = ( 0 )
+
+  debian::
+    workdir         = ( /var/lib/cfengine2 )
+
+directories:
+  any::
+    $(dstdir)                   owner=root
+                                group=staff
+                                mode=0755
+
+copy:
+  any::
+    $(srcdir)/cf.preconf        dest=$(workdir)/cf.preconf
+                                backup=false
+                                server=$(server)
+                                trustkey=true
+
+    $(srcdir)/update.conf       dest=$(dstdir)/update.conf
+                                backup=false
+                                server=$(server)
+                                trustkey=true
+
+    $(srcdir)/vars-hosts.conf   dest=$(dstdir)/vars-hosts.conf
+                                backup=false
+                                server=$(server)
+                                trustkey=true
