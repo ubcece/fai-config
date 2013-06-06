@@ -3,7 +3,10 @@
 # The Perl script below rewrites any udev rules file.  This shell script
 # snippet calls the Perl script to rewrite *persistent-net.rules.
 case "$FAI_ACTION" in
-  install|dirinstall) : ;;
+  install|dirinstall)
+    # Exempt HP servers from interface renumbering
+    ifclass HP_ILO && exit
+    ;;
   *) exit
 esac
 for i in /etc/udev/rules.d/*persistent-net.rules ; do
