@@ -144,6 +144,14 @@ ece_fai_auth() {
 
 ECE_PUB_HS_DIRS=( /etc/ssh )
 
+# task_setup() sets the clock using the code below.  However, task_setup()
+# executes AFTER the setup hook, which is too late, because an incorrect clock
+# can cause SSL certificate validation errors in ece_setup_fetchkeys().
+ece_setup_setclock() {
+    [ "$TIMESRVS_1" ] && rdate $TIMESRVS_1
+    [ "$NTPSRVS_1" ]  && ntpdate -b $NTPSRVS
+}
+
 # Downloads host-specific keys.  Error messages, if any, are directed to
 # STDOUT.  Exit status is that of wget.
 ece_setup_fetchkeys() {
@@ -277,6 +285,8 @@ ece_setup_hook() {
       sysinfo|softupdate)
         : ;;
       *) # install|dirinstall|''
+        # Set clock to prevent SSL cetificate validation errors when fetching keys
+        ece_setup_setclock
         if ! ece_setup_fetchkeys ; then
             # Only exit status 6 (authorization failure) is recoverable by
             # authentication.  However, we will treat all errors as if they could
