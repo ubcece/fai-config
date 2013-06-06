@@ -4,5 +4,7 @@
 # include such logical volumes to reserve space in the volume group for making
 # snapshots.
 for lv in /dev/mapper/*-FAI_DELETEME* ; do
-    [ -b "$lv" ] && lvremove -f "$lv"
+    if [ -b "$lv" ]; then
+        lvremove -f "$lv"
+    fi
 done
