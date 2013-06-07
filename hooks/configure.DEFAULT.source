@@ -1,1 +1,6 @@
 ece_sync_keys_to_target
+
+# According to the FAI user guide, Bash scripts under $FAI/scripts can use
+# the ifclass function.  However, fai-do-scripts doesn't make the function
+# available.  Therefore, we hereby export the function.
+export -f ifclass
