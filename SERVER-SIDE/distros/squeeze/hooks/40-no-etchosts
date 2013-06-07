@@ -1,0 +1,2 @@
+# Remove /etc/hosts entry
+sed -e "/`hostname --fqdn`/d" -i $NFSROOT/etc/hosts
