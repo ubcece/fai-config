@@ -39,6 +39,7 @@ liblinux-lvm-perl
 locales
 ncurses-term
 ntfsprogs
+patch
 perl-doc
 uuid-runtime
 
