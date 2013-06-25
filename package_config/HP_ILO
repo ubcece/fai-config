@@ -6,3 +6,7 @@ hp-snmp-agents
 hpacucli
 hponcfg
 hpsmh
+
+# Debian HP Smart Array RAID support
+array-info
+cciss-vol-status
