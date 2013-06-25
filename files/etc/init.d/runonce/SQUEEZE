@@ -23,7 +23,7 @@ if [ -x /usr/sbin/munin-node-configure ]; then
     /usr/sbin/munin-node-configure --shell | /bin/sh &&     /etc/init.d/munin-node restart
 fi
 
-[ -x /usr/sbin/cfagent ] && /usr/sbin/cfagent -v -DHourly.Daily | tee /root/cfagent.log.`date +%Y-%m-%d_%H:%M:%S` 
+[ -x /usr/sbin/cfagent ] && /usr/sbin/cfagent --no-splay -v -DHourly.Daily | tee /root/cfagent.log.`date +%Y-%m-%d_%H:%M:%S` 
 
 if id monitor >/dev/null 2>/dev/null ; then
     touch /root/runonce_success
