@@ -1,24 +1,29 @@
 #!/bin/bash
-# 2009-03-05 Chris Dumont.
-# fai-server:/srv/fai/config/scripts/OMNI/80-maple-installer.
+
+if [ -z "$SERVER" ]; then
+	echo "Error: \$SERVER is not set in $0."
+	exit 1
+fi
 
 # idempotency!
 rm -rf $target/data/maple12/
 mkdir -p $target/usr/local/bin
 
-if [ ! -d $target/mnt/huey/exports/ ] || [ ! -r $target/mnt/huey/exports/maple/Maple12_i386.tgz ]; then
-	mkdir -p $target/mnt/huey/exports/
-	mount -t nfs4 huey:/ $target/mnt/huey/exports
-fi
+MOUNTPT=/tmp/$SERVER/exports/maple
+mkdir -p "$MOUNTPT"
+mount -t nfs -o ro,nolock $SERVER:/exports/maple "$MOUNTPT"
 
 cd $target/
-if [ `uname -m` == "i686" ]; then
-	tar -xzf $target/mnt/huey/exports/maple/Maple12_i386.tgz
-elif [ `uname -m` == "x86_64" ]; then
-	tar -xzf $target/mnt/huey/exports/maple/Maple12_amd64.tgz
-else
-	echo "Don't know my own architecture."
+case `uname -m` in
+    i686)
+	tar -xzf "$MOUNTPT"/Maple12_i386.tgz
+	;;
+    x86_64)
+	tar -xzf "$MOUNTPT"/Maple12_amd64.tgz
+	;;
+  *)
+	echo "Don't know my own architecture." >&2
 	exit 1
-fi
-umount $target/mnt/huey/exports/
+esac
 
+umount "$MOUNTPT"

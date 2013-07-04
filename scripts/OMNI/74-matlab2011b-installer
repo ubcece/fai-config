@@ -1,35 +1,34 @@
 #!/bin/bash
-# 2009-01-16 Chris Dumont.
-# 2012-06-07 update for R2011b
-# fai-server:/srv/fai/config/scripts/OMNI/73-matlab-installer.
 
-
-if [ "$target" = "" ]; then
-  target="/"
+if [ -z "$SERVER" ]; then
+	echo "Error: \$SERVER is not set in $0."
+	exit 1
 fi
 
 # idempotency!
 rm -rf $target/opt/Matlab_R2011b/
 mkdir -p $target/opt/Matlab_R2011b/
 
-if [ ! -d $target/mnt/huey/exports/ ] || [ ! -r $target/mnt/huey/exports/matlab/r2011b_amd64.bz2 ]; then
-	mkdir -p $target/mnt/huey/exports/
-	mount -t nfs4 huey:/ $target/mnt/huey/exports
-fi
+MOUNTPT=/tmp/$SERVER/matlab
+mkdir -p "$MOUNTPT"
+mount -t nfs -o ro,nolock $SERVER:/exports/matlab "$MOUNTPT"
 
 cd $target/opt/
-if [ `uname -m` == "i686" ]; then
-	tar -xzf $target/mnt/huey/exports/matlab/R2011b-i686.tgz
-elif [ `uname -m` == "x86_64" ]; then
-	tar -xzf $target/mnt/huey/exports/matlab/R2011b-x86_64.tgz
-else
-	echo "Don't know my own architecture."
+case `uname -m` in
+  i686)
+	tar -xzf "$MOUNTPT"/R2011b-i686.tgz
+	;;
+  x86_64)
+	tar -xzf "$MOUNTPT"/R2011b-x86_64.tgz
+	;;
+  *)
+	echo "Don't know my own architecture." >&2
 	exit 1
-fi
+esac
 
 mv /opt/R2011b /opt/Matlab_R2011b # only here because the tarball wasn't built quite right.
 
-umount $target/mnt/huey/exports/
+umount "$MOUNTPT"
 
 mkdir -p $target/usr/local/bin
 cd $target/usr/local/bin
