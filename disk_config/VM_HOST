@@ -11,23 +11,24 @@
 disk_config disk1 disklabel:gpt bootable:2 align-at:8k
 primary  -             200M-300M   msdos        -
 primary  swap          8G          swap         rw
-primary  -             14G-18G     -            -
+primary  -             14G-60G     -            -
 primary  /data         4G-6G       xfs          rw
 
 disk_config lvm fstabkey:device
 vg         host          disk1.3
-host-root1 /             2G-3G       ext3         rw,errors=remount-ro
-host-var1  /var          5G-6G       ext3         rw
-host-root2 /altroot      2G-3G       ext3         rw,errors=remount-ro
-host-var2  /altroot/var  5G-6G       ext3         rw
+host-root1 /             2G-18G      ext3         rw,errors=remount-ro
+host-var1  /var          5G-12G      ext3         rw
+host-root2 /altroot      2G-18G      ext3         rw,errors=remount-ro
+host-var2  /altroot/var  5G-12G      ext3         rw
 
 # setup-storage may complain of "disk too small" if partition 2.1 is set to
 # 100%, probably due to failure to account for overhead.
-disk_config disk2 disklabel:gpt preserve_lazy:1 align-at:8k
-primary  -             99%-        -            -
+disk_config disk2 disklabel:gpt preserve_lazy:2 align-at:8k
+primary  -             200M-300M   msdos        -
+primary  -             98%-        -            -
 
 # If the /var/lib/vz filesystem is not ext[234] then disk quotas will not work
 # in OpenVZ containers.  http://wiki.openvz.org/Disk_quota
 disk_config lvm fstabkey:device preserve_lazy:hostdata-vz
-vg        hostdata       disk2.1
-hostdata-vz   /var/lib/vz  90%         ext4         rw
+vg        hostdata       disk2.2
+hostdata-vz   /var/lib/vz  90%         ext4         rw,relatime,barrier=1,data=ordered
