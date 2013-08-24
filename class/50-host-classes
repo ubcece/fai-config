@@ -58,8 +58,6 @@ case $HOSTNAME in
         echo "ECE GNOME KDE OMNI " ;;
     ibofh|trirotor)
         echo "ECE GNOME " ;;
-    yoho)
-        echo "ECE SERVER RAID WEB GNOME " ;;
     ssh-linux[5678])
         echo "ECE SERVER GNOME KDE OMNI " ;;
     *)
