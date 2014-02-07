@@ -6,8 +6,8 @@ if [ -z "$SERVER" ]; then
 fi
 
 # idempotency!
-rm -rf $target/opt/Matlab_R2011b/
-mkdir -p $target/opt/Matlab_R2011b/
+rm -rf $target/opt/Matlab_R2013b/
+mkdir -p $target/opt/Matlab_R2013b/
 
 MOUNTPT=/tmp/$SERVER/matlab
 mkdir -p "$MOUNTPT"
@@ -16,24 +16,24 @@ mount -t nfs -o ro,nolock $SERVER:/exports/matlab "$MOUNTPT"
 cd $target/opt/
 case `uname -m` in
   i686)
-	tar -xzf "$MOUNTPT"/R2011b-i686.tgz
+	echo "32bit linux is not supported by Mathworks, after 2012." >&2
+	exit 1
 	;;
   x86_64)
-	tar -xzf "$MOUNTPT"/R2011b-x86_64.tgz
+	tar -xzf "$MOUNTPT"/R2013b-x86_64.tgz
 	;;
   *)
 	echo "Don't know my own architecture." >&2
 	exit 1
 esac
 
-mv /opt/R2011b /opt/Matlab_R2011b # only here because the tarball wasn't built quite right.
 
 umount "$MOUNTPT"
 
 mkdir -p $target/usr/local/bin
 cd $target/usr/local/bin
-ln -sf /opt/Matlab_R2011b/bin/matlab
-ln -sf /opt/Matlab_R2011b/bin/mbuild
-ln -sf /opt/Matlab_R2011b/bin/mcc
-ln -sf /opt/Matlab_R2011b/bin/mex
+ln -sf /opt/Matlab_R2013b/bin/matlab
+ln -sf /opt/Matlab_R2013b/bin/mbuild
+ln -sf /opt/Matlab_R2013b/bin/mcc
+ln -sf /opt/Matlab_R2013b/bin/mex
 
