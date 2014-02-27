@@ -11,3 +11,7 @@ postgresql-contrib
 postgresql-doc
 postgresql-server-dev-9.0
 ptop
+
+PACKAGES aptitude SQUEEZE
+autofs5-ldap
+nslcd
