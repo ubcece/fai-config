@@ -1,8 +1,0 @@
-# <type> <mountpoint> <size in mb> [mount options]     [;extra options]
-
-disk_config disk1
-primary    /media/windows   preserve1   rw
-primary    /                9000-9999    rw,errors=remount-ro  ;-c -j ext3
-#primary    -                preserve3
-logical    /var             3000-3999    rw
-logical    swap             1000-1100    rw
