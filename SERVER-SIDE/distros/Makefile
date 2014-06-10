@@ -16,4 +16,4 @@ $(FAI_CHBOOT_TMPLS): $(PXELINUX_CFG_DIR)/%: fai-chboot-templates/%
 	cp -f $< $@
 
 $(NFSROOTS): PHONY/%: %
-	/usr/sbin/fai-make-nfsroot -f -C '$<'
+	/usr/sbin/fai-make-nfsroot -f -l -C '$<'
