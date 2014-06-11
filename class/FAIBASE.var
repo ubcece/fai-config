@@ -1,7 +1,5 @@
 # fill me in. 
 
-USE_SETUP_STORAGE=1
-
 # do not allow installation of pacakges from unsigned repositories
 FAI_ALLOW_UNSIGNED=0
 
