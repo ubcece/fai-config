@@ -16,7 +16,7 @@
 #   extrbase    Run debootstrap (use /var/tmp/base.tgz as a shortcut)
 #   mirror      If $FAI_DEBMIRROR is NFS, mount it to $MNTPOINT
 #   debconf     Fill debconf database by running `fai-debconf $FAI/debconf`
-#   prepareapt  Set up resolv.conf and other files for the next task updatebase
+#   repository  Set up resolv.conf and other files for the next task updatebase
 #   updatebase  Mount /proc et al, make diversions, apt-key add, apt-get update
 #   instsoft    Install packages as directed by $FAI/package_config
 #   configure   Call scripts in $FAI/scripts/ and subdirectories
