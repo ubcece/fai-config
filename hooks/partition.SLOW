@@ -3,12 +3,12 @@
 # 2008-11-19 Chris Dumont. Let's have a long pause before partitioning the
 # disk. 
 
-for i in $disklist ; do
-	parted -s /dev/$i unit GB print free
-done
-setup-storage -d 2>&1 | grep mkpart
-echo " "
-echo "Don't like what you see? Press Ctrl-C to abort overwriting the disk."
-echo "Like what you see? ssh to $HOSTNAME and 'killall sleep'"
-sleep 10000
+setup-storage 2>&1 | sed -e 's/^(STDOUT) Error:/INFO:/'
+echo
+echo "########################################################################"
+echo "# ^^^ This is a preview of the disk partition scheme. ^^^              #"
+echo "# Don't like what you see? Press Ctrl-C to abort overwriting the disk. #"
+echo "# Like what you see? ssh to $HOSTNAME and 'killall sleep'              #"
+echo "########################################################################"
+sleep 10000 || true
 
