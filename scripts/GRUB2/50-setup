@@ -7,19 +7,6 @@
 error=0 ; trap "error=$((error|1))" ERR
 
 ######################################################
-# 2010-10-04 Chris Dumont. This is for /usr/sbin/setup-storage 1.0.3
-# in fai-client 3.2.17~lenny1. The current setup-storage has no provision for
-# setting flags on GPT-partitioned disks. Without this I get errors during
-# grub2 install like: "grub-setup: error: Core image is too big for embedding,
-# but this is required when the root device is on a RAID array or LVM volume."
-
-setup-storage -V 2>&1 | egrep -q "setup-storage version 1.0.3|setup-storage version 1.3"
-if [ $? -eq 1 ]; then
-        echo "setup-storage version number has advanced. Maybe I'm no longer needed. Pausing so you can examine the situation"
-        sleep 3648
-        exit 0
-fi
-######################################################
 
 if [ X$FAI_ACTION = Xdirinstall ]; then
 	set_disk_info
@@ -39,24 +26,11 @@ for i in $bootdisks ; do
   # The "1" in parted and dd -MUST- correspond with fai/config/disk_config/???
   parted -s /dev/${i} set 1 bios_grub on || sleep 3686
 
-  # 2011-11-23 Derek Poon
-  # Is this an attempt to wipe the EFI system partition?  Why?  What if $i is
-  # "cciss/c0d0" -- then it would just create a file /dev/cciss/c0d01 instead
-  # of using device /dev/cciss/c0d0p1?  It would be better to increment the
-  # minor number of the device by one, or scan through /dev/disk/by-id/* to
-  # find the boot disk and append "-part1".
-  dd if=/dev/zero of=/dev/${i}1 2>/dev/null || : # We expect an error from dd
-
   GRUBEXTRA=""
   # Found IBM HS20 Blades with IDE disk.
   /usr/bin/lspci | grep -q "IDE interface: Broadcom CSB5 IDE Controller" && GRUBEXTRA=" --modules=ata"
 
   $ROOTCMD /usr/sbin/grub-install $GRUBEXTRA --no-floppy /dev/${i}
-
-  # Note that some buggy bioses require the msdos bootable flag set. Only fdisk
-  # (not cfdisk, sfdisk, or parted) will do this.
-  echo -e "a\n1\nw" | fdisk /dev/${i} || : # We expect an error from fdisk
-
 done
 set +x
 
