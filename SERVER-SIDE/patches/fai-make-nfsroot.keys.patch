@@ -1,9 +1,0 @@
---- /usr/sbin/fai-make-nfsroot.keys	2013-02-01 20:50:21.000000000 +0000
-+++ /usr/sbin/fai-make-nfsroot	2013-05-06 01:46:33.713233723 +0000
-@@ -448,5 +448,5 @@
-     if [ -d $cfdir/apt/keys ]; then
-         local f
--        for f in `find $cfdir/apt/keys -type f -name *.asc`; do
-+        for f in `find $cfdir/apt/keys -type f -name '*.asc'`; do
-             cat $f | $ROOTCMD apt-key add -
-         done
