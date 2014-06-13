@@ -1,0 +1,62 @@
+#!/bin/sh
+
+( cd $NFSROOT && patch -p0 ) <<'PATCH'
+--- fai-setup-storage-4.2/bin/setup-storage
++++ usr/sbin/setup-storage
+@@ -237,14 +237,15 @@ foreach (&numsort(keys %FAI::commands)) {
+ 
+ # generate the proposed fstab contents
+ # wait for udev to set up all devices
+-`$FAI::udev_settle`;
+-my @fstab = &FAI::generate_fstab(\%FAI::configs);
++if ($FAI::no_dry_run) {
++  `$FAI::udev_settle`;
++  my @fstab = &FAI::generate_fstab(\%FAI::configs);
+ 
+-# print fstab
+-$FAI::debug and print "$_\n" foreach (@fstab);
++  # print fstab
++  $FAI::debug and print "$_\n" foreach (@fstab);
+ 
+-# write the proposed contents of fstab to $FAI::DATADIR/fstab
+-if ($FAI::no_dry_run) {
++
++  # write the proposed contents of fstab to $FAI::DATADIR/fstab
+   open(FSTAB, ">$FAI::DATADIR/fstab")
+     or die "Failed to open $FAI::DATADIR/fstab for writing\n";
+   print FSTAB "$_\n" foreach (@fstab);
+diff --git a/lib/setup-storage/Commands.pm b/lib/setup-storage/Commands.pm
+index 31deaf2..ddb1b3e 100644
+--- fai-client-4.2/lib/setup-storage/Commands.pm
++++ usr/share/fai/setup-storage/Commands.pm
+@@ -639,6 +639,7 @@ sub cleanup_vg {
+     last;
+   }
+ 
++  &FAI::push_command( "vgchange -a y $vg", undef, "vgchange_a_y_VG_$vg" );
+   if (0 == $clear_vg) {
+     my $vg_setup_pre = "vgchange_a_n_VG_$vg";
+     if (defined($FAI::configs{"VG_$vg"})) {
+@@ -661,8 +662,8 @@ sub cleanup_vg {
+           }
+         }
+ 
+-        &FAI::push_command( "wipefs -a $vg/$lv",
+-          "vgchange_a_n_VG_$vg$pre_deps_cl",
++        &FAI::push_command( "wipefs -a /dev/$vg/$lv",
++          "vgchange_a_y_VG_$vg$pre_deps_cl",
+           "wipefs_$vg/$lv");
+         &FAI::push_command( "lvremove -f $vg/$lv",
+           "wipefs_$vg/$lv",
+@@ -686,8 +687,8 @@ sub cleanup_vg {
+       join(",self_cleared_", @{ $FAI::current_dev_children{"/dev/$vg/$lv"} })
+         if (defined($FAI::current_dev_children{"/dev/$vg/$lv"}) &&
+           scalar(@{ $FAI::current_dev_children{"/dev/$vg/$lv"} }));
+-    &FAI::push_command( "wipefs -a $vg/$lv",
+-      "vgchange_a_n_VG_$vg$pre_deps_cl",
++    &FAI::push_command( "wipefs -a /dev/$vg/$lv",
++      "vgchange_a_y_VG_$vg$pre_deps_cl",
+       "wipefs_$vg/$lv");
+     &FAI::push_command( "lvremove -f $vg/$lv",
+       "wipefs_$vg/$lv",
+PATCH
