@@ -4,6 +4,8 @@ echo FAIBASE
 echo DHCPC
 
 case $HOSTNAME in
+    faiclient)
+        echo "ECE SERVER SLOW" ;;
     [kmxv]sql?)
         echo "ECE SERVER WEB DATABASE RT RAID" ;;
     rafiq)
