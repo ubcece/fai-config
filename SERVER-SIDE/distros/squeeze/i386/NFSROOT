@@ -45,6 +45,13 @@ uuid-runtime
 linux-base/unstable
 firmware-linux/unstable
 
+# install LSB (Linux Standard Base) to determine the
+# distribution and release of the install system
+
+lsb-base
+lsb-core
+lsb-release
+
 # architecture dependent list of packages that are installed
 
 PACKAGES aptitude I386
