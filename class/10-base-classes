@@ -6,13 +6,4 @@ uname -s | tr '[:lower:]' '[:upper:]'
 
 [ -f /boot/RUNNING_FROM_FAICD ] && echo "FAICD"
 
-# extract CLASSES given in the kernel FAI_CLASSES parameter passed by
-# the loader
-
-if [ -n "$FAI_CLASSES" ]; then
-    for class in $(echo $FAI_CLASSES | tr "," "\n"); do
-        echo $class
-    done
-fi
-
 exit 0

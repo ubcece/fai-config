@@ -1,0 +1,12 @@
+#! /bin/bash
+
+# extract CLASSES given in the kernel parameter FAI_CLASSES passed by
+# the loader
+
+if [ -n "$FAI_CLASSES" ]; then
+    for class in $(echo $FAI_CLASSES | tr "," "\n"); do
+        echo $class
+    done
+fi
+
+exit 0
