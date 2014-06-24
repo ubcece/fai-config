@@ -1,74 +1,39 @@
 #! /bin/bash
 
-function OSexpand {
-    local OSvers
-    local class
-    local word
+# script to determine the OS classes for this install from the running
+# OS of the installation system if there are no predefined OS classes in
+# the class list
 
-    OSvers=$1
-
-    # if the OS keyword is given without a version number then
-    # add the version number of the current stable distribution
-
-    if [[ $OSvers =~ ^(DEBIAN|UBUNTU)$ ]]; then
-	case $OSvers in
-	    DEBIAN)
-		OSvers="DEBIAN_6_0_9"
-		;;
-	    UBUNTU)
-		OSvers="UBUNTU_14_04"
-		;;
-	esac
-    fi
-    
-    # now generate the list of OS classes based on the distributions
-    # and the version
-
-    class=""
-    for word in $(echo $OSvers | tr "_" "\n"); do
-	if [ -z "${class}" ]; then
-	    class="${word}"
-	else
-	    class="${class}_${word}"
-	fi
-	echo "${class}"
-    done
-}
-
-
-OSclasses=()
+OSclasses=""
 
 # extract the classes that are prefixed by the supported OS distributions
+# (currently DEBIAN and UBUNTU)
 
-for OSclass in ${classes}; do
-    if [[ $OSclass =~ ^(UBUNTU|DEBIAN).* ]]; then
-	OSclasses=("${OSclasses[@]}" $OSclass)
+for class in ${classes}; do
+    if [[ $class =~ ^(DEBIAN|UBUNTU).* ]]; then
+	OSclasses="${OSclasses} $class"
     fi
 done
 
-# if no OS classes are found generate a class based on the installer OS
-# (assuming the default is to install same OS as the installer)
+# if no OS classes are found generate classes based on the installer OS
 
 if [ -z "$OSclasses" ]; then
-    OSclasses=$(lsb_release -a 2>/dev/null | awk \
+    myOS=$(lsb_release -a 2>/dev/null | awk \
 	'BEGIN {distribution=""; release=""}
 	 /Distributor/ {distribution=toupper($3)}
 	 /Release/ {release=$2; gsub(/\./, "_", release)}
 	 END {print distribution "_" release}')
+
+    OSclass=""
+    for word in $(echo $myOS | tr "_" "\n"); do
+	if [ -z "${OSclass}" ]; then
+	    OSclass="${word}"
+	else
+	    OSclass="${OSclass}_${word}"
+	fi
+	echo "${OSclass}"
+    done
 fi
-
-# if there is only one OS class expand the classes to include the
-# distribution and versions
-
-if [ ${#OSclasses[@]} -eq 1 ]; then
-    OSclasses=($(OSexpand $OSclasses))
-fi
-
-# now publish the classes of OS
-
-for OSclass in ${OSclasses[@]}; do
-    echo $OSclass
-done | sort | uniq
 
 # whilst testing add the original Debian stable release
 
