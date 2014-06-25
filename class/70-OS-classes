@@ -6,8 +6,8 @@
 # the OS to install.  Otherwise, generate OS classes based on the
 # NFSroot's OS
 
-# explicit_class(): extract the class that are prefixed by the supported
-# OS distributions (currently DEBIAN and UBUNTU)
+# explicit_class(): extract the class that are prefixed by the supported OS
+# distributions (currently DEBIAN and UBUNTU) - assuming only one specified
 
 explicit_class() {
     for class in "$@"; do
@@ -19,7 +19,7 @@ explicit_class() {
     return 1
 }
 
-# nfsroot_class(): generate the OS classes based on the OS of NFSroot
+# nfsroot_class(): generate the OS class based on the OS of NFSroot
 
 nfsroot_class() {
     lsb_release -ir 2>/dev/null | awk \
@@ -28,27 +28,55 @@ nfsroot_class() {
 	END {print distribution "_" release;}'
 }
 
-# reduce_versions(): generate new OS class by sequential stripping the _ suffix
+# reduce_versions(): recursively generate new OS classes by
+# sequentially stripping the "_" suffix
 
 reduce_versions() {
-    OS="$1"
+    OS="$1"; skipOS="$2"
+
+    [ "$OS" != "$skipOS" ] && echo "$OS"
+
+    # temporary hask for compatibilty
+    [ "$OS" = "DEBIAN_6" ] && echo "SQUEEZE"
+
     case "$OS" in
 	*_*)
-	    OS="${OS%_*}"
-	    echo "$OS"
-	    # temporary hack for compatibility
-	    [ "$OS" = "DEBIAN_6" ] && echo "SQUEEZE"
-	    reduce_versions "$OS"
+	    reduce_versions "${OS%_*}" "$skipOS"
     esac 
 }
 
-# main script
+# main script:
 
-OS=$(explicit_class "$classes")
+# check if an OS class have been explicity defined
+
+OS=$(explicit_class $classes)
+
+# if OS class has not been defined then generate OS class
+# based on the OS of NFSroot
 
 if [ -z "$OS" ]; then
-    OS=$(nfsroot_class)
-    echo "$OS"
+    OS=$(nfsroot_class) && skipOS=""
+
+# else provide the stable version of OS if a version has
+# not been provided
+
+else
+    skipOS=$OS
+
+    if [[ $OS =~ ^(DEBIAN|UBUNTU)$ ]]; then
+	case $OS in
+	    DEBIAN)
+		OS="DEBIAN_6"
+		;;
+	    UBUNTU)
+		OS="UBUNTU_14_04"
+		;;
+	esac
+    fi
 fi
 
-reduce_versions "$OS" 
+# generate the list of OS classes based on OS version specified
+
+reduce_versions "$OS" "$skipOS"
+
+exit 0
