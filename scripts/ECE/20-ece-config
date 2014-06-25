@@ -2,7 +2,7 @@
 # Chris Dumont 2007-08-10. Do only what is necessary for cfengine to run for
 # the first time.
 
-ifclass SQUEEZE && fcopy -BM /etc/ntp.conf
+ifclass ECE && fcopy -BM /etc/ntp.conf
 fcopy -BM /etc/ferm/ferm.conf
 fcopy -iBM /etc/default/ntp
 fcopy -BM /etc/fai/fai.conf

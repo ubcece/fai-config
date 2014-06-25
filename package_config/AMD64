@@ -1,7 +1,7 @@
 PACKAGES aptitude NOT_VZ_CONTAINER
 linux-image-amd64
 
-PACKAGES aptitude SQUEEZE
+PACKAGES aptitude DEBIAN_6
 isc-dhcp-client
 lvm2
 

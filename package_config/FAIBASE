@@ -1,7 +1,7 @@
 PACKAGES aptitude RAID
 mdadm
 
-PACKAGES aptitude SQUEEZE
+PACKAGES aptitude DEBIAN
 acpid
 acpi-support-base
 firmware-bnx2

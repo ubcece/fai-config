@@ -36,9 +36,6 @@ reduce_versions() {
 
     [ "$OS" != "$skipOS" ] && echo "$OS"
 
-    # temporary hask for compatibilty
-    [ "$OS" = "DEBIAN_6" ] && echo "SQUEEZE"
-
     case "$OS" in
 	*_*)
 	    reduce_versions "${OS%_*}" "$skipOS"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-! ifclass SQUEEZE && exit 0
+! ifclass DEBIAN && exit 0
 
 # 2011-03-01 Chris Dumont. 
 
