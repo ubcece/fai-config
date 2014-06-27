@@ -14,6 +14,7 @@ SELF="$0"
 git_ref=
 localboot=
 template=
+classes=
 
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 
@@ -51,13 +52,17 @@ fi
 
 help() {
     echo \
-"Usage: `basename $0` [-t TEMPLATE] [-r GIT_REF] HOSTNAME [HOSTNAME ...]
+"Usage: `basename $0` [-c CLASSES] [-t TEMPLATE] [-r GIT_REF] HOSTNAME [HOSTNAME ...]
        `basename $0` -l HOSTNAME [HOSTNAME ...]
 
     Configures the PXE server so that a host will run FAI (Fully Automated
     Install) the next time it is rebooted.
 
     Options:
+
+      -c CLASSES
+          Comma delimited list of additional classes to be added to
+	  the list of FAI install classes
 
       -t TEMPLATE
           Specifies which PXE template to use.
@@ -128,8 +133,10 @@ show_remote_commit() {
     esac
 }
 
-while getopts :hlr:t: opt; do
+while getopts :c:hlr:t: opt; do
     case "$opt" in
+      c)    classes=$(echo "$OPTARG" | tr '[:lower:]' '[:upper:]')
+            ;;
       h)    help
             exit 0
             ;;
@@ -173,6 +180,7 @@ elif [ -n "$template" ]; then
         LC_ALL=C $fai_chboot -c "$template" "$hostname" \
             hostname="$hostname" \
             auth="`auth "$hostname"`" \
-            FAI_CONFIG_SRC_REF="$git_ref"
+            FAI_CONFIG_SRC_REF="$git_ref" \
+	    FAI_CLASSES="$classes"
     done
 fi
