@@ -46,6 +46,14 @@ altroot  data  home        lib32  maple12     nfs  root  srv      ubc  vmlinuz
 bin      dev   initrd.img  lib64  media       opt  sbin  sys      usr
 machine:/# grub-install /dev/sda
 Installation finished. No error reported.
+machine:~# update-grub
+Generating grub.cfg ...
+Found background image: /usr/share/images/desktop-base/desktop-grub.png
+Found linux image: /boot/vmlinuz-2.6.32-5-amd64
+Found initrd image: /boot/initrd.img-2.6.32-5-amd64
+Found memtest86+ multiboot image: /boot/memtest86+_multiboot.bin
+Found Windows 7 (loader) on /dev/sda1
+done
 machine:/# exit
 exit
 root@machine:~# umount /target/sys
