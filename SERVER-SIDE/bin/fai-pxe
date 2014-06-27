@@ -181,6 +181,6 @@ elif [ -n "$template" ]; then
             hostname="$hostname" \
             auth="`auth "$hostname"`" \
             FAI_CONFIG_SRC_REF="$git_ref" \
-	    FAI_CLASSES="$classes"
+            FAI_CLASSES="$classes"
     done
 fi

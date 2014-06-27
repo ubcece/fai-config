@@ -1,6 +1,6 @@
 #!/bin/bash
 
-! ifclass DEBIAN && exit 0
+! ifclass DEBIAN_6 && exit 0
 
 # 2011-03-01 Chris Dumont. 
 
@@ -45,7 +45,7 @@ echo "Configuring X11 to use the Nvidia video card. "
 KVERS=\`uname -r\`
 case "\$KVERS" in
   2.6.38-bpo.2-amd64)
-	  echo "deb http://mirrors.ece.ubc.ca/debian sid main contrib non-free" >> /etc/apt/sources.list
+	  echo "deb http://mirror.it.ubc.ca/debian sid main contrib non-free" >> /etc/apt/sources.list
 	  apt-get -qq update
 	  apt-get -qq -y install  linux-headers-2.6.38-bpo.2-all-amd64 nvidia-kernel-dkms/unstable
 	  LIST="

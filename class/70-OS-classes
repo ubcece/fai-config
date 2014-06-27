@@ -11,10 +11,10 @@
 
 explicit_class() {
     for class in "$@"; do
-	if [[ $class =~ ^(DEBIAN|UBUNTU).* ]]; then
-	    echo "$class"
-	    return 0
-	fi
+        if [[ $class =~ ^(DEBIAN|UBUNTU).* ]]; then
+            echo "$class"
+            return 0
+        fi
     done
     return 1
 }
@@ -24,8 +24,8 @@ explicit_class() {
 nfsroot_class() {
     lsb_release -ir 2>/dev/null | awk \
        '/Distributor/ {distribution=toupper($3)}
-	/Release/ {release=$2; gsub(/\./, "_", release)}
-	END {print distribution "_" release;}'
+        /Release/ {release=$2; gsub(/\./, "_", release)}
+        END {print distribution "_" release;}'
 }
 
 # reduce_versions(): recursively generate new OS classes by
@@ -37,8 +37,8 @@ reduce_versions() {
     [ "$OS" != "$skipOS" ] && echo "$OS"
 
     case "$OS" in
-	*_*)
-	    reduce_versions "${OS%_*}" "$skipOS"
+        *_*)
+            reduce_versions "${OS%_*}" "$skipOS"
     esac 
 }
 
@@ -46,34 +46,33 @@ reduce_versions() {
 
 # check if an OS class have been explicity defined
 
-OS=$(explicit_class $classes)
+EXPLICIT_OS=$(explicit_class $classes)
 
-# if OS class has not been defined then generate OS class
-# based on the OS of NFSroot
+if [ -z "$EXPLICIT_OS" ]; then
+    # if OS class has not been defined then generate OS class
+    # based on the OS of NFSroot
 
-if [ -z "$OS" ]; then
-    OS=$(nfsroot_class) && skipOS=""
-
-# else provide the stable version of OS if a version has
-# not been provided
+    OS=$(nfsroot_class)
 
 else
-    skipOS=$OS
+    # else provide the stable version of OS if a version has
+    # not been provided
 
-    if [[ $OS =~ ^(DEBIAN|UBUNTU)$ ]]; then
-	case $OS in
-	    DEBIAN)
-		OS="DEBIAN_6"
-		;;
-	    UBUNTU)
-		OS="UBUNTU_14_04"
-		;;
-	esac
-    fi
+    case $OS in
+        DEBIAN)
+            OS="DEBIAN_6"
+            ;;
+        UBUNTU)
+            OS="UBUNTU_14_04"
+            ;;
+        *)
+            OS="$EXPLICIT_OS"
+            ;;
+    esac
 fi
 
 # generate the list of OS classes based on OS version specified
 
-reduce_versions "$OS" "$skipOS"
+reduce_versions "$OS" "$EXPLICIT_OS"
 
 exit 0
