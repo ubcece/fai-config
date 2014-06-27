@@ -1,0 +1,68 @@
+Manually installing GRUB
+========================
+
+You may need to install the GRUB bootloader manually.  For example, if you
+have reinstalled Windows on a dual-boot machine, the Windows installer will
+have overwritten GRUB.
+
+Here is an outline of how to install or reinstall GRUB by network-booting
+into FAI's rescue mode.
+
+
+$ SERVER-SIDE/bin/fai-pxe -t rescue-squeeze machine.ece.ubc.ca
+...
+$ ssh -lroot machine.ece.ubc.ca
+...
+root@machine:~# parted /dev/sdb p
+Model: ATA HDS728080PLA380 (scsi)
+Disk /dev/sdb: 80.0GB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+
+Number  Start   End     Size    File system     Name     Flags
+ 1      17.4kB  210MB   210MB                   primary  bios_grub
+ 2      210MB   8800MB  8590MB  linux-swap(v1)  primary
+ 3      8800MB  80.0GB  71.2GB                  primary  lvm
+
+root@machine:~# vgchange -ay
+  5 logical volume(s) in volume group "vg" now active
+root@machine:~# lvs
+  LV    VG   Attr   LSize  Origin Snap%  Move Log Copy%  Convert
+  data  vg   -wi-a- 13.68g                                      
+  root1 vg   -wi-a- 20.00g                                      
+  root2 vg   -wi-a- 21.00g                                      
+  var1  vg   -wi-a-  5.00g                                      
+  var2  vg   -wi-a-  6.00g                                      
+root@machine:~# mount /dev/mapper/vg-root1 /target
+root@machine:~# mount /dev/mapper/vg-var1 /target/var
+root@machine:~# mount -t proc proc /target/proc
+root@machine:~# mount -t devtmpfs dev /target/dev
+root@machine:~# mount -t devpts devpts /target/dev/pts
+root@machine:~# mount -t sysfs sys /target/sys
+root@machine:~# chroot /target /bin/bash
+machine:/# ls
+CMC      boot  etc         lib    lost+found  mnt  proc  selinux  tmp  var
+altroot  data  home        lib32  maple12     nfs  root  srv      ubc  vmlinuz
+bin      dev   initrd.img  lib64  media       opt  sbin  sys      usr
+machine:/# grub-install /dev/sda
+Installation finished. No error reported.
+machine:/# exit
+exit
+root@machine:~# umount /target/sys
+root@machine:~# umount /target/proc
+root@machine:~# umount /target/dev/pts
+root@machine:~# umount /target/dev 
+root@machine:~# umount /target/var
+root@machine:~# umount /target 
+root@machine:~# sync
+root@machine:~# task chboot
+Calling task_chboot
+Running fai-chboot on server to disable PXE booting for this client
+2014-06-27 20:06:28 URL:https://fai.ece.ubc.ca/fai/chboot [0/0] -> "-" [1]
+root@machine:~# reboot
+
+Broadcast message from root@machine (pts/1) (Fri Jun 27 20:06:47 2014):
+
+The system is going down for reboot NOW!
+root@machine:~# Connection to machine.ece.ubc.ca closed by remote host.
+Connection to machine.ece.ubc.ca closed.
