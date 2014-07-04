@@ -58,7 +58,7 @@ else
     # else provide the stable version of OS if a version has
     # not been provided
 
-    case $OS in
+    case "$EXPLICIT_OS" in
         DEBIAN)
             OS="DEBIAN_6"
             ;;
