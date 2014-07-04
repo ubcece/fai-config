@@ -10,8 +10,8 @@ label fai-install-squeeze
 
 label fai-install-squeeze-amd64
     kernel vmlinuz-squeeze-amd64
-    append ip=dhcp root=/dev/nfs boot=live initrd=initrd-squeeze-amd64 nfsroot=/exports/fai/nfsroot-squeeze-amd64 FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+    append ip=dhcp root=/dev/nfs boot=live initrd=initrd-squeeze-amd64 nfsroot=/exports/fai/nfsroot-squeeze-amd64 FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
 
 label fai-install-squeeze-i386
     kernel vmlinuz-squeeze-i386
-    append ip=dhcp root=/dev/nfs boot=live initrd=initrd-squeeze-i386  nfsroot=/exports/fai/nfsroot-squeeze-i386  FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+    append ip=dhcp root=/dev/nfs boot=live initrd=initrd-squeeze-i386  nfsroot=/exports/fai/nfsroot-squeeze-i386  FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
