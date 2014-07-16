@@ -1,0 +1,2 @@
+# To be unmounted in finish.DEFAULT hook
+mount -t nfs $SERVER:/exports/fai/baseimages-amd64 "$FAI/basefiles"

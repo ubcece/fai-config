@@ -1,0 +1,2 @@
+# Undo extrbase hook
+umount "$FAI/basefiles"
