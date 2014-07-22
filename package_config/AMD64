@@ -1,7 +1,10 @@
-PACKAGES aptitude NOT_VZ_CONTAINER
-linux-image-amd64
+PACKAGES aptitude UBUNTU_14
+linux-image-generic
+isc-dhcp-client
+lvm2
 
 PACKAGES aptitude DEBIAN_6
+linux-image-amd64
 isc-dhcp-client
 lvm2
 
