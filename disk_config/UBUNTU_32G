@@ -1,6 +1,6 @@
 # Disk configuration for Ubuntu
 
-disk_config sysdisk disklabel:gpt preserve_reinstall:1 fstabkey:uuid bootable:2 align-at:8k
+disk_config disk1 disklabel:gpt preserve_reinstall:1 fstabkey:uuid bootable:2 align-at:8k
 primary		-			100M	msdos	-
 primary		-			24G-	-	-
 
