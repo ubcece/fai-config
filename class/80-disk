@@ -8,7 +8,17 @@ lastdisksize() {
 egrep ' etherd/e[[:digit:]]+\.[[:digit:]]+\b| i2o/hd.\b| cciss/c.d.\b| ida/c.d.\b| rd/c.d.\b| hd.\b| sd[a-z]{1,2}\b|/disc\b| vd.\b| xvd.\b' /proc/partitions | sort -k4 | awk '{print $3}' | tail -n 1
 }
 
-if ifclass SERVER ; then
+if ifclass UBUNTU; then
+
+    if ifclass SERVER; then
+	echo "UBUNTU_32G" && exit 0
+    fi
+
+    echo "$0: disk not suitable for Ubuntu" >&2
+    echo "SLOW"
+    sleep 1000000
+
+elif ifclass SERVER ; then
 	# FIXME: It would be nice if all servers could use a common layout and this line could go away.
 	( ifclass VM_HOST || ifclass DATABASE ) && exit 0
 
