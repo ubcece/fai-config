@@ -1,14 +1,14 @@
 # Disk configuration for Ubuntu
 
-disk_config disk1 disklabel:gpt preserve_reinstall:1 fstabkey:uuid bootable:2 align-at:8k
-primary		-			100M	msdos	-
-primary		-			24G-	-	-
+disk_config disk1 disklabel:gpt fstabkey:uuid bootable:2 align-at:8k
+primary		-			16M	msdos	-
+primary		-			25G-	-	-
 
 disk_config lvm fstabkey:uuid
 vg		VGroot			disk1.2
 VGroot-LVroot 	/			8G	ext4	rw,errors=remount-ro
-VGroot-LVswap	swap			1G	swap	rw
-VGroot-LVtmp	/tmp			3G	ext4	rw
-VGroot-LVvar 	/var			4G	ext4	rw
+VGroot-LVswap	swap			2G	swap	rw
+VGroot-LVtmp	/tmp			3G	ext4	rw,nodev,nosuid
+VGroot-LVvar 	/var			4G 	ext4	rw
 VGroot-LVlog	/var/log		4G	ext4	rw
 VGroot-LVaudit	/var/log/audit		4G	ext4	rw
