@@ -11,7 +11,7 @@ firmware-qlogic
 ntp
 tmux
 
-PACKAGES aptitude
+PACKAGES aptitude DEBIAN
 # arping might be removed by OMNI class. That's ok.
 anacron
 #arping
