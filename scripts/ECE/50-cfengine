@@ -5,6 +5,11 @@
 # script to run on first local disk boot which, during successful execution,
 # erases itself.
 
+# Compatibility hook to run /etc/init.d/runonce on systems that use Upstart
+fcopy -iB /etc/init/runonce.conf
+
 fcopy -B /etc/init.d/runonce
-$ROOTCMD /sbin/insserv -d runonce
+
+# Debian has /sbin/insserv; Ubuntu does not
+[ -x $target/sbin/insserv ] && $ROOTCMD /sbin/insserv -d runonce
 

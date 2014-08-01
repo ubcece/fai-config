@@ -27,7 +27,10 @@ fi
 
 if id monitor >/dev/null 2>/dev/null ; then
     touch /root/runonce_success
-    insserv -r runonce
+
+    # On Ubuntu, the Upstart configuration will take care of the cleanup
+    [ -x /sbin/insserv ] && /sbin/insserv -r runonce
+
     rm -f /root/runonce_no_success /etc/init.d/runonce
 
     # 2011-11-03 Derek and Chris:

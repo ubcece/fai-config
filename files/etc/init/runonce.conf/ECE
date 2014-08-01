@@ -1,0 +1,17 @@
+# runonce
+
+description     "ECE runonce"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+task
+normal exit 0
+
+umask 022
+console log
+
+start on started networking and started ssh
+
+exec /etc/init.d/runonce start
+post-stop exec rm -f /etc/init/runonce.conf
