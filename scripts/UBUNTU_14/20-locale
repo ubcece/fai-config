@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# FAI installation of UBUNTU 14 does not configure the locale for this server
+
+# determine default locale for the installed server
+
+locale=$($ROOTCMD /usr/bin/debconf-get-selections | grep default_environment_locale | awk '{print $4}')
+
+if [ -z "$locale" ]; then
+    locale="POSIX"
+fi
+
+# generate locale definitions files for the default locale
+
+$ROOTCMD /usr/sbin/locale-gen $locale
+$ROOTCMD /usr/sbin/update-locale LANG=$locale
