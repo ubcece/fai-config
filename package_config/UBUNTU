@@ -1,3 +1,5 @@
 PACKAGES aptitude UBUNTU
 linux-generic
 ubuntu-minimal
+debconf-utils
+ssh
