@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# UBUNTU 14 is installed with GRUB 2.02 which by default does not
+# display the GRUB Menu Screen during the bootstrap.  This script
+# reconfigures GRUB to always show the GRUB Menu
+
+# unhide the GRUB menu
+sed -i 's/^GRUB_HIDDEN/#GRUB_HIDDEN/' $target/etc/default/grub
+
+# remove default Linux boot options to have verbose boot console messages
+sed -i 's/\(GRUB_CMDLINE_LINUX_DEFAULT="\).*"/\1"/' $target/etc/default/grub
+
+# regenerate the GRUB configuration
+
+$ROOTCMD /usr/sbin/update-grub
+
