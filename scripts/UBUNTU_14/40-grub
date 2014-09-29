@@ -10,6 +10,9 @@ sed -i 's/^GRUB_HIDDEN/#GRUB_HIDDEN/' $target/etc/default/grub
 # remove default Linux boot options to have verbose boot console messages
 sed -i 's/\(GRUB_CMDLINE_LINUX_DEFAULT="\).*"/\1"/' $target/etc/default/grub
 
+# Ubuntu 14.04 not supporting Diskfilter writes
+sed -i 's/^quick_boot="1"/quick_boot="0"/' $target/etc/grub.d/10_linux
+
 # regenerate the GRUB configuration
 
 $ROOTCMD /usr/sbin/update-grub
