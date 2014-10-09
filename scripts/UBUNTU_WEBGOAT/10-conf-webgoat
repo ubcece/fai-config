@@ -1,0 +1,26 @@
+#!/bin/sh
+#---------
+# Ying Wong - 2014-10-09
+#
+# Used to push out WebGoat instalation stack/conf files to be executed on first boot
+#
+
+# Download WebGoat on the fly to avoid bloating the fai-config repository with
+# the WAR file
+#fcopy -Bm root,root,0444	 /usr/local/WEBGOAT_SETUP/WebGoat-5.4.war
+
+WEBGOAT_DOWNLOAD_URL=https://webgoat.googlecode.com/files/WebGoat-5.4.war
+if ! ( cd $target/usr/local && wget "$WEBGOAT_DOWNLOAD_URL" ); then
+    echo "Failed to download $WEBGOAT_DOWNLOAD_URL" >&2
+    exit 1
+fi
+
+fcopy -Bm root,root,0440	 /usr/local/WEBGOAT_SETUP/apache.conf
+fcopy -Bm root,root,0500	 /usr/local/WEBGOAT_SETUP/functions.sh
+fcopy -Bm root,root,0500	 /usr/local/WEBGOAT_SETUP/install.sh
+fcopy -Bm root,root,0440	 /usr/local/WEBGOAT_SETUP/iptables.rules
+fcopy -Bm root,root,0400	 /usr/local/WEBGOAT_SETUP/monitrc
+fcopy -Bm root,root,0500	 /usr/local/WEBGOAT_SETUP/webgoat_users.sh
+fcopy -Bm root,root,0750 	 /etc/init.d/webgoat_runonce
+
+chroot $target update-rc.d webgoat_runonce defaults

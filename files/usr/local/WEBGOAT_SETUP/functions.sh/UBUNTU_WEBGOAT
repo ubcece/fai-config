@@ -1,0 +1,10 @@
+#!/bin/bash
+
+removeWar()
+{
+	while [[ ! -d "/var/lib/tomcat7/webapps/WebGoat" ]]
+	do
+		sleep 5
+	done
+	rm -f /var/lib/tomcat7/webapps/WebGoat.war
+}

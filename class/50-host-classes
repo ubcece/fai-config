@@ -9,7 +9,7 @@ case $HOSTNAME in
     svmailp[1-5])
 	echo "ECE SERVER SLOW UBUNTU UBUNTU_MAIL_IMAP" ;;
     svwebgoatp1)
-	echo "ECE SERVER SLOW" ;;
+	echo "ECE SERVER SLOW UBUNTU_WEBGOAT UBUNTU" ;;
     svwebmailp[1-2])
 	echo "ECE SLOW UBUNTU UBUNTU_STANDARD" ;;
     blanc|puncak|vinson|xena9)
