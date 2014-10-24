@@ -34,7 +34,7 @@ case $HOSTNAME in
         echo "ECE SERVER SMBSERVER" ;;
     [kmxv]web1|[kmx]vweb1)
         echo "ECE SERVER WEB RT" ;;
-    [kmxv]web?|[kmx]vweb?)
+    [kmxv]web?|[kmx]vweb?|svweb*)
         echo "ECE SERVER WEB" ;;
     [kmxv]mx?|[kmx]mail?)
         echo "ECE SERVER MAIL WEB" ;;
