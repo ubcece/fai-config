@@ -7,7 +7,7 @@ case $HOSTNAME in
     faiclient)
         echo "ECE SERVER SLOW" ;;
     svmailp[1-5])
-	echo "ECE SERVER SLOW" ;;
+	echo "ECE SERVER SLOW UBUNTU UBUNTU_MAIL_IMAP" ;;
     svwebgoatp1)
 	echo "ECE SERVER SLOW" ;;
     svwebmailp[1-2])
