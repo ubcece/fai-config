@@ -2,10 +2,13 @@
 
 [ $do_init_tasks -eq 1 ] || exit 0 # Only continue when doing install (not a dirinstall)
 
-#set -x
-lastdisksize() {
-# This grep string from /usr/lib/fai/fai-disk-info 
-egrep ' etherd/e[[:digit:]]+\.[[:digit:]]+\b| i2o/hd.\b| cciss/c.d.\b| ida/c.d.\b| rd/c.d.\b| hd.\b| sd[a-z]{1,2}\b|/disc\b| vd.\b| xvd.\b' /proc/partitions | sort -k4 | awk '{print $3}' | tail -n 1
+. /usr/lib/fai/subroutines         # For definition of ifclass
+
+disksizes() {
+	# Output the size of each disk, in kiB, in the natural enumeration order
+	/usr/lib/fai/fai-disk-info | while read dev ; do
+		awk -v dev="$dev" '$4 == dev { print $3 }' /proc/partitions
+	done
 }
 
 if ifclass UBUNTU; then
@@ -15,13 +18,8 @@ elif ifclass SERVER ; then
 	# FIXME: It would be nice if all servers could use a common layout and this line could go away.
 	( ifclass VM_HOST || ifclass DATABASE ) && exit 0
 
-	if [ `/usr/lib/fai/fai-disk-info | wc -l` -gt 2 ]; then
-		echo "$0: Too many hard disks. Too risky. Sleeping *and* adding SLOW class." >&2
-		echo "SLOW "
-		sleep 1000000
-	fi
-	#size=$(/usr/lib/fai/fai-disk-info | cut -d' ' -f2 | sort -n | head -n 1)
-	size=`lastdisksize`
+	# On SERVERs, assume that we want to install to the first disk.
+	size=`disksizes | head -n 1`
 
 	[ "$size" -lt 10000000 ] && die "The hard disk is too small (10 GB minimum)."
         [ "$size" -ge 10000000 ] && [ "$size" -lt  35000000 ] && echo "TINYS" && exit 0
@@ -43,8 +41,8 @@ elif ifclass SERVER ; then
 	exit 0
 else
         [ `/usr/lib/fai/fai-disk-info | wc -l` -gt 2 ] && die "Too many hard disks. Too risky."
-        #size=$(/usr/lib/fai/fai-disk-info | cut -d' ' -f2 | head -n 1)
-	size=`lastdisksize`
+	# On non-SERVERs, assume that we want to install to the last disk.
+	size=`disksizes | tail -n 1`
 
         if ifclass ECE_DISK2 ; then
 		[ "$size" -lt 10000000 ] && die "The hard disk is too small (10 GB minimum)."
