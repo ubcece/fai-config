@@ -3,5 +3,4 @@
 #
 # One hostname, whitespace, and desired NIC per line. No comments, no trailing
 # spaces.
-thud		eth2
 g32 		eth1

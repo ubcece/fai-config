@@ -1,8 +1,0 @@
-# <type> <mountpoint> <size in mb> [mount options]     [;extra options]
-
-disk_config disk3
-primary  /             9000-10000  rw,errors=remount-ro ; -m 5 -j ext3
-logical  swap          1000-1100   rw                   
-logical  /var          5000-6000   rw                   ; -m 5 -j ext3
-logical  /data         50-         rw,nosuid            ; -m 1 -j xfs
-

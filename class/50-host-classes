@@ -54,8 +54,6 @@ case $HOSTNAME in
         echo "SLOW ECE GRID GNOME KDE OMNI" ;;
     morty)
         echo "SLOW RAID ECE GRID GNOME KDE OMNI" ;;
-    scow|thud)
-        echo "GNOME NET " ;;
     webgoat) 
         echo "GNOME WEBGOAT" ;;
     bellini|bigboy|blop|cimarosa|morricone|paganini|respighi|vivaldi) 
