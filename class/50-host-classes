@@ -13,7 +13,7 @@ case $HOSTNAME in
     svwebmailp[1-2])
 	echo "ECE SLOW UBUNTU UBUNTU_STANDARD" ;;
     blanc|puncak|vinson|xena9)
-	echo "ECE SERVER SLOW" ;;
+	echo "ECE SLOW UBUNTU UBUNTU_STANDARD UBUNTU_UNITY" ;;
     [kmxv]sql?)
         echo "ECE SERVER WEB DATABASE RT RAID" ;;
     rafiq)

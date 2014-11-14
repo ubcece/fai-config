@@ -13,7 +13,7 @@ PACKAGES aptitude VMWARE_GUEST
 open-vm-tools
 
 # packages required for standard ECE system
-PACKAGES aptitude UBUNTU
+PACKAGES aptitude UBUNTU_STANDARD
 ubuntu-standard
 anacron
 apparmor
@@ -71,7 +71,7 @@ xfsprogs
 zsh
 
 # utilities/tools packages for ECE systems
-PACKAGES aptitude UBUNTU
+PACKAGES aptitude UBUNTU_STANDARD
 bind9-host
 curl
 diffstat
@@ -111,7 +111,7 @@ whois
 zip
 
 # development/testing packages for ECE systems
-PACKAGES aptitude UBUNTU
+PACKAGES aptitude UBUNTU_DEVELOP
 cpuburn
 cvs
 dc
