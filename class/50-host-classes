@@ -6,6 +6,14 @@ echo DHCPC
 case $HOSTNAME in
     faiclient)
         echo "ECE SERVER SLOW" ;;
+    svmailp[1-5])
+	echo "ECE SERVER SLOW" ;;
+    svwebgoatp1)
+	echo "ECE SERVER SLOW" ;;
+    svwebmailp[1-2])
+	echo "ECE SLOW UBUNTU UBUNTU_STANDARD" ;;
+    blanc|puncak|vinson|xena9)
+	echo "ECE SERVER SLOW" ;;
     [kmxv]sql?)
         echo "ECE SERVER WEB DATABASE RT RAID" ;;
     rafiq)
