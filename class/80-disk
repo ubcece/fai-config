@@ -9,14 +9,7 @@ egrep ' etherd/e[[:digit:]]+\.[[:digit:]]+\b| i2o/hd.\b| cciss/c.d.\b| ida/c.d.\
 }
 
 if ifclass UBUNTU; then
-
-    if ifclass SERVER; then
-	echo "UBUNTU_32G" && exit 0
-    fi
-
-    echo "$0: disk not suitable for Ubuntu" >&2
-    echo "SLOW"
-    sleep 1000000
+    echo "UBUNTU_32G" && exit 0
 
 elif ifclass SERVER ; then
 	# FIXME: It would be nice if all servers could use a common layout and this line could go away.
