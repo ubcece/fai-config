@@ -38,7 +38,7 @@ case $HOSTNAME in
         echo "ECE SERVER LOOKUPSERVER VERTXSERVER" ;;
     msmb1)
         echo "ECE SERVER SMBSERVER RAID " ;;
-    [kmxv]smb?)
+    [kmxv]smb?|svsmbp1)
         echo "ECE SERVER SMBSERVER" ;;
     [kmxv]web1|[kmx]vweb1)
         echo "ECE SERVER WEB RT" ;;
