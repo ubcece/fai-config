@@ -134,13 +134,13 @@ PACKAGES aptitude UBUNTU_UNITY
 ubuntu-desktop
 apport-gtk
 branding-ubuntu
-brassero
+brasero
 cheese
 gnome-accessibility-themes
 gnome-control-center-shared-data
 gnome-screensaver
 gnome-terminal
-gnome_terminal-data
+gnome-terminal-data
 gnome-user-guide
 gnome-video-effects
 hud
