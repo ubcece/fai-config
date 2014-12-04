@@ -1,7 +1,12 @@
 #!/bin/bash
 
+# Inspect output of dmidecode for a stanza with "IPMI" in the name, and
+# a non-zero Base Address in the details.
+#
 # dmidecode can fail.  For example, in OpenVZ containers, it fails with
 # "/dev/mem: Operation not permitted".
-if /usr/sbin/dmidecode -q --type 11 2>/dev/null | grep -q 'OEM Strings' ; then
-    echo "IPMI"
-fi
+
+/usr/sbin/dmidecode -q 2>/dev/null | awk '
+    /IPMI/i,/^$/ {
+        if (/Base Address:/ && strtonum($3) > 0) { print "IPMI" }
+    }'
