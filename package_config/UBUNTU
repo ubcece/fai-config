@@ -156,6 +156,8 @@ libaccountsservice0
 libgnome-control-center1
 libpam-gnome-keyring
 myspell-en-gb
+nvidia-current
+nvidia-settings
 onboard
 pam-kwallet
 remmina
