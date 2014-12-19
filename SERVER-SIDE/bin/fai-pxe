@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o pipefail
+
 # These values should match those in fai.conf
 SERVER=fai.ece.ubc.ca
 FAI_CONFIG_SRC=git+http://dev.ece.ubc.ca/git/fai-config.git
@@ -101,8 +103,8 @@ show_remote_commit() {
         tmp=`git ls-remote "$FAI_CONFIG_SRC" "${git_ref:-HEAD}"`
         if [ -z "$tmp" ]; then
             echo "warning: Remote branch $git_ref not found in upstream origin" >&2
-            echo "Maybe you forgot to \`git push\` your branch?" >&2
-            exit 128
+            echo "Maybe $git_ref is a commit ID rather than a branch or tag name," >&2
+            echo "or maybe you forgot to \`git push\` your branch?" >&2
         else
             [ -n "$git_ref" ] && echo "Using git ref $git_ref"
             echo "$tmp"
@@ -120,15 +122,19 @@ show_remote_commit() {
         trap "rm -rf \"$tmp\"" EXIT
 
         [ -n "$git_ref" ] && checkout="-b $git_ref"
-        if ! git clone -q --depth 1 --bare $checkout "$FAI_CONFIG_SRC" "$tmp" ; then
+        if ! git clone -q --depth 1 --bare $checkout "$FAI_CONFIG_SRC" "$tmp" 2>&1 |
+                # Filter out the "fatal" message, as it is not necessarily fatal to fai-pxe.
+                # The pipefail option ensures that the status of grep is ignored.
+                ( grep -v '^fatal: Remote branch .* not found in upstream' >&2 || true ) ; then
             status=$?
-            echo "Maybe you forgot to \`git push\` your branch?" >&2
-            exit $status
+            echo "Maybe $git_ref is a commit ID rather than a branch or tag name," >&2
+            echo "or maybe you forgot to \`git push\` your branch?" >&2
+        else
+            [ -n "$git_ref" ] && echo "Using git ref $git_ref"
+            GIT_DIR="$tmp" PAGER= git log -n 1 \
+              --pretty=format:"Last commit: %h by %aN: %s%n" 2>/dev/null || \
+            GIT_DIR="$tmp" PAGER= git log -n 1 --pretty=oneline
         fi
-        [ -n "$git_ref" ] && echo "Using git ref $git_ref"
-        GIT_DIR="$tmp" PAGER= git log -n 1 \
-          --pretty=format:"Last commit: %h by %aN: %s%n" 2>/dev/null || \
-        GIT_DIR="$tmp" PAGER= git log -n 1 --pretty=oneline
         ;;
     esac
 }
