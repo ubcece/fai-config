@@ -18,6 +18,8 @@ case $HOSTNAME in
 	echo "ECE SLOW UBUNTU UBUNTU_STANDARD UBUNTU_UNITY" ;;
     [kmxv]sql?)
         echo "ECE SERVER WEB DATABASE RT RAID" ;;
+    svsql[dp]*)
+        echo "UBUNTU UBUNTU_STANDARD ECE SERVER WEB DATABASE RT" ;;
     rafiq)
         # rafiq is not integrated with ECE.
         echo "GNOME KDE OMNI " ;;
