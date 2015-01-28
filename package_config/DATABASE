@@ -6,9 +6,9 @@ mylvmbackup
 mysql-client
 mysql-server
 mytop
-postgresql
-postgresql-contrib
-postgresql-doc
+postgresql-9.0
+postgresql-contrib-9.0
+postgresql-doc-9.0
 postgresql-server-dev-9.0
 ptop
 
