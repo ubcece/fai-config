@@ -12,7 +12,7 @@ diff --git a/bin/fai-make-nfsroot b/bin/fai-make-nfsroot
 index 0fdd4e4..f37b4c0 100755
 --- fai-server-4.0.6/bin/fai-make-nfsroot
 +++ /usr/sbin/fai-make-nfsroot
-@@ -386,7 +386,7 @@ Acquire::Languages none;
+@@ -391,7 +391,7 @@ Acquire::Languages none;
  EOF
  
      # this copies sources.list into the nfsroot
