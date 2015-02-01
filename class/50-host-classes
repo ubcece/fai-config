@@ -46,10 +46,8 @@ case $HOSTNAME in
         echo "ECE SERVER SMBSERVER RAID " ;;
     [kmxv]smb?|svsmbp1)
         echo "ECE SERVER SMBSERVER" ;;
-    [kmxv]web1|[kmx]vweb1)
-        echo "ECE SERVER WEB RT" ;;
     [kmxv]web?|[kmx]vweb?|svweb*)
-        echo "ECE SERVER WEB" ;;
+        echo "ECE SERVER WEB RT" ;;
     [kmxv]mx?|[kmx]mail?|*smtp*)
         echo "ECE SERVER MAIL WEB" ;;
     [kmxv]flex?|vintr1|yoink)
