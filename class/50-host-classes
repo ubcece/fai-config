@@ -36,6 +36,8 @@ case $HOSTNAME in
         echo "ECE SERVER LOOKUPSERVER" ;;
     [kmxv]lookup?)
         echo "ECE SERVER LOOKUPSERVER VERTXSERVER" ;;
+    svlookupp?)
+        echo "ECE SERVER LOOKUPSERVER" ;;
     msmb1)
         echo "ECE SERVER SMBSERVER RAID " ;;
     [kmxv]smb?|svsmbp1)
