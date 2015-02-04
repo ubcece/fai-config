@@ -8,6 +8,8 @@ case $HOSTNAME in
         echo "ECE SERVER SLOW" ;;
     svmailp[1-5])
 	echo "ECE SERVER SLOW UBUNTU UBUNTU_MAIL_IMAP" ;;
+    smtp?|svsmtpp?)
+        echo "ECE SERVER MAIL" ;;
     svwebgoatp1)
 	echo "ECE SERVER SLOW UBUNTU_WEBGOAT UBUNTU" ;;
     svwebmailp[1-2])
