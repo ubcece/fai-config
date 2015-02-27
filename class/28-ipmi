@@ -8,5 +8,5 @@
 
 /usr/sbin/dmidecode -q 2>/dev/null | awk '
     /IPMI/i,/^$/ {
-        if (/Base Address:/ && strtonum($3) > 0) { print "IPMI" }
+        if (/Base Address:/ && $3 !~ "^0*x*0*$") { print "IPMI" }
     }'
