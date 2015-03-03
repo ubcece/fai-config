@@ -72,8 +72,6 @@ case $HOSTNAME in
         echo "ECE GNOME " ;;
     ssh-linux[5678])
         echo "ECE SERVER GNOME KDE OMNI " ;;
-    mesbah-pc0[1234])
-	echo "ECE SLOW UBUNTU UBUNTU_STANDARD UBUNTU_UNITY" ;;
     *)
         echo "SLOW ECE GNOME KDE OMNI" ;;
 esac
