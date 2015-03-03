@@ -1,0 +1,24 @@
+# This disk_config is suitable for a virtual server two virtual disks.
+# The second, larger, disk (/dev/sdb) will be used for data storage.
+
+disk_config disk1 disklabel:gpt fstabkey:uuid bootable:2 align-at:8k
+primary		-			16M	msdos	-
+primary		-			25G-	-	-
+
+disk_config disk2 disklabel:gpt preserve_always:2 fstabkey:uuid align-at:8k
+primary		-			16M	msdos	-
+primary		-			63G-	-	-
+
+disk_config lvm fstabkey:uuid preserve_always:vg-data
+vg		VGroot			disk1.2
+VGroot-LVroot 	/			8G-	ext4	rw,errors=remount-ro
+VGroot-LVswap	swap			2G	swap	rw
+VGroot-LVtmp	/tmp			3G	ext4	rw,nodev,nosuid
+VGroot-LVvar 	/var			4G 	ext4	rw
+VGroot-LVlog	/var/log		4G	ext4	rw
+VGroot-LVaudit	/var/log/audit		4G	ext4	rw
+VGroot-snapreserve  -			1G	-	-
+
+vg		vg			disk2.2
+vg-data		/data			52G-	xfs	rw,noatime
+vg-snapreserve	-			10G-20G	-	-
