@@ -1,15 +1,17 @@
 #!/bin/bash
-# Chris Dumont 2007-11-14. 2010-01-21 squeeze update. 2010-02-24 Add LSB Info.
 
 # This runs to completion when in network boot (FAI install?) mode. Creates
 # script to run on first local disk boot which, during successful execution,
 # erases itself.
 
-# Compatibility hook to run /etc/init.d/runonce on systems that use Upstart
-fcopy -iB /etc/init/runonce.conf
-
 fcopy -B /etc/init.d/runonce
 
-# Debian has /sbin/insserv; Ubuntu does not
-[ -x $target/sbin/insserv ] && $ROOTCMD /sbin/insserv -d runonce
+if [ -x $target/sbin/insserv ]; then
+    # Debian has /sbin/insserv
+    $ROOTCMD /sbin/insserv -d runonce
 
+elif [ -d $target/etc/init ]; then
+    # Compatibility hook to run /etc/init.d/runonce on systems that use Upstart
+    fcopy -iB /etc/init/runonce.conf
+
+fi
