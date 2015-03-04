@@ -6,6 +6,7 @@ bash
 debconf-utils
 debootstrap
 debsums
+friendly-recovery
 lsb-core
 ssh
 
