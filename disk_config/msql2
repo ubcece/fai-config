@@ -7,7 +7,7 @@
 # The 1M partition is for gpt's sake. Somewhat like the old way of having a
 # separate /boot but for quite different reasons.
 
-disk_config disk1 disklabel:gpt preserve_reinstall:1 fstabkey:uuid bootable:3
+disk_config disk1 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:3
 primary		-		200M	msdos	-
 primary		swap		8G	swap	rw
 primary		-		40G-	-	-
