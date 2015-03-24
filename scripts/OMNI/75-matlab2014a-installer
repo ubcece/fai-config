@@ -1,0 +1,44 @@
+#!/bin/bash
+
+if [ -z "$SERVER" ]; then
+	echo "Error: \$SERVER is not set in $0."
+	exit 1
+fi
+
+# Idempotency!
+if [ -L $target/opt/Matlab_R2014a ]; then
+    ( cd $target/opt
+      rm -rf "$(readlink Matlab_R2014a)"
+      mkdir -p "$(readlink Matlab_R2014a)" )
+elif [ -d $target/opt/Matlab_R2014a ]; then
+    rm -rf $target/opt/Matlab_R2014a
+fi
+
+MOUNTPT=/tmp/$SERVER/matlab
+mkdir -p "$MOUNTPT"
+mount -t nfs -o ro,nolock,tcp,rsize=32768 $SERVER:/exports/matlab "$MOUNTPT"
+
+cd $target/opt/
+case `uname -m` in
+  i686)
+	echo "32bit linux is not supported by Mathworks, after 2012." >&2
+	exit 1
+	;;
+  x86_64)
+	tar -xz --no-same-owner -f "$MOUNTPT"/R2014a-x86_64.tgz
+	;;
+  *)
+	echo "Don't know my own architecture." >&2
+	exit 1
+esac
+
+
+umount "$MOUNTPT"
+
+mkdir -p $target/usr/local/bin
+cd $target/usr/local/bin
+ln -sf /opt/Matlab_R2014a/bin/matlab
+ln -sf /opt/Matlab_R2014a/bin/mbuild
+ln -sf /opt/Matlab_R2014a/bin/mcc
+ln -sf /opt/Matlab_R2014a/bin/mex
+
