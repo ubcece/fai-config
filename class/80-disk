@@ -39,7 +39,7 @@ else
 	# On non-SERVERs, assume that we want to install to the last disk.
 	size=`disk_sizes | tail -n 1`
 
-	if   [ "$size" -lt  10000000 ]; then die "The hard disk is too small (10 GB minimum)."
+	if   [ "$size" -lt  30000000 ]; then die "The hard disk is too small (30 GB minimum)."
 	elif [ "$size" -lt  35000000 ]; then echo "TINYW"
 	elif [ "$size" -lt  70000000 ]; then ifclass ECE_DISK2 && echo "SMALLW2"  || echo "SMALLW"
 	elif [ "$size" -lt 500000000 ]; then ifclass ECE_DISK2 && echo "MEDIUMW2" || echo "MEDIUMW"
