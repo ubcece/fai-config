@@ -24,7 +24,7 @@ fi
 
 # Make sure everything is configured properly
 echo "Running \"apt-get -f install\" for the last time."
-$ROOTCMD apt-get -f install
+$ROOTCMD apt-get -f --no-remove install < /dev/null
 
 lskernels=$(echo $target/boot/vmlinu*)
 [ -f ${lskernels%% *} ] || echo "ERROR: No kernel was installed. Have a look at shell.log"
