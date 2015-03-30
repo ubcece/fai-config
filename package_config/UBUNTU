@@ -9,6 +9,10 @@ debsums
 friendly-recovery
 lsb-core
 ssh
+tasksel
+
+PACKAGES aptitude VIRTUALBOX_GUEST
+virtualbox-guest-dkms
 
 PACKAGES aptitude VMWARE_GUEST
 open-vm-tools
@@ -130,44 +134,10 @@ ri
 ruby
 xml-core
 
-# packages required for desktop
-PACKAGES aptitude UBUNTU_UNITY
+PACKAGES taskinst GNOME
 ubuntu-desktop
-apport-gtk
-branding-ubuntu
-brasero
-cheese
-gnome-accessibility-themes
-gnome-control-center-shared-data
-gnome-screensaver
-gnome-terminal
-gnome-terminal-data
-gnome-user-guide
-gnome-video-effects
-hud
-indicator-application
-indicator-application
-indicator-appmenu
-indicator-messages
-indicator-printers
-indicator-session
-language-pack-gnome-en
-libaccount-plugin-1.0-0
-libaccountsservice0
-libgnome-control-center1
-libpam-gnome-keyring
-myspell-en-gb
-nvidia-current
-nvidia-settings
-onboard
-pam-kwallet
-remmina
-unity-control-center-signon
-unity-gtk-module-common
-unity-gtk2-module
-unity-gtk3-module
-unity-lens-applications
-unity-lens-files
-unity-scope-calculator
-unity-scopes-runner
-xterm
+ubuntu-gnome-desktop
+
+PACKAGES taskinst KDE
+ubuntu-desktop
+ubuntu-kde-desktop
