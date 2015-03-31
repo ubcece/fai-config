@@ -1,2 +1,0 @@
-# To be unmounted in finish.DEFAULT hook
-mount -t nfs $SERVER:/exports/fai/baseimages-i386 "$FAI/basefiles"
