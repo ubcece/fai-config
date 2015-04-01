@@ -10,6 +10,7 @@ friendly-recovery
 lsb-core
 ssh
 tasksel
+xfsprogs
 
 PACKAGES aptitude VIRTUALBOX_GUEST
 virtualbox-guest-dkms
@@ -51,6 +52,7 @@ manpages
 monit
 nfs-common
 nscd
+nslcd
 ntp
 parted
 patchutils
@@ -72,7 +74,6 @@ ubuntu-docs
 ubuntu-system-service
 usepackage
 vim
-xfsprogs
 zsh
 
 # utilities/tools packages for ECE systems
@@ -98,6 +99,8 @@ lsof
 ltrace
 memtester
 mlocate
+mtr-tiny
+nano
 procinfo
 pv
 rsnapshot
@@ -141,3 +144,13 @@ ubuntu-gnome-desktop
 PACKAGES taskinst KDE
 ubuntu-desktop
 ubuntu-kde-desktop
+
+PACKAGES aptitude OMNI
+command-not-found
+firefox-locale-en
+hyphen-en-us
+language-pack-en
+thunderbird-locale-en
+openoffice.org-hyphenation
+plymouth-theme-ubuntu-text
+ubuntu-restricted-addons
