@@ -1,8 +1,1 @@
-deb     http://fai-project.org/download             wheezy            koeln
-deb     http://mirror.it.ubc.ca/debian              squeeze           main contrib non-free
-deb-src http://mirror.it.ubc.ca/debian              squeeze           main contrib non-free
-deb     http://mirror.it.ubc.ca/debian              squeeze-updates   main contrib non-free
-deb     http://mirror.it.ubc.ca/debian-security     squeeze/updates   main contrib non-free
-deb     http://mirror.it.ubc.ca/deb-multimedia      squeeze           main         non-free
-deb     http://mirror.it.ubc.ca/debian-backports    squeeze-backports main contrib non-free
-deb     http://download.virtualbox.org/virtualbox/debian squeeze           contrib non-free
+../../../../../files/etc/apt/sources.list/DEBIAN_6

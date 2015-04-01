@@ -1,0 +1,12 @@
+Explanation: cfengine $Rev: 1298 $
+Package: *
+Pin: release unstable
+Pin-Priority: 10
+
+Package: *
+Pin: release testing
+Pin-Priority: 10
+
+Package: *
+Pin: release experimental
+Pin-Priority: 10

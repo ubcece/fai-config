@@ -19,32 +19,34 @@ live-boot
 bash-completion
 binutils
 bridge-utils
+ca-certificates
 cfengine2
 cryptsetup
 curl
-debian-backports-keyring
-deb-multimedia-keyring
 discover
 dmsetup
 eject
 fai-doc
+firmware-linux
 firmware-linux-free
 firmware-linux-nonfree
 fuse-utils
 git-core
 gptsync
-hpacucli
 kexec-tools
 liblinux-lvm-perl
+linux-base
 locales
 ncurses-term
 ntfsprogs
 patch
 perl-doc
+syslinux
 uuid-runtime
+virtualbox-guest-dkms
+virtualbox-guest-utils
 
-linux-base/unstable
-firmware-linux/unstable
+debootstrap/unstable
 
 # install LSB (Linux Standard Base) to determine the
 # distribution and release of the install system
@@ -57,18 +59,16 @@ lsb-release
 
 PACKAGES aptitude I386
 grub read-edid
+linux-headers-686
 linux-image-686
-linux-image-2.6.38-bpo.2-686
-# The ".2" in "bpo.2" is likely to go stale quickly. This is current as of 2011-05-06.
 
 # packages for Ubuntu natty/oneiric/precise:
 # linux-image-generic live-boot
 
 PACKAGES aptitude AMD64
 grub
+linux-headers-amd64
 linux-image-amd64
-linux-image-2.6.38-bpo.2-amd64
-# The ".2" in "bpo.2" is likely to go stale quickly. This is current as of 2011-05-06.
 
 # packages for Ubuntu natty/oneiric/precise:
 # linux-image-generic live-boot

@@ -1,0 +1,4 @@
+Explanation: The initramfs-tools package from fai-project.org wreaks havoc with dependencies
+Package: initramfs-tools
+Pin: release v=6*
+Pin-Priority: 1001

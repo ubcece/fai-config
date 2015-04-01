@@ -1,0 +1,4 @@
+# fai-make-nfsroot creates a configuration file that makes APT accept
+# unauthenticated packages.  We undo that here.
+
+rm $NFSROOT/etc/apt/apt.conf.d/10fai
