@@ -1,0 +1,4 @@
+# task repository recursively fcopies /etc/apt.
+# Leave /etc/apt/sources.list.d to be copied by hooks for more specific classes
+
+export FAI_IGNOREDIRS=sources.list.d

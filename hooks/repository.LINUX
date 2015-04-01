@@ -1,7 +1,0 @@
-#!/bin/bash
-# 2011-07-04 Derek Poon.  Allows APT-pinning and other shenanigans.
-#
-# 2011-11-22 Derek Poon:  Leave /etc/apt/sources.list.d to be copied by hooks
-#                         for more specific classes
-
-fcopy -iBMr -I sources.list.d /etc/apt
