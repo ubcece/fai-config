@@ -12,9 +12,6 @@ ssh
 tasksel
 xfsprogs
 
-PACKAGES aptitude VIRTUALBOX_GUEST
-virtualbox-guest-dkms
-
 PACKAGES aptitude VMWARE_GUEST
 open-vm-tools
 

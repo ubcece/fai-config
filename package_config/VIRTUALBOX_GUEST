@@ -1,2 +1,12 @@
 PACKAGES aptitude
 dkms
+virtualbox-guest-dkms
+
+PACKAGES aptitude OMNI
+virtualbox-guest-x11
+
+PACKAGES aptitude GNOME
+virtualbox-guest-x11
+
+PACKAGES aptitude KDE
+virtualbox-guest-x11
