@@ -1,12 +1,13 @@
 #!/usr/sbin/cfagent --no-preconf -f
-# cfengine: $Rev: 1198 $
+# cfengine: $Rev: 1422 $
 
 # When modifying this configuration file, please commit to both
-# cfengine/cfengine2/cf.preconf and fai-config/var/lib/cfengine2/.
+# cfengine/cfengine2/cf.preconf and fai-config/files/var/lib/cfengine2/.
 
 control:
   actionsequence  = ( directories copy )
   server          = ( cfmaster.ece.ubc.ca )
+  domain          = ( ece.ubc.ca )
   srcdir          = ( /var/local/cfengine/cfengine2 )
   dstdir          = ( /etc/cfengine )
   IfElapsed       = ( 0 )
