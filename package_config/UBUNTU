@@ -45,6 +45,8 @@ ksh
 ldap-auth-client
 ldap-utils
 libnfsidmap2
+libnss-ldapd
+libpam-ldapd
 libpam-passwdqc
 lockfile-progs
 logrotate

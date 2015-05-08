@@ -58,6 +58,8 @@ iputils-ping
 ipython
 kexec-tools
 less
+libnss-ldapd
+libpam-ldapd
 libwww-perl
 linuxlogo
 locales
@@ -106,6 +108,7 @@ testdisk
 time
 tofrodos
 traceroute
+unscd
 unzip
 usbutils
 vim
