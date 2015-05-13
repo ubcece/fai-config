@@ -2,6 +2,16 @@ PACKAGES aptitude AMD64
 w64codecs
 libc6-dev-i386
 
+PACKAGES aptitude SQUEEZE
+sun-java6-bin
+sun-java6-demo
+#sun-java6-doc problematic
+sun-java6-fonts
+sun-java6-jdk
+sun-java6-jre
+sun-java6-plugin
+sun-java6-source
+
 # ChrisD says "I didn't heavily vet this list."
 PACKAGES aptitude
 a2ps
@@ -39,12 +49,14 @@ chromium-browser-l10n
 cjk-latex
 ckermit
 console-tools
+cpuburn
 cpufrequtils
 cron-apt
 cupsys
 cupsys-bsd
 cupsys-driver-gutenprint
 curl
+cvs
 cxref
 db4.2-util
 dbus-1-utils
@@ -52,6 +64,7 @@ dc
 ddd
 deb-multimedia-keyring
 debsums
+default-jdk
 deskbar-applet
 dia
 doc-linux-text
@@ -139,6 +152,7 @@ installation-report
 intltool-debian
 iproute
 iputils-arping
+ipython
 jadetex
 jove
 jython
@@ -243,7 +257,8 @@ resolvconf
 rhythmbox
 ri
 rlwrap
-ruby1.8-dev
+ruby
+ruby-dev
 rubygems
 rxvt
 selinux-policy-default
@@ -252,14 +267,6 @@ smbclient
 ssl-cert
 subversion
 subversion-tools
-sun-java6-bin
-sun-java6-demo
-#sun-java6-doc problematic
-sun-java6-fonts
-sun-java6-jdk
-sun-java6-jre
-sun-java6-plugin
-sun-java6-source
 syslog-ng
 system-config-printer
 talk
@@ -272,7 +279,6 @@ tig
 transcode
 transfig
 tsclient
-# ttf-bitstream-vera should be a dependency of googleearth
 ttf-bitstream-vera
 ttf-dejavu
 ttf-inconsolata

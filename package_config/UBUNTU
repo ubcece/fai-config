@@ -117,25 +117,6 @@ vlan
 whois
 zip
 
-# development/testing packages for ECE systems
-PACKAGES aptitude UBUNTU_DEVELOP
-cpuburn
-cvs
-dc
-gcc
-gcc-multilib
-gdb
-hardening-includes
-ipython
-manpages-dev
-openjdk-7-jre
-perl
-pkg-config
-rcs
-ri
-ruby
-xml-core
-
 PACKAGES taskinst GNOME
 ubuntu-desktop
 ubuntu-gnome-desktop
