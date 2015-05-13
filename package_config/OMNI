@@ -1,6 +1,9 @@
 PACKAGES aptitude AMD64
-w64codecs
 libc6-dev-i386
+
+PACKAGES aptitude DEBIAN
+deb-multimedia-keyring
+acroread
 
 PACKAGES aptitude SQUEEZE
 sun-java6-bin
@@ -12,11 +15,36 @@ sun-java6-jre
 sun-java6-plugin
 sun-java6-source
 
+PACKAGES aptitude SQUEEZE
+chromium-browser
+chromium-browser-inspector
+chromium-browser-l10n
+epiphany-extensions
+evolution-exchange
+evolution-webcal
+tsclient
+
+PACKAGES aptitude UBUNTU
+chromium-browser
+chromium-browser-inspector
+chromium-browser-l10n
+chromium-chromedriver
+chromium-codecs-ffmpeg
+chromium-codecs-ffmpeg-extra
+unity-chromium-extension
+unity-scope-chromiumbookmarks
+
+PACKAGES aptitude DEBIAN
+# chromium-browser renamed to chromium in Debian 8
+chromium
+chromium-inspector
+chromium-l10n
+libreoffice-evolution
+
 # ChrisD says "I didn't heavily vet this list."
 PACKAGES aptitude
 a2ps
 abiword
-acroread
 alacarte
 alpine
 alsa-utils
@@ -43,18 +71,16 @@ bzr
 bzrtools
 cadaver
 chktex
-chromium-browser
-chromium-browser-inspector
-chromium-browser-l10n
 cjk-latex
 ckermit
 console-tools
 cpuburn
 cpufrequtils
 cron-apt
-cupsys
-cupsys-bsd
-cupsys-driver-gutenprint
+cups
+cups-bsd
+cups-driver-gutenprint
+cups-pdf
 curl
 cvs
 cxref
@@ -62,12 +88,10 @@ db4.2-util
 dbus-1-utils
 dc
 ddd
-deb-multimedia-keyring
 debsums
 default-jdk
 deskbar-applet
 dia
-doc-linux-text
 ebtables
 eclipse
 eclipse-cdt
@@ -84,18 +108,14 @@ eclipse-xsd
 eclipse-xsd-sdk
 ekiga
 emacs21
-epiphany-extensions
-esvn
-evolution-exchange
+evolution-mapi
 evolution-plugins
-evolution-webcal
 exuberant-ctags
 fdutils
 flashplugin-nonfree
 flex
 foomatic-db
 foomatic-filters-ppds
-foomatic-gui
 fortune-mod
 fortunes
 fortunes-min
@@ -107,6 +127,7 @@ gdb
 gdb-doc
 gdebi
 gdesklets
+gecko-mediaplayer
 gfortran
 gimp
 gimp-data
@@ -168,10 +189,8 @@ lftp
 lib32bz2-dev
 lib32z1-dev
 libdvdcss2
-libhighline-ruby
 libelf1
 libgmp3-dev
-libgmp3-doc
 libgmpxx4ldbl
 libgsl0-dev
 libgsl0ldbl
@@ -179,7 +198,6 @@ libmpfr-dev
 libmpfr4
 libnet-ldap-perl # mutt -> lbdb -> libnet-ldap-perl
 libssl-dev
-libstdc++6-4.3-dev
 liferea
 linuxdoc-tools
 lockfile-progs
@@ -192,28 +210,29 @@ mawk
 mencoder
 mercurial
 minicom
-mozilla-mplayer
 mpack
 mplayer
 mtools
 mtr
 mutt
 myspell-en-us
+mythes-thesaurus
 ncdu
-ncurses-term
 netdiag
 netmask
 nmap
 notification-daemon
 noweb
 ocaml
-openoffice.org
-openoffice.org-evolution
-openoffice.org-gcj
-openoffice.org-gnome
-openoffice.org-gtk
-openoffice.org-help-en-us
-openoffice.org-thesaurus-en-us
+libreoffice
+libreoffice-gnome
+libreoffice-lightproof-en
+libreoffice-gtk
+libreoffice-java-common
+libreoffice-help-en-us
+libreoffice-pdfimport
+libreoffice-presentation-minimizer
+libreoffice-presenter-console
 openvpn
 php-pear
 php5-cli
@@ -278,7 +297,6 @@ totem-mozilla
 tig
 transcode
 transfig
-tsclient
 ttf-bitstream-vera
 ttf-dejavu
 ttf-inconsolata
@@ -298,7 +316,6 @@ vtk-doc
 vtk-examples
 vtk-tcl
 vtkdata
-w32codecs
 w3m
 wamerican
 whois

@@ -16,34 +16,29 @@ libgl1-nvidia-glx-ia32/testing
 nvidia-settings/testing
 nvidia-xconfig/testing
 
-
-PACKAGES aptitude
+PACKAGES aptitude DEBIAN
+# Should probably be replaed by tasksel, as we do for UBUNTU
 compiz
+gdm3
 gnome-desktop-environment
 gnumeric
 icedove
 iceweasel
-gdm3
 menu
+xorg xserver-xorg-video-all xserver-xorg-input-all 
+xterm
 #### nvidia-kernel-2.6-686 must be installed before nvidia-glx or unwanted
 #### linux-image- packages are installed.
-###nvidia-glx
 ###nvidia-glx-dev
-###nvidia-settings
-###nvidia-xconfig
 nvidia-glx
 nvidia-glx-ia32
 nvidia-vdpau-driver-ia32
 libgl1-nvidia-glx-ia32
 nvidia-settings
 nvidia-xconfig
-synaptic
-xorg xserver-xorg-video-all xserver-xorg-input-all 
-ttf-freefont
-# 2010-08-18 ChrisD. The next two packages expand the scope of properly displayed Chinese characters.
-ttf-arphic-ukai
-ttf-arphic-uming
-xterm
 
-###PACKAGES aptitude AMD64
-###nvidia-glx-ia32
+PACKAGES aptitude
+synaptic
+ttf-freefont
+fonts-arphic-ukai
+fonts-arphic-uming

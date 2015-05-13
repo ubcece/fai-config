@@ -8,6 +8,7 @@ debootstrap
 debsums
 friendly-recovery
 lsb-core
+ncurses-term
 ssh
 tasksel
 xfsprogs
