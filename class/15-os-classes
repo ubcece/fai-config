@@ -10,11 +10,13 @@
 # distributions (currently DEBIAN and UBUNTU) - assuming only one specified
 
 explicit_class() {
-    for class in "$@"; do
-        if [[ $class =~ ^(DEBIAN|UBUNTU).* ]]; then
-            echo "$class"
-            return 0
-        fi
+    local most_explicit=''
+    for class in $*; do
+        case "$class" in
+          DEBIAN|DEBIAN_[0-9]*|UBUNTU|UBUNTU_[0-9]*)
+            [ "$class" '>' "$most_explicit" ] && most_explicit="$class"
+            ;;
+        esac
     done
     return 1
 }
@@ -37,7 +39,7 @@ reduce_versions() {
     [ "$OS" != "$skipOS" ] && echo "$OS"
 
     case "$OS" in
-        *_*)
+        *_[0-9]*)
             reduce_versions "${OS%_*}" "$skipOS"
     esac 
 }
