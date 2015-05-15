@@ -1,6 +1,0 @@
-# 2009-05-20 ChrisD. To work around a GRUB limitation for bigboy/stabile/hct1/wankel we need to
-# discover the motherboard disks before the 3ware disks.
-libata
-ata_generic
-sata_nv
-3w_9xxx

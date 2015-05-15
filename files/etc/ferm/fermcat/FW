@@ -1,2 +1,0 @@
-#!/bin/sh
-cat /etc/ferm/netdata/$1 | sed -e '/^\w*#.*$/d' -e '/^\w*$/d' -e 's/\w*#.*$//' -e 's/;//'

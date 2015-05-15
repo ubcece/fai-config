@@ -4,8 +4,6 @@ echo FAIBASE
 echo DHCPC
 
 case $HOSTNAME in
-    faiclient)
-        echo "ECE SERVER SLOW" ;;
     svmailp[1-5])
 	echo "ECE SERVER SLOW UBUNTU UBUNTU_MAIL_IMAP" ;;
     smtp?|svsmtpp?)
@@ -17,23 +15,15 @@ case $HOSTNAME in
     [kmxv]sql?)
         echo "ECE SERVER WEB DATABASE RT RAID" ;;
     svsql[dp]*)
-        echo "UBUNTU UBUNTU_STANDARD ECE SERVER WEB DATABASE RT" ;;
-    rafiq)
-        # rafiq is not integrated with ECE.
-        echo "GNOME KDE OMNI " ;;
+        echo "ECE SERVER UBUNTU UBUNTU_STANDARD WEB DATABASE RT" ;;
     lersse1)
         # lersse1 is integrated with ECE but is limited to mounting netapp4:/vol/ECE_vol3/kb/data/backup.
         echo "ECE SERVER GNOME KDE OMNI SLOW " ;;
     modigliani)
         # modigliani is not integrated with ECE.
         echo "ECE_DISK2 GNOME KDE OMNI" ;;
-    kakadu|xanadu|[kmx]host*)
+    [kmx]host*)
         echo "ECE SERVER VM_HOST" ;;
-    hooz)
-        echo "ECE SERVER VM_HOST RAID" ;;
-        # LOOKUPSEVER without ECE only applies packages.
-    huey)
-        echo "ECE SERVER" ;;
     [kmxv]ldap?|master)
         echo "ECE SERVER LOOKUPSERVER" ;;
     [kmxv]lookup?)
@@ -50,26 +40,20 @@ case $HOSTNAME in
         echo "ECE SERVER MAIL WEB" ;;
     [kmxv]flex?|vintr1|yoink)
         echo "ECE SERVER " ;;
-    mmatlab1|mmatlab2|psserv|ssh-linux[1234]|vb|vklinux[345])
+    psserv|ssh-linux*|vb|vklinux[345])
         echo "ECE SERVER GNOME KDE OMNI" ;;
     node*) # to be clear: these are nodes on Rafeef/morty.
         echo "SLOW ECE GRID GNOME KDE OMNI" ;;
     morty)
         echo "SLOW RAID ECE GRID GNOME KDE OMNI" ;;
-    *webgoat*)
-	echo "ECE SERVER UBUNTU WEBGOAT" ;;
-    bellini|bigboy|blop|cimarosa|morricone|paganini|respighi|vivaldi) 
-        echo "" ;;
+    *webgoat*) 
+        echo "ECE SERVER UBUNTU WEBGOAT" ;;
     nano-mac03)
         echo "ECE ECE_DISK2 GNOME KDE OMNI NOMBR" ;;
     purang1[345])
         echo "ECE VM_HOST GNOME KDE OMNI" ;;
     frink)
         echo "ECE GNOME KDE OMNI " ;;
-    ibofh|trirotor)
-        echo "ECE GNOME " ;;
-    ssh-linux[5678])
-        echo "ECE SERVER GNOME KDE OMNI " ;;
     *)
         echo "SLOW ECE GNOME KDE OMNI" ;;
 esac
