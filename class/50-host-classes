@@ -10,8 +10,6 @@ case $HOSTNAME in
 	echo "ECE SERVER SLOW UBUNTU UBUNTU_MAIL_IMAP" ;;
     smtp?|svsmtpp?)
         echo "ECE SERVER MAIL" ;;
-    svwebgoatp1)
-	echo "ECE SERVER SLOW UBUNTU_WEBGOAT UBUNTU" ;;
     svwebmailp[1-2])
 	echo "ECE SLOW UBUNTU UBUNTU_STANDARD" ;;
     blanc|puncak|vinson|xena9)
@@ -58,8 +56,8 @@ case $HOSTNAME in
         echo "SLOW ECE GRID GNOME KDE OMNI" ;;
     morty)
         echo "SLOW RAID ECE GRID GNOME KDE OMNI" ;;
-    webgoat) 
-        echo "GNOME WEBGOAT" ;;
+    *webgoat*)
+	echo "ECE SERVER UBUNTU WEBGOAT" ;;
     bellini|bigboy|blop|cimarosa|morricone|paganini|respighi|vivaldi) 
         echo "" ;;
     nano-mac03)
