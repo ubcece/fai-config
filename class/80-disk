@@ -15,8 +15,8 @@ disk_count() {
 	/usr/lib/fai/fai-disk-info | wc -l
 }
 
-if ifclass SERVER && ifclass VMWARE_GUEST ; then
-	[ `disk_count` = 1 ] && echo "VIRTS" || echo "VIRTS2"
+if ifclass VMWARE_GUEST ; then
+	[ `disk_count` = 1 ] && echo "VM_GUEST" || echo "VM_GUEST2"
 
 elif ifclass SERVER ; then
 	# FIXME: It would be nice if all servers could use a common layout and this line could go away.
