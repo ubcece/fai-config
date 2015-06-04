@@ -1,3 +1,5 @@
+ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula boolean true
+
 samba-common    samba-common/encrypt_passwords  boolean true
 samba-common    samba-common/dhcp       boolean false
 samba-common    samba-common/workgroup  string  UBC_ECE

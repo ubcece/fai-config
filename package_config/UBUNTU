@@ -60,7 +60,6 @@ pciutils
 pm-utils
 postfix
 pwgen
-rsyslog
 screen
 setserial
 stow
@@ -75,6 +74,11 @@ ubuntu-system-service
 usepackage
 vim
 zsh
+
+PACKAGES aptitude UBUNTU_STANDARD
+rsyslog-
+ubuntu-minimal-
+syslog-ng
 
 # utilities/tools packages for ECE systems
 PACKAGES aptitude UBUNTU_STANDARD

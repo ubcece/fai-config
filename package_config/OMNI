@@ -4,8 +4,11 @@ libc6-dev-i386
 PACKAGES aptitude DEBIAN
 deb-multimedia-keyring
 acroread
+foomatic-db
+system-config-printer
 
 PACKAGES aptitude SQUEEZE
+rubygems
 sun-java6-bin
 sun-java6-demo
 #sun-java6-doc problematic
@@ -30,7 +33,7 @@ chromium-browser-inspector
 chromium-browser-l10n
 chromium-chromedriver
 chromium-codecs-ffmpeg
-chromium-codecs-ffmpeg-extra
+#chromium-codecs-ffmpeg-extra
 unity-chromium-extension
 unity-scope-chromiumbookmarks
 
@@ -117,8 +120,7 @@ exuberant-ctags
 fdutils
 flashplugin-nonfree
 flex
-foomatic-db
-foomatic-filters-ppds
+fonts-inconsolata
 fortune-mod
 fortunes
 fortunes-min
@@ -141,8 +143,6 @@ git-arch
 git-cvs
 git-doc
 git-email
-git-load-dirs
-git-remote-hg
 git-svn
 gitk
 glipper
@@ -218,11 +218,11 @@ mencoder
 mercurial
 minicom
 mpack
-mplayer
+mplayer2
 mtools
+mtr-tiny-
 mtr
 mutt
-myspell-en-us
 mythes-thesaurus
 ncdu
 netdiag
@@ -321,7 +321,6 @@ ri
 rlwrap
 ruby
 ruby-dev
-rubygems
 rxvt
 scala
 scala-library
@@ -332,8 +331,6 @@ sqlite3
 ssl-cert
 subversion
 subversion-tools
-syslog-ng
-system-config-printer
 talk
 texi2html
 texinfo
@@ -345,7 +342,7 @@ transcode
 transfig
 ttf-bitstream-vera
 ttf-dejavu
-ttf-inconsolata
+ttf-mscorefonts-installer
 twm
 unace
 unrar
@@ -358,14 +355,9 @@ vbetool
 vim-gtk
 vlc
 vnc4server
-vtk-doc
-vtk-examples
-vtk-tcl
-vtkdata
 w3m
 wamerican
 whois
-wine 
 wireshark
 writer2latex
 wv
