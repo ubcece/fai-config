@@ -4,19 +4,23 @@
 lspci | while read slot desc ; do
     case "$desc" in
       "System peripheral: Compaq Computer Corporation Integrated Lights Out Controller (rev 01)")
-        echo "HP_ILO HP_ILO_REV1 "
+        echo -n "HP_ILO HP_ILO_REV1 "
         ;;
       "System peripheral: Compaq Computer Corporation Integrated Lights Out Controller (rev 03)")
-        echo "HP_ILO HP_ILO_REV3 "
+        echo -n "HP_ILO HP_ILO_REV3 "
         ;;
       "System peripheral: Hewlett-Packard Company iLO3 Management Processor Support and Messaging (rev 04)")
-        echo "HP_ILO HP_ILO_REV4 "
+        echo -n "HP_ILO HP_ILO_REV4 "
         ;;
       "SCSI storage controller: LSI Logic / Symbios Logic 53c1030 PCI-X Fusion-MPT"*)
-	echo "MPT_SCSI"
+	echo -n "MPT_SCSI "
+	;;
+      *"VMware LSI Logic Parallel SCSI Controller"*)
+	# If the MPT_SCSI controller is virtual, don't bother monitoring it
+	echo -n "NO_MPT_SCSI "
 	;;
       *"Adaptec AIC-79"*)
-	echo "AIC79XX"
+	echo -n "AIC79XX "
 	;;
     esac
-done
+done | sed -e 's/MPT_SCSI NO_MPT_SCSI //g'
