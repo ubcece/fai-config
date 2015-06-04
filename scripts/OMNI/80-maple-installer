@@ -6,14 +6,14 @@ if [ -z "$SERVER" ]; then
 fi
 
 # idempotency!
-rm -rf $target/data/maple12/
+rm -rf $target/opt/maple12/
 mkdir -p $target/usr/local/bin
 
 MOUNTPT=/tmp/$SERVER/exports/maple
 mkdir -p "$MOUNTPT"
 mount -t nfs -o ro,nolock $SERVER:/exports/maple "$MOUNTPT"
 
-cd $target/
+cd $target/opt
 case `uname -m` in
     i686)
 	tar -xzf "$MOUNTPT"/Maple12_i386.tgz
