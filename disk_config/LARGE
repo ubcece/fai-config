@@ -1,0 +1,16 @@
+# This disk_config is suitable for a hard disk with >=100GB
+
+disk_config disk1 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:3 align-at:8k
+primary		-		200M	msdos	-
+primary		swap		8G	swap	rw
+primary		-		90G-	-	-
+
+disk_config lvm fstabkey:uuid
+vg		vg		disk1.3
+vg-root1	/		35G-60G	ext4	rw,errors=remount-ro
+vg-var1		/var		6G-8G	ext4	rw
+vg-root2	/altroot	35G-60G	ext4	rw,errors=remount-ro
+vg-var2		/altroot/var	6G-8G	ext4	rw
+vg-data		/data		5G-	xfs	rw
+
+vg-snapreserve	-		1G	-	-

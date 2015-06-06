@@ -18,31 +18,26 @@ disk_count() {
 if ifclass VMWARE_GUEST ; then
 	[ `disk_count` = 1 ] && echo "VM_GUEST" || echo "VM_GUEST2"
 
-elif ifclass SERVER ; then
+elif ifclass VM_HOST ; then
 	# FIXME: It would be nice if all servers could use a common layout and this line could go away.
-	ifclass VM_HOST && exit 0
-
-	# On SERVERs, assume that we want to install to the first disk.
-	size=`disk_sizes | head -n 1`
-
-	if   [ "$size" -lt  10000000 ]; then die "The hard disk is too small (10 GB minimum)."
-	elif [ "$size" -lt  35000000 ]; then echo "TINYS"
-	elif [ "$size" -lt  70000000 ]; then ifclass RAID && echo "RAID1SS" || echo "SMALLS"
-	elif [ "$size" -lt 500000000 ]; then ifclass RAID && echo "RAID1MS" || echo "MEDIUMS"
-	else                                 echo "HUGE"
-	fi
+	exit 0
 
 elif [ `disk_count` -gt 2 ]; then
 	die "Too many hard disks. Too risky."
 
-else
-	# On non-SERVERs, assume that we want to install to the last disk.
+elif ifclass ECE_DISK2 ; then
 	size=`disk_sizes | tail -n 1`
+	if   [ "$size" -lt  40000000 ]; then die "The hard disk is too small (40 GB minimum)."
+	elif [ "$size" -lt 100000000 ]; then echo "MEDIUM2"
+	else                                 echo "LARGE2"
+	fi
 
-	if   [ "$size" -lt  30000000 ]; then die "The hard disk is too small (30 GB minimum)."
-	elif [ "$size" -lt  35000000 ]; then echo "TINYW"
-	elif [ "$size" -lt  70000000 ]; then ifclass ECE_DISK2 && echo "SMALLW2"  || echo "SMALLW"
-	elif [ "$size" -lt 500000000 ]; then ifclass ECE_DISK2 && echo "MEDIUMW2" || echo "MEDIUMW"
-	else                                 ifclass ECE_DISK2 && echo "HUGE2"    || echo "HUGE"
+else
+	size=`disk_sizes | head -n 1`
+	if   [ "$size" -lt  10000000 ]; then die "The hard disk is too small (10 GB minimum)."
+	elif [ "$size" -lt  40000000 ]; then echo "SMALL"
+	elif [ "$size" -lt 100000000 ]; then echo "MEDIUM"
+	elif ifclass RAID             ; then echo "RAID1"
+	else                                 echo "LARGE"
 	fi
 fi

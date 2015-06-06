@@ -5,49 +5,49 @@ echo DHCPC
 
 case $HOSTNAME in
     svmailp[1-5])
-	echo "ECE SERVER SLOW UBUNTU UBUNTU_MAIL_IMAP" ;;
+	echo "ECE SLOW UBUNTU UBUNTU_MAIL_IMAP" ;;
     smtp?|svsmtpp?)
-        echo "ECE SERVER MAIL" ;;
+        echo "ECE MAIL" ;;
     svwebmailp[1-2])
 	echo "ECE SLOW UBUNTU UBUNTU_STANDARD" ;;
     blanc|puncak|vinson|xena9)
 	echo "ECE SLOW UBUNTU UBUNTU_STANDARD UBUNTU_UNITY" ;;
     [kmxv]sql?)
-        echo "ECE SERVER WEB DATABASE RT RAID" ;;
+        echo "ECE WEB DATABASE RT RAID" ;;
     svsql[dp]*)
-        echo "ECE SERVER UBUNTU UBUNTU_STANDARD WEB DATABASE RT" ;;
+        echo "ECE UBUNTU UBUNTU_STANDARD WEB DATABASE RT" ;;
     lersse1)
         # lersse1 is integrated with ECE but is limited to mounting netapp4:/vol/ECE_vol3/kb/data/backup.
-        echo "ECE SERVER GNOME KDE OMNI SLOW " ;;
+        echo "ECE GNOME KDE OMNI SLOW " ;;
     modigliani)
         # modigliani is not integrated with ECE.
         echo "ECE_DISK2 GNOME KDE OMNI" ;;
     [kmx]host*)
-        echo "ECE SERVER VM_HOST" ;;
+        echo "ECE VM_HOST" ;;
     [kmxv]ldap?|master)
-        echo "ECE SERVER LOOKUPSERVER" ;;
+        echo "ECE LOOKUPSERVER" ;;
     [kmxv]lookup?)
-        echo "ECE SERVER LOOKUPSERVER VERTXSERVER" ;;
+        echo "ECE LOOKUPSERVER VERTXSERVER" ;;
     svlookupp?)
-        echo "ECE SERVER LOOKUPSERVER" ;;
+        echo "ECE LOOKUPSERVER" ;;
     msmb1)
-        echo "ECE SERVER SMBSERVER RAID " ;;
+        echo "ECE SMBSERVER RAID " ;;
     [kmxv]smb?|svsmbp1)
-        echo "ECE SERVER SMBSERVER" ;;
+        echo "ECE SMBSERVER" ;;
     [kmxv]web?|[kmx]vweb?|svweb*)
-        echo "ECE SERVER WEB RT" ;;
+        echo "ECE WEB RT" ;;
     [kmxv]mx?|[kmx]mail?|*smtp*)
-        echo "ECE SERVER MAIL WEB" ;;
+        echo "ECE MAIL WEB" ;;
     [kmxv]flex?|vintr1|yoink)
-        echo "ECE SERVER " ;;
+        echo "ECE " ;;
     psserv|ssh-linux*|vb|vklinux[345])
-        echo "ECE SERVER GNOME KDE OMNI" ;;
+        echo "ECE GNOME KDE OMNI" ;;
     node*) # to be clear: these are nodes on Rafeef/morty.
         echo "SLOW ECE GRID GNOME KDE OMNI" ;;
     morty)
         echo "SLOW RAID ECE GRID GNOME KDE OMNI" ;;
     *webgoat*) 
-        echo "ECE SERVER UBUNTU WEBGOAT" ;;
+        echo "ECE UBUNTU WEBGOAT" ;;
     nano-mac03)
         echo "ECE ECE_DISK2 GNOME KDE OMNI NOMBR" ;;
     purang1[345])
