@@ -66,8 +66,6 @@ WEBGOAT         Java Servlet server (misnomer since WebGoat is not installed)
 OMNI            General-purpose workstation with lots of packages
 
 SLOW            Long pauses before risky operations
-
-NOMBR           OBSOLETE: Install boot loader to root partition, not MBR
 ==
 
 GRUB2           Install GRUB2 bootloader

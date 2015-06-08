@@ -48,8 +48,6 @@ case $HOSTNAME in
         echo "SLOW RAID ECE GRID GNOME KDE OMNI" ;;
     *webgoat*) 
         echo "ECE UBUNTU WEBGOAT" ;;
-    nano-mac03)
-        echo "ECE ECE_DISK2 GNOME KDE OMNI NOMBR" ;;
     purang1[345])
         echo "ECE VM_HOST GNOME KDE OMNI" ;;
     frink)
