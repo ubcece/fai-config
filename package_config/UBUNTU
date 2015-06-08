@@ -17,7 +17,7 @@ PACKAGES aptitude VMWARE_GUEST
 open-vm-tools
 
 # packages required for standard ECE system
-PACKAGES aptitude UBUNTU_STANDARD
+PACKAGES aptitude STANDARD
 ubuntu-standard
 anacron
 apparmor
@@ -75,13 +75,13 @@ usepackage
 vim
 zsh
 
-PACKAGES aptitude UBUNTU_STANDARD
+PACKAGES aptitude STANDARD
 rsyslog-
 ubuntu-minimal-
 syslog-ng
 
 # utilities/tools packages for ECE systems
-PACKAGES aptitude UBUNTU_STANDARD
+PACKAGES aptitude STANDARD
 bind9-host
 curl
 diffstat

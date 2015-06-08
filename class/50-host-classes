@@ -9,13 +9,13 @@ case $HOSTNAME in
     smtp?|svsmtpp?)
         echo "ECE MAIL" ;;
     svwebmailp[1-2])
-	echo "ECE SLOW UBUNTU UBUNTU_STANDARD" ;;
+	echo "ECE SLOW UBUNTU STANDARD" ;;
     blanc|puncak|vinson|xena9)
-	echo "ECE SLOW UBUNTU UBUNTU_STANDARD UBUNTU_UNITY" ;;
+	echo "ECE SLOW UBUNTU STANDARD" ;;
     [kmxv]sql?)
         echo "ECE WEB DATABASE RT RAID" ;;
     svsql[dp]*)
-        echo "ECE UBUNTU UBUNTU_STANDARD WEB DATABASE RT" ;;
+        echo "ECE UBUNTU STANDARD WEB DATABASE RT" ;;
     lersse1)
         # lersse1 is integrated with ECE but is limited to mounting netapp4:/vol/ECE_vol3/kb/data/backup.
         echo "ECE GNOME KDE OMNI SLOW " ;;
