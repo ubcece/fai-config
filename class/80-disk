@@ -29,7 +29,7 @@ elif ifclass VM_HOST ; then
 elif [ `disk_count` -gt 2 ]; then
 	die "Too many hard disks. Too risky."
 
-elif ifclass ECE_DISK2 ; then
+elif ifclass DISK2 ; then
 	size=`disk_sizes | tail -n 1`
 	if   [ "$size" -lt  40000000 ]; then die "The hard disk is too small (40 GB minimum)."
 	elif [ "$size" -lt 100000000 ]; then echo "MEDIUM2"

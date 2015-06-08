@@ -10,9 +10,6 @@ memtest86+
 PACKAGES aptitude DHCPC
 dhcp3-client
 
-PACKAGES aptitude ECE_DISK2
-grub lilo-
-
 PACKAGES aptitude GRUB
 grub lilo-
 

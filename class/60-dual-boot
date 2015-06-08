@@ -1,12 +1,9 @@
-#! /bin/bash
-# 2011-05-19 Chris Dumont. 
-# Host *MUST* have two disks. FAI will install to second disk. This is the preferred method.
-# For dual-boot on one disk see, for instance, fai/config/disk_config/commlab01
+#!/bin/bash
 
-dualboot=$FAI/class/dual-boot
+. /usr/lib/fai/subroutines         # For definition of ifclass
 
-[ -r $dualboot ] || ( echo "ERROR: .../class/dual-boot not readable" ; exec bash -i )
-
-if grep -q "^${HOSTNAME}$" $dualboot ; then
-	echo "ECE_DISK2 "
+# If the disk count is not one, and...
+if ! ifclass RAID && ! ifclass VM_GUEST &&
+   [ "`/usr/lib/fai-disk-info | wc -l`" != 1 ]; then
+    echo "DISK2"
 fi

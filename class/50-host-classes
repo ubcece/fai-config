@@ -21,7 +21,7 @@ case $HOSTNAME in
         echo "ECE GNOME KDE OMNI SLOW " ;;
     modigliani)
         # modigliani is not integrated with ECE.
-        echo "ECE_DISK2 GNOME KDE OMNI" ;;
+        echo "GNOME KDE OMNI" ;;
     [kmx]host*)
         echo "ECE VM_HOST" ;;
     [kmxv]ldap?|master)

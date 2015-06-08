@@ -9,28 +9,31 @@ error=0 ; trap "error=$((error|1))" ERR
 ######################################################
 
 if [ X$FAI_ACTION = Xdirinstall ]; then
-	set_disk_info
+    set_disk_info
 fi
 
 # Using md0 and first one or two disks should be correct. fai/config/disk_config/??? sets these.
 if [ -b /dev/md0 ]; then
-	bootdisks=$(echo $disklist | awk '{print $1 " " $2}')
-elif ifclass ECE_DISK2 ; then
-        bootdisks=$(echo $disklist | awk '{print $2}')
+    bootdisks=$(echo $disklist | awk '{print $1 " " $2}')
+elif ifclass DISK2 ; then
+    for disk in $disklist; do
+        dd if="$disk" of="$target/root/bootsect-backup.$disk" bs=512 count=1
+    done
+    bootdisks=$(echo $disklist | awk '{print $1 " " $2}')
 else
-	bootdisks=$(echo $disklist | awk '{print $1}')
+    bootdisks=$(echo $disklist | awk '{print $1}')
 fi
 
 set -x
 for i in $bootdisks ; do
-  # The "1" in parted and dd -MUST- correspond with fai/config/disk_config/???
-  parted -s /dev/${i} set 1 bios_grub on || sleep 3686
+    # The "1" in parted and dd -MUST- correspond with fai/config/disk_config/???
+    parted -s /dev/${i} set 1 bios_grub on || sleep 3686
 
-  GRUBEXTRA=""
-  # Found IBM HS20 Blades with IDE disk.
-  /usr/bin/lspci | grep -q "IDE interface: Broadcom CSB5 IDE Controller" && GRUBEXTRA=" --modules=ata"
+    GRUBEXTRA=""
+    # Found IBM HS20 Blades with IDE disk.
+    /usr/bin/lspci | grep -q "IDE interface: Broadcom CSB5 IDE Controller" && GRUBEXTRA=" --modules=ata"
 
-  $ROOTCMD /usr/sbin/grub-install $GRUBEXTRA --no-floppy /dev/${i}
+    $ROOTCMD /usr/sbin/grub-install $GRUBEXTRA --no-floppy /dev/${i}
 done
 set +x
 
