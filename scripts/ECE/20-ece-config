@@ -1,9 +1,0 @@
-#! /bin/bash
-# Chris Dumont 2007-08-10. Do only what is necessary for cfengine to run for
-# the first time.
-
-fcopy -BM /etc/ntp.conf
-fcopy -BM /etc/ferm/ferm.conf
-fcopy -iBM /etc/default/ntp
-fcopy -BM /etc/fai/fai.conf
-fcopy -Br /var/lib/cfengine2/

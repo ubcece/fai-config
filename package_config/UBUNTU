@@ -1,3 +1,6 @@
+PACKAGES aptitude RAID
+mdadm
+
 # package list for minimal OS install
 PACKAGES aptitude UBUNTU
 ubuntu-minimal
@@ -27,7 +30,6 @@ autofs
 autofs-ldap
 bash-completion
 ca-certificates
-cfengine2
 cron
 cron-apt
 discover
@@ -74,6 +76,9 @@ ubuntu-system-service
 usepackage
 vim
 zsh
+
+PACKAGES aptitude ECE
+cfengine2
 
 PACKAGES aptitude STANDARD
 rsyslog-

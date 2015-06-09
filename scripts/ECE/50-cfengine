@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copy necessary configuration for cfengine to run for the first time.
+fcopy -Br /var/lib/cfengine2/
+
 # This runs to completion when in network boot (FAI install?) mode. Creates
 # script to run on first local disk boot which, during successful execution,
 # erases itself.

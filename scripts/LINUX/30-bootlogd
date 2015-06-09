@@ -1,0 +1,6 @@
+#!/bin/bash
+
+CONF=$target/etc/default/bootlogd
+if [ -f "$CONF" ]; then
+    sed -i -e 's/BOOTLOGD_ENABLE=.*/BOOTLOGD_ENABLE=Yes/' "$CONF"
+fi

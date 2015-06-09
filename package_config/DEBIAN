@@ -22,7 +22,6 @@ bsd-mailx
 build-essential
 busybox
 bzip2
-cfengine2
 #cmake
 cpuburn
 cron
@@ -118,3 +117,6 @@ whois
 xfsprogs
 zip
 zsh
+
+PACKAGES aptitude ECE
+cfengine2
