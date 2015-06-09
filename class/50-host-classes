@@ -16,9 +16,7 @@ case $HOSTNAME in
         echo "SERVER VM_HOST" ;;
     [kmxv]ldap?|master)
         echo "SERVER LOOKUPSERVER" ;;
-    [kmxv]lookup?)
-        echo "SERVER LOOKUPSERVER VERTXSERVER" ;;
-    svlookupp?)
+    [kmxv]lookup?|svlookup[dp]?)
         echo "SERVER LOOKUPSERVER" ;;
     msmb1)
         echo "SERVER SMBSERVER RAID" ;;

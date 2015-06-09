@@ -40,7 +40,7 @@ RAID            RAID1 using Linux md
 
 DATABASE        MySQL and PostgreSQL server
 GRID            Oracle (Sun) Grid Engine client
-LOOKUPSERVER    BIND, DHCP, LDAP, NIS, NTP, VertXd server (no NFS support)
+LOOKUPSERVER    BIND, DHCP, LDAP, NIS, NTP server (no NFS support)
 MAIL            Mail server (SMTP, IMAP, and/or mailing list)
 NET             Routing/bridging/firewalling/VPN server
 RT              OBSOLETE: Install Request Tracker software
