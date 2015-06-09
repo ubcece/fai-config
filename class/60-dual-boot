@@ -2,8 +2,8 @@
 
 . /usr/lib/fai/subroutines         # For definition of ifclass
 
-# If the disk count is not one, and...
-if ! ifclass RAID && ! ifclass VM_GUEST &&
-   [ "`/usr/lib/fai-disk-info | wc -l`" != 1 ]; then
+if ifclass RAID || { ifclass SERVER && ifclass VM_GUEST; }; then
+    :
+elif [ "`/usr/lib/fai-disk-info | wc -l`" != 1 ]; then
     echo "DISK2"
 fi

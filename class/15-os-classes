@@ -51,10 +51,9 @@ reduce_versions() {
 EXPLICIT_OS=$(explicit_class $classes)
 
 if [ -z "$EXPLICIT_OS" ]; then
-    # if OS class has not been defined then generate OS class
-    # based on the OS of NFSroot
+    # if OS class has not been defined then choose Ubuntu LTS
 
-    OS=$(nfsroot_class)
+    OS="UBUNTU_14_04"
 
 else
     # else provide the stable version of OS if a version has

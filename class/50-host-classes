@@ -1,57 +1,43 @@
 #! /bin/bash
 
-echo FAIBASE
-echo DHCPC
-
 case $HOSTNAME in
     svmailp[1-5])
-	echo "ECE SLOW UBUNTU UBUNTU_MAIL_IMAP" ;;
+        echo "SERVER UBUNTU_MAIL_IMAP" ;;
     smtp?|svsmtpp?)
-        echo "ECE MAIL" ;;
+        echo "SERVER MAIL" ;;
     svwebmailp[1-2])
-	echo "ECE SLOW UBUNTU STANDARD" ;;
-    blanc|puncak|vinson|xena9)
-	echo "ECE SLOW UBUNTU STANDARD" ;;
+        echo "SERVER" ;;
     [kmxv]sql?)
-        echo "ECE WEB DATABASE RT RAID" ;;
+        echo "SERVER WEB DATABASE RT RAID" ;;
     svsql[dp]*)
-        echo "ECE UBUNTU STANDARD WEB DATABASE RT" ;;
-    lersse1)
-        # lersse1 is integrated with ECE but is limited to mounting netapp4:/vol/ECE_vol3/kb/data/backup.
-        echo "ECE GNOME KDE OMNI SLOW " ;;
+        echo "SERVER DATABASE RT" ;;
     modigliani)
         # modigliani is not integrated with ECE.
         echo "GNOME KDE OMNI" ;;
     [kmx]host*)
-        echo "ECE VM_HOST" ;;
+        echo "SERVER VM_HOST" ;;
     [kmxv]ldap?|master)
-        echo "ECE LOOKUPSERVER" ;;
+        echo "SERVER LOOKUPSERVER" ;;
     [kmxv]lookup?)
-        echo "ECE LOOKUPSERVER VERTXSERVER" ;;
+        echo "SERVER LOOKUPSERVER VERTXSERVER" ;;
     svlookupp?)
-        echo "ECE LOOKUPSERVER" ;;
+        echo "SERVER LOOKUPSERVER" ;;
     msmb1)
-        echo "ECE SMBSERVER RAID " ;;
+        echo "SERVER SMBSERVER RAID" ;;
     [kmxv]smb?|svsmbp1)
-        echo "ECE SMBSERVER" ;;
+        echo "SERVER SMBSERVER" ;;
     [kmxv]web?|[kmx]vweb?|svweb*)
-        echo "ECE WEB RT" ;;
+        echo "SERVER WEB RT" ;;
     [kmxv]mx?|[kmx]mail?|*smtp*)
-        echo "ECE MAIL WEB" ;;
-    [kmxv]flex?|vintr1|yoink)
-        echo "ECE " ;;
-    psserv|ssh-linux*|vb|vklinux[345])
-        echo "ECE GNOME KDE OMNI" ;;
+        echo "SERVER MAIL WEB" ;;
+    [kmxv]flex?)
+        echo "SERVER" ;;
     node*) # to be clear: these are nodes on Rafeef/morty.
-        echo "SLOW ECE GRID GNOME KDE OMNI" ;;
+        echo "GRID" ;;
     morty)
-        echo "SLOW RAID ECE GRID GNOME KDE OMNI" ;;
+        echo "RAID GRID" ;;
     *webgoat*) 
-        echo "ECE UBUNTU WEBGOAT" ;;
+        echo "SERVER WEBGOAT" ;;
     purang1[345])
-        echo "ECE VM_HOST GNOME KDE OMNI" ;;
-    frink)
-        echo "ECE GNOME KDE OMNI " ;;
-    *)
-        echo "SLOW ECE GNOME KDE OMNI" ;;
+        echo "VM_HOST" ;;
 esac

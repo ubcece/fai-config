@@ -17,78 +17,69 @@ TODO: Describe how to divide the responsibilities between FAI and CFengine.
 Our Classes
 ===========
 
+Explicit Classes
+----------------
+
+These classes may be specified explicitly by editing class/50-host-classes or
+by invoking SERVER-SIDE/bin/fai-pxe -c $classname1,$classname2.
+
+DEBIAN          The recommended version of Debian
+SQBPO           Use kernel from squeeze-backports, nVidia software from testing
+SQUEEZE         Debian 6
+
+SERVER          Supress inferred classes DISK2 GNOME KDE OMNI SLOW
+NO_STANDARD     Suppress inferred class STANDARD
+NO_ECE          Suppress inferred class ECE
+NO_GNOME        Suppress inferred class GNOME
+NO_KDE          Suppress inferred class KDE
+NO_OMNI         Suppress inferred class OMNI
+NO_SLOW         Suppress inferred class SLOW
+
+VM_HOST         Install Proxmox VE with a large /var/lib/vz partition
+RAID            RAID1 using Linux md
+
+DATABASE        MySQL and PostgreSQL server
+GRID            Oracle (Sun) Grid Engine client
+LOOKUPSERVER    BIND, DHCP, LDAP, NIS, NTP, VertXd server (no NFS support)
+MAIL            Mail server (SMTP, IMAP, and/or mailing list)
+NET             Routing/bridging/firewalling/VPN server
+RT              OBSOLETE: Install Request Tracker software
+SMBSERVER       Samba server with LDAP utilities
+WEB             Apache server
+WEBGOAT         Java Servlet server
+
+
+Inferred Classes
+----------------
+
+These classes should be automatically inferred as appropriate unless explicitly
+suppressed as described above.
+
+UBUNTU          The recommended version of Ubuntu
+UBUNTU_14_04    Ubuntu 14.04 LTS (trusty)
+
 DEFAULT         The first class of every FAI invocation
 LINUX           The second class of every FAI invocation (from `uname -s`)
 AMD64 I386      Installation architecture (maybe different from the hardware)
 FAICD           FAI is running from an ISO image
-
 I386_BIGMEM     I386 with > 4 GiB RAM, which could benefit from PAE kernel
+FAIBASE         TODO: How is this different from DEFAULT and LINUX?
+DHCPC           If FAIBASE, configure eth0 to use DHCP, not static IP address
+GRUB2           Install GRUB2 bootloader
 
 VZ_CONTAINER    Installing to an OpenVZ container
 NOT_VZ_CONTAINER ... or not
-
 VM_GUEST        Installing to a virtual machine
 BOCHS_GUEST      ... KVM virtual machine
 VMWARE_GUEST     ... VMWare virtual machine
 
-==
-
-FAIBASE         TODO: How is this different from DEFAULT and LINUX?
-DHCPC           If FAIBASE, configure eth0 to use DHCP, not static IP address
-
-ECE             TODO: Seems to do nothing?
-
+ECE             Integrate with ECE configuration management
 DISK2           Machine with 2 disks; FAI will install to second disk
-RAID            RAID1 using Linux md
 
-SERVER          TODO: UTC, LVM snapshot space
-LOOKUPSERVER    BIND, DHCP, LDAP, NIS, NTP, VertXd server (no NFS support)
-SMBSERVER       Samba server with LDAP utilities
-MAIL            Mail server (SMTP, IMAP, and/or mailing list)
-WEB             Apache server
-
-DATABASE        MySQL and PostgreSQL server
-
-RT              OBSOLETE: Install Request Tracker software
-
-VM_HOST         Make /var/lib/vz partition
-
-GRID            Oracle (Sun) Grid Engine client
-
+STANDARD        Install some basic packages for a not-so-bare-bones OS
 GNOME           Install GNOME desktop environment
 KDE             Install KDE desktop environment
-
-NET             Routing/bridging/firewalling/VPN server
-
-WEBGOAT         Java Servlet server (misnomer since WebGoat is not installed)
-
 OMNI            General-purpose workstation with lots of packages
-
-SLOW            Long pauses before risky operations
-==
-
-GRUB2           Install GRUB2 bootloader
-
-DEBIAN          The recommended version of Debian
-UBUNTU          The recommended version of Ubuntu
-SQBPO           Use kernel from squeeze-backports, nVidia software from testing
-SQUEEZE         Debian 6
-UBUNTU_14_04    Ubuntu 14.04 LTS (trusty)
-
-The disk configurations below should be automatically inferred by
-class/80-disk, not explicitly specified.  The selection of the disk
-partitioning scheme is influenced by the number and size of disks, as well as
-classes DISK2, RAID, VM_GUEST, and VM_HOST.
-
-VM_GUEST        VM guest, using LVM names established by UBC IT Systems
-VM_GUEST2       VM guest as above, with a data volume group on a second disk
-VM_HOST         Proxmox host, with a large /var/lib/vz logical volume
-SMALL           disk < 40 GB
-MEDIUM          40 GB <= disk < 100 GB
-MEDIUM2         40 GB <= disk < 100 GB, on disk 2 for dual boot
-LARGE           100 GB <= disk
-LARGE2          100 GB <= disk, on disk 2 for dual boot
-RAID1           100 GB <= disk, using disks 1 and 2 in Linux RAID 1
 
 HP_ILO          HP Integrated Lights-Out Management present
 HP_ILO_REV1      ... rev 1
@@ -98,6 +89,22 @@ HP_ILO_REV4      ... rev 4
 MPT_SCSI        SCSI card present: LSI Logic Fusion-MPT
 AIC79XX         Hardware RAID card present: Adaptec AIC-79XX
 
+SLOW            Long pauses before risky operations
 LAST            The last class of every FAI invocation
+
+
+Exactly one of the following disk-partitioning schemes shall be inferred by
+class/80-disk, with the choice influenced by the number and size of disks, as
+well as classes DISK2, RAID, VM_GUEST, and VM_HOST.
+
+VM_GUEST        VM guest, using LVM names established by UBC IT Systems
+VM_GUEST2       VM guest as above, with a data volume group on a second disk
+VM_HOST         Proxmox host, with a large /var/lib/vz logical volume
+SMALL           disk < 40 GB
+MEDIUM          40 GB <= disk < 100 GB
+MEDIUM2         40 GB <= disk < 100 GB, FAI on disk 2 for dual boot
+LARGE           100 GB <= disk
+LARGE2          100 GB <= disk, FAI on disk 2 for dual boot
+RAID1           100 GB <= disk, using disks 1 and 2 in Linux RAID 1
 
 # vim: tw=78 sw=4 et:
