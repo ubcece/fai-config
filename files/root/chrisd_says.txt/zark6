@@ -1,8 +1,0 @@
-2009-11-19 Chris Dumont
-special on zark6:
-	- nfs kernel server
-		/etc/ferm/ferm.conf
-		/etc/default/nfs-kernel-server
-		/etc/default/common
-		/etc/exports
-	- virtualbox
