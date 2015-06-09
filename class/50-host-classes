@@ -7,8 +7,6 @@ case $HOSTNAME in
         echo "SERVER MAIL" ;;
     svwebmailp[1-2])
         echo "SERVER" ;;
-    [kmxv]sql?)
-        echo "SERVER WEB DATABASE RT RAID" ;;
     svsql[dp]*)
         echo "SERVER DATABASE RT" ;;
     modigliani)
