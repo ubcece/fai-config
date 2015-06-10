@@ -4,6 +4,6 @@
 
 if ifclass RAID || { ifclass SERVER && ifclass VM_GUEST; }; then
     :
-elif [ "`/usr/lib/fai-disk-info | wc -l`" != 1 ]; then
+elif [ "`/usr/lib/fai/fai-disk-info | wc -l`" != 1 ]; then
     echo "DISK2"
 fi
