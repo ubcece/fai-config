@@ -1,1 +1,17 @@
-rescue-squeeze.tmpl
+default fai-rescue-squeeze
+
+label localboot
+    kernel syslinux/chain
+    append hd0
+
+label fai-rescue-squeeze
+    kernel syslinux/ifcpu64.c32
+    append fai-rescue-squeeze-amd64 -- fai-rescue-squeeze-i386
+
+label fai-rescue-squeeze-amd64
+    kernel vmlinuz-squeeze-amd64
+    append ip=dhcp root=/dev/nfs boot=live initrd=initrd-squeeze-amd64 nfsroot=/exports/fai/nfsroot-squeeze-amd64 FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+
+label fai-rescue-squeeze-i386
+    kernel vmlinuz-squeeze-i386
+    append ip=dhcp root=/dev/nfs boot=live initrd=initrd-squeeze-i386  nfsroot=/exports/fai/nfsroot-squeeze-i386  FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
