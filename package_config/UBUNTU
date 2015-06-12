@@ -70,8 +70,8 @@ tcsh
 tcpd
 telnet
 testdisk
+tftp-hpa
 tmux
-ubuntu-docs
 ubuntu-system-service
 usepackage
 vim
@@ -129,6 +129,7 @@ zip
 
 PACKAGES taskinst GNOME
 ubuntu-desktop
+ubuntu-docs
 ubuntu-gnome-desktop
 
 PACKAGES taskinst KDE

@@ -54,7 +54,6 @@ iotop
 iptraf
 iputils-arping
 iputils-ping
-ipython
 kexec-tools
 less
 libnss-ldapd
@@ -104,6 +103,7 @@ tcpdump
 tcptraceroute
 telnet
 testdisk
+tftp-hpa
 time
 tofrodos
 traceroute
