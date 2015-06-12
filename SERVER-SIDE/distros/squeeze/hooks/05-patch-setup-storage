@@ -1,0 +1,18 @@
+#!/bin/sh
+
+( cd $NFSROOT && patch -p0 ) <<'PATCH'
+When setup-storage calls vgremove, it should use the -f flag.  Otherwise,
+vgremove will prompt for confirmation, and it will hang forever because
+there is no way to respond to the prompt.
+--- fai-setup-storage-4.3.2/lib/setup-storage/Commands.pm
++++ usr/share/fai/setup-storage/Commands.pm
+@@ -772,7 +772,7 @@ sub cleanup_vg {
+       "lv_rm_$vg/$lv,self_cleared_/dev/$vg/$lv");
+     $vg_destroy_pre .= ",lv_rm_$vg/$lv";
+   }
+-  &FAI::push_command( "vgremove $vg", "$vg_destroy_pre", "vg_removed_$vg");
++  &FAI::push_command( "vgremove -f $vg", "$vg_destroy_pre", "vg_removed_$vg");
+ 
+   # clear all the devices
+   my $devices = "";
+PATCH
