@@ -194,12 +194,13 @@ ece_setup_fetchkeys() {
             chmod 644 "$f"
             ;;
           *)
+            f_parent="${f%/*}"
             (
               for dir in ${ECE_PUB_HS_DIRS[@]} ; do
-                [ "$f" = "$dir" ] && exit 0
+                [ "$f_parent" = "/tmp/keydist$dir" ] && exit 0
               done
             ) || \
-            chmod 700 "${f%/*}"
+            chmod 700 "$f_parent"
             ;;
         esac
     done
