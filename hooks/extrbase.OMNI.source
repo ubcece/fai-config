@@ -1,0 +1,11 @@
+rootfs_GiB=$(
+    df -P $target/ |
+    awk -v target="$target" '
+        match($6, target "/?$") { printf "%d", $2 / 1024 / 1024 }
+    '
+)
+
+if [ 0$rootfs_GiB -lt 25 ]; then
+    echo "Root filesystem has $rootfs_GiB GiB.  Refusing to continue with <= 25 GiB."
+    exit 1
+fi
