@@ -5,7 +5,7 @@ primary		-		100M	msdos	-
 primary		swap		512M	swap	rw
 primary		-		9G-	-	-
 
-disk_config lvm fstabkey:uuid
+disk_config lvm fstabkey:uuid preserve_lazy:vg-data
 vg		vg		disk1.3
 vg-root 	/		4G-	ext4 rw,errors=remount-ro
 vg-var 		/var		4G-	ext4 rw
