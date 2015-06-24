@@ -59,6 +59,7 @@ ntp
 parted
 patchutils
 pciutils
+perl-doc
 pm-utils
 postfix
 pwgen

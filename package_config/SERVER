@@ -1,0 +1,5 @@
+PACKAGES aptitude
+molly-guard
+munin-node
+munin-plugins-extra
+snmpd
