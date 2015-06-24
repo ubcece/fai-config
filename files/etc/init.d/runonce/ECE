@@ -11,8 +11,6 @@
 #                    need to be run once ever in the life of the OS.
 ### END INIT INFO
 
-set -e 
-
 [ "$1" = "start" ] || exit 0
 
 echo "Integrating `hostname` into ECE (this will take a while, please be patient). "
@@ -20,8 +18,12 @@ echo "Integrating `hostname` into ECE (this will take a while, please be patient
 # derekp: munin-node's postinst script fails in an FAI environment (some error
 # running df).  Workaround.
 if [ -x /usr/sbin/munin-node-configure ]; then
-    /usr/sbin/munin-node-configure --shell | /bin/sh &&     /etc/init.d/munin-node restart
+    /usr/sbin/munin-node-configure --shell 2> /root/munin-node-configure.log |
+        /bin/sh &&
+        /etc/init.d/munin-node restart
 fi
+
+set -e 
 
 [ -x /usr/sbin/cfagent ] && /usr/sbin/cfagent --no-splay -v -DHourly.Daily.Install | tee /root/cfagent.log.`date +%Y-%m-%d_%H:%M:%S` 
 
@@ -48,11 +50,10 @@ if id monitor >/dev/null 2>/dev/null ; then
     fi
 else
     touch /root/runonce_no_success
-    echo "Not successful. Depends on cfagent starting, out of normal order, nslcd."
-    echo -n "Was nslcd running? "
+    echo -n "LDAP accounts not integrated"
     if pgrep -x -f /usr/sbin/nslcd >/dev/null ; then
-      echo "Yes."
+	    echo " (nslcd is running)."
     else
-      echo "No."
+	    echo " (nslcd is not running)."
     fi
 fi
