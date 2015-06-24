@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Add classes for special hardware.
 
 handle_device() {
