@@ -23,6 +23,7 @@ procmail
 rt3.6-clients
 sasl2-bin
 tcpd
+tnef
 
 # For spam filtering
 clamav
