@@ -97,6 +97,7 @@ ssh
 ssl-cert
 stow
 strace
+stress
 sudo
 tcsh
 tcpdump

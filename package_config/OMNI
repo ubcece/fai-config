@@ -97,6 +97,7 @@ ddd
 debsums
 default-jdk
 deskbar-applet
+devscripts
 dia
 ebtables
 eclipse
@@ -213,10 +214,12 @@ lyx
 m4
 manpages-dev
 markdown
+maven
 mawk
 mencoder
 mercurial
 minicom
+mosh
 mpack
 mplayer2
 mtools
@@ -257,8 +260,12 @@ python-anyjson
 python3-anyjson
 python-bs4
 python3-bs4
+python-docopt
+python3-docopt
 python-flask
 python3-flask
+python-gmpy2
+python3-gmpy2
 python-gnome2
 python-gnome2-extras
 python-html5lib
@@ -274,8 +281,12 @@ python3-keyring
 python-matplotlib
 python3-matplotlib
 python-matplotlib-data
+python-mpltoolkits.basemap
+python-mpltoolkits.basemap-data
 python-mock
 python3-mock
+python-mpmath
+python3-mpmath
 python-newt
 python3-newt
 python-nine
@@ -292,6 +303,11 @@ python-pygraph
 python3-pygraph
 python-pysqlite2
 python-qt3
+python-reportlab
+python3-reportlab
+python-reportlab-accel
+python3-reportlab-accel
+python-reportlab-doc
 python-scientific
 python-scipy
 python3-scipy
@@ -305,6 +321,7 @@ python3-tk
 python-vtk
 python-xlsxwriter
 python3-xlsxwriter
+qrencode
 quilt
 quota
 r-base

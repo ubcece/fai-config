@@ -65,7 +65,9 @@ postfix
 pwgen
 screen
 setserial
+stress
 stow
+software-properties-common
 sysstat
 tcsh
 tcpd
