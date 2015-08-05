@@ -15,7 +15,10 @@ disk_count() {
 	/usr/lib/fai/fai-disk-info | wc -l
 }
 
-if ifclass VMWARE_GUEST ; then
+if ifclass RAID ; then
+	exit
+
+elif ifclass VMWARE_GUEST ; then
 	if [ `disk_count` = 1 ]; then
 		ifclass VM_GUEST || echo "VM_GUEST"
 	else

@@ -17,6 +17,7 @@ case $HOSTNAME in
     [kmxv]ldap?|master)
         echo "SERVER LOOKUPSERVER" ;;
     [kmxv]lookup?|svlookup[dp]?)
+        case $HOSTNAME in klookup?) echo "RAID" ; esac
         echo "SERVER LOOKUPSERVER" ;;
     msmb1)
         echo "SERVER SMBSERVER RAID" ;;
