@@ -1,55 +1,71 @@
-# 2011-05-06 Chris Dumont. Due diligence before dirinstalling.
+#!/bin/bash
 
-set -e
+# Verify that the target directory of a dirinstall is a mountpoint, and that
+# it is, for all practical purposes, empty.
 
-MSG="If you're sure you want to wipe the /altroot tree you could copy'n'paste this:
-		rm -rf /altroot/var/*
-		umount /altroot/var
-		rm -rf /altroot/*
-		mkdir /altroot/var
-		mount -a
-"
+is_fstab_mountpoint() {
+    local directory="$1"
+    # Ideally, we should be using getmntent(3).  If parsing /etc/fstab
+    # manually, we should interpret \nnn in the mountpoint as as octal ASCII
+    # values.  But this is just a hack.
+    cat /etc/fstab | sed -e 's/#.*//' | awk -v directory="$directory" '
+        BEGIN { notfound = 1 }
+        $2 == directory { notfound = 0 }
+        END { exit notfound }
+    '
+}
 
-while ! grep -q "^[^#]*[[:space:]]/altroot[[:space:]]" /etc/fstab ; do
-	echo "/altroot not in /etc/fstab. Will check again in 21s."
-	sleep 21
-done
+junk_in_mountpoint() {
+    local target="$1"
+    find "$target" | while read f ; do
+        case "$f" in
+          "$target"/var|\
+          "$target"/var/lib|\
+          "$target"/var/lib/fai|\
+          "$target"/var/lib/fai/*|\
+          "$target"/var/log|\
+          "$target"/var/log/fai|\
+          "$target"/var/log/fai/*)
+            ;;
+          *)
+            if [ -d "$f" ]; then
+               if [ `basename "$f"` != lost+found ] &&
+                  ! is_fstab_mountpoint "$f"; then
+                   echo "$f"
+               fi
+            else
+                echo "$f"
+            fi
+            ;;
+        esac
+    done
+}
 
-while ! grep -q "^[^#]*[[:space:]]/altroot/var[[:space:]]" /etc/fstab ; do
-	echo "/altroot/var not in /etc/fstab. Will check again in 22s."
-	sleep 22
-done
+confirm() {
+    local prompt="$1"
+    local affirmative_option="$2" negative_option="$3" default_option="$4"
+    local choice ; unset choice
+    while true ; do
+        echo -n "$prompt"
+        read choice
+        choice=`echo "$choice" | tr A-Z a-z`
+        [ "$choice" = '' ] && choice="$default_option"
+        case "$choice" in
+          "$affirmative_option"*)
+            case "$choice" in "$negative_option"*) :;; *) return 0 ;; esac
+            ;;
+          "$negative_option"*)
+            case "$choice" in "$affirmative_option"*) :;; *) return 1 ;; esac
+            ;;
+        esac
+    done
+}
 
-while true; do
-	mount -a || :
-
-	if ! mount | grep -q "[[:space:]]/altroot[[:space:]]" ; then
-		echo "/altroot not mounted. Will check again in 23s."
-		sleep 23
-		continue
-	fi
-
-	if ! mount | grep -q "[[:space:]]/altroot/var[[:space:]]" ; then
-		echo "/altroot/var not mounted. Will check again in 24s."
-		sleep 24
-		continue
-	fi
-
-	if [ `find /altroot/var | wc -l` -gt 2 ]; then
-		echo "/altroot/var not empty. Will check again in 25s."
-		echo $MSG
-		sleep 25
-		continue
-	fi
-
-	if [ `find /altroot | wc -l` -gt 4 ]; then
-		echo "/altroot not empty. Will check again in 26s."
-		echo $MSG
-		sleep 26
-		continue
-	fi
-	break
-done
-echo "The /altroot tree appears to be mounted and empty. Continuing dirinstall."
-
-set +e
+junk=`junk_in_mountpoint "$target"`
+if [ -n "$junk" ]; then
+    echo "$target is not an empty mountpoint."
+    if ! confirm "Do you REALLY want to install to $target (y/N)? " y n n ; then
+        echo "Stopping installation by user choice."
+        exit 1
+    fi
+fi
