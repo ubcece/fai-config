@@ -3,10 +3,14 @@
 # At this time this class is only used for additional packages. This may change
 # to include scripts to install, e.g., nvidia differently.
 
-sqbpolist=$FAI/class/sqbpo
+. /usr/lib/fai/subroutines         # For definition of ifclass
 
-[ -r $sqbpolist ] || ( "ERROR: .../class/sqbpo not readable" ; exec bash -i )
+if ifclass DEBIAN_6; then
+    sqbpolist=$FAI/class/sqbpo
 
-if grep -q "^${HOSTNAME}$" $sqbpolist ; then
-	echo "SQBPO "
+    [ -r $sqbpolist ] || ( "ERROR: .../class/sqbpo not readable" ; exec bash -i )
+
+    if grep -q "^${HOSTNAME}$" $sqbpolist ; then
+        echo "SQBPO "
+    fi
 fi
