@@ -69,6 +69,7 @@ bittorrent
 blender
 bluefish
 bluez-gnome
+bmake
 bridge-utils
 build-essential
 bzr
@@ -201,9 +202,11 @@ libgmp3-dev
 libgmpxx4ldbl
 libgsl0-dev
 libgsl0ldbl
+libmpc-dev
 libmpfr-dev
 libmpfr4
 libnet-ldap-perl # mutt -> lbdb -> libnet-ldap-perl
+libncurses5-dbg
 libssl-dev
 liferea
 linuxdoc-tools
