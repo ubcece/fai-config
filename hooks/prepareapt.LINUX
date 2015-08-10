@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# FAI's prepareapt task does some unnecessary and harmful things.  For example,
+# it copies /etc/apt/sources.list from the root filesystem to the target
+# filesystem, which is the wrong thing to do for dirinstall.
+
+# Suppress the prepareapt task
+. /usr/lib/fai/subroutines
+skiptask prepareapt
+
+# Just do the minimum needed work ourselves
+fcopy -iBM /etc/apt/sources.list
