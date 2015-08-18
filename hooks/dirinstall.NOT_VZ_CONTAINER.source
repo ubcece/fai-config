@@ -29,7 +29,7 @@ junk_in_mountpoint() {
             ;;
           *)
             if [ -d "$f" ]; then
-               if [ `basename "$f"` != lost+found ] &&
+               if [ "`basename "$f"`" != lost+found ] &&
                   ! is_fstab_mountpoint "$f"; then
                    echo "$f"
                fi
