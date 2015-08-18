@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$ROOTCMD /usr/sbin/cfagent --no-splay -D Daily.Hourly.install.no_services
