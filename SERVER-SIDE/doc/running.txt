@@ -35,7 +35,24 @@ configuration by using the -r option to fai-pxe.
 Run FAI dirinstall
 ==================
 
-TODO: dirinstall on a real machine, dirinstall on an OpenVZ container
+FAI can also be used to install to an existing directory or filesystem of an
+already working machine.  This can be used to perform an operating system
+upgrade with minimal disruption: the OS installation happens in the background,
+and when it is complete, just a reboot is necessary.
+
+First, ensure that the target filesystem is mounted.  (On physical machines
+that have sufficiently large disks, we create partitions and mount them at
+/altroot for this purpose.)  There also needs to be an appropriate
+/etc/fai/fai.conf file to tell FAI where to look for the server and
+configuration files.  (ECE's CFengine manages fai.conf.)
+
+    1 $ tmux
+    2 $ /usr/sbin/fai dirinstall -N /altroot
+
+The use of tmux is recommended, especially if logged in remotely, so that the
+installation will not be interrupted if the network session is dropped.
+
+This dirinstall technique can also be used to populate an OpenVZ container.
 
 
 FAI on a Macintosh

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cat <<'RESUME_SCRIPT' > "$LOGDIR/fai-env"
+# This script to restore the FAI environment is to be invoked as
+#     eval `fai-env`
+
+echo "LOGDIR=\"$(dirname -- "$(echo "$0")")\" ;"
+
+# Suppress the error when trying to set the BASHOPTS read-only variable
+echo 'if [ -f "$LOGDIR/variables.log" ]; then'
+echo '    . "$LOGDIR/variables.log" 2>/dev/null ;'
+echo "    eval \`while IFS='=' read var val ; do echo export \"\$var\" ; done < \"\$LOGDIR/variables.log\"\` ;"
+echo 'fi ;'
+
+echo '. /usr/lib/fai/subroutines ;'
+echo '[ -f "$FAI/hooks/subroutines" ] && . "$FAI/hooks/subroutines" ;'
+
+# Override the die() function in /usr/lib/fai/subroutines
+echo 'die() { echo $@ ; }'
+RESUME_SCRIPT
+
+chmod 755 "$LOGDIR/fai-env"
