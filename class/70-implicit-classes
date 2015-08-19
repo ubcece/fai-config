@@ -8,8 +8,14 @@ for class in STANDARD ECE ; do
     fi
 done
 
-for class in GNOME KDE OMNI SLOW ; do
+for class in GNOME KDE OMNI ; do
     if ! ifclass "SERVER" && ! ifclass "NO_$class" ; then
+        echo "$class"
+    fi
+done
+
+for class in SLOW ; do
+    if [ "$action" != dirinstall ] && ! ifclass "SERVER" && ! ifclass "NO_$class" ; then
         echo "$class"
     fi
 done
