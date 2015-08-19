@@ -70,6 +70,7 @@ blender
 bluefish
 bluez-gnome
 bmake
+byobu
 bridge-utils
 build-essential
 bzr
@@ -162,6 +163,7 @@ gsfonts-other
 gsfonts-x11
 gstreamer0.10-ffmpeg
 gstreamer0.10-plugins-ugly
+gstreamer1.0-libav
 gv
 hpijs-ppds
 hplip
