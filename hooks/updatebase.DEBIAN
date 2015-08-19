@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Workaround for https://bugs.launchpad.net/ubuntu/+source/fai/+bug/1400341
+#
+# fai-divert is buggy: It requires /usr/sbin/dpkg-divert, but calls whichever
+# dpkg-divert is on the $PATH.  In recent versions of Debian/Ubuntu,
+# dpkg-divert has been moved to /usr/bin.
+#
+# Since /usr/lib/fai/updatebase uses fai-divert, we use this updatebase
+# hook as a workaround.
+
+case "$FAI_ACTION" in
+  install|dirinstall)
+    if [ ! -x "$FAI_ROOT/usr/sbin/dpkg-divert" -a -x "$FAI_ROOT/usr/bin/dpkg-divert" ]; then
+        [ "$verbose" ] && echo "Creating /usr/sbin/dpkg-divert as a workaround"
+        ln -s ../bin/dpkg-divert "$FAI_ROOT/usr/sbin/dpkg-divert"
+    fi
+    ;;
+esac
