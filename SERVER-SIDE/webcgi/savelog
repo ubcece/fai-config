@@ -11,18 +11,16 @@ use Socket;
 use feature qw(say);
 use strict;
 
-use constant MAX_DELAY => 7200;
+use constant MAX_DELAY => 86400;
 my $logdir = '/var/log/fai';
 
 sub cgimain {
     my ($q) = @_;
 
-    my $auth_param = $q->param('auth') || '';
+    my $auth = $q->param('auth') || '';
     my $host = $q->param('host');
     my $action = $q->param('action') || 'noaction';
     my $rundate = $q->param('rundate');
-    my $hash_len = length FAI::ECE::Auth::hash;
-    my ($auth, $time) = ((substr $auth_param, 0, $hash_len), (substr $auth_param, $hash_len));
 
     my $path = $q->path_info;
 
@@ -35,7 +33,7 @@ sub cgimain {
         say "Status: 400 Bad Request\r\n";
         return;
     }
-    if (!FAI::ECE::Auth::verify_hash($auth, $time, $host, MAX_DELAY)) {
+    if (!FAI::ECE::Auth::verify_hash($auth, $host, MAX_DELAY)) {
         say "Status: 401 Unauthorized\r\n";
         return;
     }

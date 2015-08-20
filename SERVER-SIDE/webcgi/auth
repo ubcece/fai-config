@@ -34,9 +34,13 @@ sub generate_hash {
 }
 
 sub verify_hash {
-    my ($auth, $time, $host, $max_delay) = @_;
-    my $hash = hash($time, $host);
-    return (time - $time < $max_delay) && ($hash eq $auth);
+    my ($hash, $host, $max_delay) = @_;
+
+    my $hash_len = length FAI::ECE::Auth::hash;
+    my ($auth, $time) = ((substr $hash, 0, $hash_len), (substr $hash, $hash_len));
+
+    my $correct_hash = hash($time, $host);
+    return (time - $time < $max_delay) && ($auth eq $correct_hash);
 }
 
 sub cgimain {

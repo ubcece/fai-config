@@ -37,16 +37,14 @@ sub fai_chboot {
 sub cgimain {
     my ($q) = @_;
 
-    my $auth_param = $q->param('auth') || '';
+    my $auth = $q->param('auth') || '';
     my $host = $q->param('host') || '';
-    my $hash_len = length FAI::ECE::Auth::hash;
-    my ($auth, $time) = ((substr $auth_param, 0, $hash_len), (substr $auth_param, $hash_len));
 
     if ('POST' ne $q->request_method) {
         say "Status: 405 Method Not Allowed\r\n";
         return;
     }
-    if (!FAI::ECE::Auth::verify_hash($auth, $time, $host, MAX_DELAY)) {
+    if (!FAI::ECE::Auth::verify_hash($auth, $host, MAX_DELAY)) {
         say "Status: 401 Unauthorized\r\n";
         return;
     }
