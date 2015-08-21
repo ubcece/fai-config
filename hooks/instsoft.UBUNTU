@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# The cups-pdf post-install script wants to create a cups-pdf printer
+# queue.  However, that requires cups to be running, which is something
+# that cannot be guaranteed during a dirinstall.  (If cups is already
+# running outside the $FAI_ROOT, it would be a bad idea to restart it.)
+# 
+# Unfortunately, when cups is not running, lpadmin prompts for a root
+# password, which not only isn't possible (since the root password hasn't
+# been set yet), it also causes the installation to hang at the prompt.
+# 
+# Therefore, we prevent the root password prompt from being displayed by
+# diverting lpadmin, cupsenable, and cupsaccept.
+#
+# Possibly related to bug
+# https://bugs.launchpad.net/ubuntu/+source/system-config-printer/+bug/387970
+
+DIVERT_SCRIPTS='
+/usr/sbin/cupsaccept
+/usr/sbin/lpadmin
+'
+
+for script in $DIVERT_SCRIPTS ; do
+    fai-divert -a "$script" &&
+    cat <<SCRIPT > "$FAI_ROOT/$script"
+#!/bin/sh
+# diversion of $script created by FAI
+exit 1
+SCRIPT
+
+done
