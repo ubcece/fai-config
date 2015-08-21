@@ -1,0 +1,3 @@
+#!/bin/sh
+
+fcopy -iBM /etc/apt/sources.list.d/fai-project.list

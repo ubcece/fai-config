@@ -1,8 +1,10 @@
 PACKAGES aptitude
 apache2-mpm-prefork
 fai-server
+genisoimage
 git-core
-isc-dhcp-server
+libdigest-perl
+libdigest-sha-perl
 make
 memtest86+
 nfs-kernel-server

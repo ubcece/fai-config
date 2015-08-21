@@ -1,17 +1,19 @@
 #! /bin/bash
 
 case $HOSTNAME in
+    svpxe[dp]*)
+        echo "SERVER FAISERVER" ;;
     svmailp[1-5])
-        echo "SERVER UBUNTU_MAIL_IMAP" ;;
+        echo "DHCPC SERVER UBUNTU_MAIL_IMAP" ;;
     smtp?|svsmtpp?)
-        echo "SERVER MAIL" ;;
+        echo "DHCPC SERVER MAIL" ;;
     svwebmailp[1-2])
-        echo "SERVER" ;;
+        echo "DHCPC SERVER" ;;
     svsql[dp]*)
-        echo "SERVER DATABASE RT" ;;
+        echo "DHCPC SERVER DATABASE RT" ;;
     modigliani)
         # modigliani is not integrated with ECE.
-        echo "GNOME KDE OMNI" ;;
+        echo "DHCPC GNOME KDE OMNI" ;;
     [kmx]host*)
         echo "SERVER VM_HOST" ;;
     [kmxv]ldap?|master)
@@ -20,21 +22,23 @@ case $HOSTNAME in
         case $HOSTNAME in klookup?) echo "RAID" ; esac
         echo "SERVER LOOKUPSERVER" ;;
     msmb1)
-        echo "SERVER SMBSERVER RAID" ;;
+        echo "DHCPC SERVER SMBSERVER RAID" ;;
     [kmxv]smb?|svsmbp1)
-        echo "SERVER SMBSERVER" ;;
+        echo "DHCPC SERVER SMBSERVER" ;;
     [kmxv]web?|[kmx]vweb?|svweb*)
-        echo "SERVER WEB RT" ;;
+        echo "DHCPC SERVER WEB RT" ;;
     [kmxv]mx?|[kmx]mail?|*smtp*)
-        echo "SERVER MAIL WEB" ;;
+        echo "DHCPC SERVER MAIL WEB" ;;
     [kmxv]flex?)
-        echo "SERVER" ;;
+        echo "DHCPC SERVER" ;;
     node*) # to be clear: these are nodes on Rafeef/morty.
-        echo "GRID" ;;
+        echo "DHCPC GRID" ;;
     morty)
-        echo "RAID GRID" ;;
+        echo "DHCPC RAID GRID" ;;
     *webgoat*) 
-        echo "SERVER WEBGOAT" ;;
+        echo "DHCPC SERVER WEBGOAT" ;;
     purang1[345])
-        echo "VM_HOST" ;;
+        echo "DHCPC VM_HOST" ;;
+    *)
+        echo "DHCPC" ;;
 esac
