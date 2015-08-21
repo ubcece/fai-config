@@ -3,3 +3,7 @@ molly-guard
 munin-node
 munin-plugins-extra
 snmpd
+
+PACKAGES aptitude UBUNTU
+apparmor-profiles
+apparmor-utils
