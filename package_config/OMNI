@@ -92,6 +92,8 @@ cups-pdf
 curl
 cvs
 cxref
+cython
+cython3
 db4.2-util
 dbus-1-utils
 dc
@@ -296,6 +298,8 @@ python-newt
 python3-newt
 python-nine
 python3-nine
+python-numexpr
+python3-numexpr
 python-pandas
 python3-pandas
 python-pip
@@ -317,6 +321,7 @@ python-scientific
 python-scipy
 python3-scipy
 python-scrapy
+python-sklearn
 python-six
 python3-six
 python-termcolor
