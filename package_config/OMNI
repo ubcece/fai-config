@@ -37,6 +37,10 @@ chromium-codecs-ffmpeg
 unity-chromium-extension
 unity-scope-chromiumbookmarks
 
+PACKAGES aptitude UBUNTU_14_04
+lua5.2
+liblua5.2-dev
+
 PACKAGES aptitude DEBIAN
 # chromium-browser renamed to chromium in Debian 8
 chromium
@@ -118,7 +122,7 @@ eclipse-rcp
 eclipse-xsd
 eclipse-xsd-sdk
 ekiga
-emacs21
+emacs
 evolution-mapi
 evolution-plugins
 exuberant-ctags
@@ -166,7 +170,9 @@ gsfonts-x11
 gstreamer0.10-ffmpeg
 gstreamer0.10-plugins-ugly
 gstreamer1.0-libav
+gtkwave
 gv
+h5utils
 hpijs-ppds
 hplip
 hplip-data
@@ -185,6 +191,7 @@ intltool-debian
 iproute
 iputils-arping
 ipython
+iverilog
 jadetex
 jove
 jython
@@ -200,21 +207,27 @@ lftp
 lib32bz2-dev
 lib32z1-dev
 libboost-all-dev
+libboost-dev
+libconfig++-dev
 libdvdcss2
-libelf1
+libelf-dev
 libgmp3-dev
 libgmpxx4ldbl
 libgsl0-dev
 libgsl0ldbl
+libhdf5-dev
 libmpc-dev
 libmpfr-dev
 libmpfr4
 libnet-ldap-perl # mutt -> lbdb -> libnet-ldap-perl
 libncurses5-dbg
+libpolarssl-dev
 libssl-dev
+libtool
 liferea
 linuxdoc-tools
 littler
+llvm-dev
 lockfile-progs
 lynx
 lyx
@@ -223,6 +236,7 @@ manpages-dev
 markdown
 maven
 mawk
+meld
 mencoder
 mercurial
 minicom
@@ -253,6 +267,7 @@ mono-complete
 nodejs                  # Available in Debian >= 8 and Ubuntu
 ocaml
 openvpn
+pandoc
 php-pear
 php5-cli
 pidgin
@@ -275,6 +290,7 @@ python-gmpy2
 python3-gmpy2
 python-gnome2
 python-gnome2-extras
+python-h5py
 python-html5lib
 python3-html5lib
 python-httplib2
@@ -328,7 +344,10 @@ python-termcolor
 python3-termcolor
 python-tk
 python3-tk
+python-virtualenv
 python-vtk
+python-w3lib
+python3-w3lib
 python-xlsxwriter
 python3-xlsxwriter
 qrencode
@@ -351,6 +370,7 @@ ruby-dev
 rxvt
 scala
 scala-library
+scons
 selinux-policy-default
 sharutils
 smbclient
@@ -359,6 +379,7 @@ ssl-cert
 subversion
 subversion-tools
 talk
+tcc
 texi2html
 texinfo
 texlive-full
@@ -379,6 +400,7 @@ update-notifier
 uswsusp
 valgrind
 vbetool
+verilator
 vim-gtk
 vlc
 vnc4server
