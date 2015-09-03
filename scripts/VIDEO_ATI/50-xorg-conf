@@ -1,0 +1,4 @@
+#!/bin/bash
+
+set +x
+fcopy -iBM /etc/X11/xorg.conf

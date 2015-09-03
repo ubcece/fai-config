@@ -16,23 +16,29 @@ handle_device() {
         done
     done
 
-    case "$vendor:$device" in
-      'Compaq Computer Corporation:Integrated Lights Out Controller'|\
-      'Hewlett-Packard Company:iLO3 Management Processor Support and Messaging')
+    case "$class:$vendor:$device" in
+      'System peripheral:Compaq Computer Corporation:Integrated Lights Out Controller'|\
+      'System peripheral:Hewlett-Packard Company:iLO3 Management Processor Support and Messaging')
         case "$rev" in
           '-r01')   echo 'HP_ILO HP_ILO_REV1' ;;
           '-r03')   echo 'HP_ILO HP_ILO_REV3' ;;
           '-r04')   echo 'HP_ILO HP_ILO_REV4' ;;
         esac
         ;;
-      'LSI Logic / Symbios Logic:53c1030 PCI-X Fusion-MPT'*)
+      'RAID bus controller:LSI Logic / Symbios Logic:53c1030 PCI-X Fusion-MPT'*)
         case "$subsystem_vendor" in
           'VMware') : ;;
           *)        echo 'MPT_SCSI' ;;
         esac
         ;;
-      'Adaptec:AIC-79'*)
+      'RAID bus controller:Adaptec:AIC-79'*)
         echo 'AIC79XX'
+        ;;
+      'VGA compatible controller:ATI Technologies Inc:'*)
+        echo "VIDEO_ATI"
+        ;;
+      'VGA compatible controller:NVIDIA Corporation:'*)
+        echo "VIDEO_NVIDIA"
         ;;
     esac
 }

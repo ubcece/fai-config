@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# For definition of ifclass
+. /usr/lib/fai/subroutines
+
+if ! ifclass GNOME && ! ifclass KDE && ! ifclass XFCE ; then
+	exit 0
+fi
+
+if ifclass UBUNTU ; then
+
+	# Install the recommended nVidia driver package.
+	# Sample output from `ubuntu-drivers devices`:
+	#
+	# == /sys/devices/pci0000:00/0000:00:02.0/0000:03:00.0 ==
+	# vendor   : NVIDIA Corporation
+	# model    : GF119 [GeForce GT 610]
+	# modalias : pci:v000010DEd0000104Asv00003842sd00002619bc03sc00i00
+	# driver   : nvidia-346 - distro non-free recommended
+	# driver   : nvidia-304 - distro non-free
+	# driver   : nvidia-304-updates - distro non-free
+	# driver   : nvidia-340 - distro non-free
+	# driver   : xserver-xorg-video-nouveau - distro free builtin
+	# driver   : nvidia-340-updates - distro non-free
+	# driver   : nvidia-346-updates - distro non-free
+	# 
+	$ROOTCMD ubuntu-drivers devices | awk '
+	    $1 == "==" { VENDOR = "" }
+	    $1 == "vendor" { $1 = $2 = ""; VENDOR = $0 }
+	    $1 == "driver" && VENDOR ~ "NVIDIA" && /recommended/ { print $3 }
+	' |
+	xargs $ROOTCMD apt-get install -y
+
+
+elif ifclass DEBIAN_6 ; then
+
+	#fcopy -iBM /etc/X11/xorg.conf
+
+	NVINST="runonce_nvidxorg.sh"
+
+	cat <<EOF > $target/etc/init.d/$NVINST
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          nvidia_xconfig
+# Required-Start:    \$local_fs \$syslog
+# Required-Stop:     \$local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Runs nvidia-xconfig after OS install.
+# Description:       Runs nvidia-xconfig after OS install. This script
+#                    erases itself.
+### END INIT INFO
+
+set -e
+iam=$NVINST
+touch /root/\${iam}_no_success
+
+[ "\$1" != "start" ] && exit 0
+
+echo "Configuring X11 to use the Nvidia video card. "
+
+nvidia-xconfig -s 2>/dev/null # Complains but doesn't return an error.
+perl -p -i -e "s/HorizSync[[:space:]]+28.0 - 33.0/HorizSync       28.0 - 73.0/" /etc/X11/xorg.conf
+/etc/init.d/gdm3 restart
+insserv -r \${iam}
+rm -f /etc/init.d/\${iam}
+touch /root/\${iam}_success
+rm -f /root/\${iam}_no_success
+echo "Done."
+
+EOF
+
+	chmod +x $target/etc/init.d/$NVINST
+	$ROOTCMD insserv -d $NVINST
+
+fi
