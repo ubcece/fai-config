@@ -1,0 +1,90 @@
+#!/bin/bash
+
+######################################################################
+# If setup-storage encounters a disk to be partitioned, but the disk
+# contains no partition table at all, it will give up.  To prevent
+# such failures, this hook creates an empty partition table of the
+# type specified in the setup-storage configuration file on any disk
+# whose first 512 bytes are all null.
+######################################################################
+
+. /usr/lib/fai/subroutines
+
+# Prints the absolute path of the disk configuration file, chosen based on
+# the last applicable class to have a configuration file in
+# /var/lib/fai/config/disk_config.
+disk_config_file() {
+    echo $classes | tr ' ' '\n' | tac | while read class ; do
+        if [ -f "$FAI/disk_config/$class" ]; then
+            echo "$FAI/disk_config/$class"
+            break
+        fi
+    done
+}
+
+# Output contains one line per disk, with the device followed by the partition
+# table type that it is supposed to have:
+#
+# /dev/sda gpt
+# /dev/sdb msdos
+want_partition_tables() {
+    config_file=`disk_config_file`
+    if [ -z "$config_file" ]; then
+        # No suitable setup-storage config file
+        exit 1
+    fi
+    awk -v disks="`fai-disk-info`" '
+        BEGIN {
+            split(disks, dev);
+        }
+
+        $1 == "disk_config" && $2 ~ "disk.*" {
+            sub("^disk", "", $2);
+            for (i = 3; i <= NF; i++) {
+                if (split($i, optionpair, ":")) {
+                    if (optionpair[1] == "sameas") {
+                        sub("^disk", "", optionpair[2]);
+                        partition_table[$2] = partition_table[optionpair[2]];
+                        if (dev[$2]) print "/dev/" dev[$2], partition_table[$2];
+                        next;
+                    } else if (optionpair[1] == "disklabel") {
+                        partition_table[$2] = optionpair[2];
+                        if (dev[$2]) print "/dev/" dev[$2], partition_table[$2];
+                        next;
+                    }
+                }
+            }
+
+	    # If no disklabel option is given, setup-storage uses "msdos" as
+            # the default.
+            if (dev[$2]) print "/dev/" dev[$2], "msdos";
+        }
+    ' "$config_file"
+}
+
+# Returns 0 if the first 512 bytes of the specified device are all null.
+has_partition_table() {
+    local dev="$1"
+    perl -e "
+        open D, '<', '$dev' and
+        read D, \$buf, 512 and
+        \$buf ne \"\\000\" x 512 or
+        exit 1
+    "
+}
+
+# For every disk in the setup-storage configuration, if there is no partition
+# table apparent in the first 512 bytes, then we will create one of the
+# appropriate type.
+ensure_partition_tables_exist() {
+    set -o pipefail
+    want_partition_tables |
+    while read dev table ; do
+        if ! has_partition_table "$dev" ; then
+            echo "$dev has no partition table; making one of type $table"
+            parted --script "$dev" mktable "$table"
+        fi
+    done
+}
+
+ensure_partition_tables_exist
