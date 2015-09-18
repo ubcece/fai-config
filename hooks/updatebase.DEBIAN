@@ -6,6 +6,7 @@ else
     rm -f $target/etc/apt/apt.conf.d/02proxy
 fi
 
+# Speed optimization, to be undone in hooks/finish.DEBIAN
 echo force-unsafe-io > $target/etc/dpkg/dpkg.cfg.d/fai-temp
 
 # you may want to add i386 arch to amd64 hosts

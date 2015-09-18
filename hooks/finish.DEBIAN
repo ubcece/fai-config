@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Undo unsafe speed optimization added in hooks/updatebase.DEBIAN
+rm $target/etc/dpkg/dpkg.cfg.d/fai-temp
