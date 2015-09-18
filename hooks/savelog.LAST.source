@@ -15,6 +15,7 @@ no space
 syntax
 Couldn't stat
 Cannot access
+ conflict
 is bigger than the limit
 did not exist
 non existent
@@ -28,18 +29,42 @@ No previous regular expression
 No such
 Device or resource busy
 unknown option
-[a-z]\+\.log:E: 
+[a-z]\+\.log:E:
 No candidate version found
 segfault
-cannot create"
+Couldn't find any package whose name or description matched
+cannot create
+The following packages have unmet dependencies"
 
-globalignorepatterns="[a-z]\+\.log:# 
-^\[ [0-9. ]*\] 
+globalignorepatterns="[a-z]\+\.log:#
+Error: Driver 'pcspkr' is already registered, aborting
+: bytes  packets  errors  dropped
+:+ error=0
+:+ trap error=
+task_error_func=
+STOP_ON_ERROR=
+courier-webadmin
+plugins-bad
+Enabling conf localized-error-pages
+ibwebadmin
+kernel-patch-badram
+kolab-webadmin
+kolabadmin
+gstreamer0.10-plugins-really-bad
+liberrors.so
+gsambad
+libad
+libtest-nowarnings-perl
+libtest-warn-perl
+libclass-errorhandler-perl
+zope-ploneerrorreporting
 libroxen-errormessage
 liberror-perl
+libgpg-error-dev
 libgpg-error0
 ^fstab.\+errors=remount
-[RT]X: bytes
+Opts: errors=remount-ro
+[RT]X packets:
 WARNING: unexpected IO-APIC
 warned about = ( )
 daemon.warn
@@ -52,7 +77,7 @@ RPC call returned error 101
 deverror.out
 (floppy), sector 0
 mount version older than kernel
-Can't locate module 
+Can't locate module
 Warning only 896MB will be used.
 hostname: Host name lookup failure
 I can't tell the difference.
@@ -70,29 +95,62 @@ RPC: sendmsg returned error 101
 can't print them to stdout. Define these classes
 warning: downgrading
 suppress emacs errors
-echo Error: 
+echo Error:
 Can't open dependencies file
 documents in /usr/doc are no longer supported
 if you have both a SCSI and an IDE CD-ROM
 Warning: /proc/ide/hd?/settings interface is obsolete, and will be removed soon
 Monitoring disabled
-kernel-patch-badram
 Error: only one processor found.
 Error Recovery Strategy:
 sector 0 does not have an
 syslogin_perform_logout: logout() returned an error
 grub is not in an XFS filesystem.
+grub-install: line 374:
+grub-probe: error: Cannot open \`/boot/grub/device.map'
 is harmless
 not updating .\+ font directory data.
 register_serial(): autoconfig failed
 Fontconfig error: Cannot load default config file
 asking for cache data failed
 However, I can not read the target:
-gstreamer0.10-plugins-bad
+fai-kernels/modules.dep: No such file
 Warning: The partition table looks like it was made
 task_error=0
-^info: Trying to set 
-cdrom: open failed."
+^info: Trying to set
+warning: /usr/lib/X11/fonts
+can't read /etc/udev/rules.d/z25_persistent-net.rules
+/cow': No such file or directory
+Dummy start-stop-daemon called
+X: bytes  packets  errors
+ACPI Error
+ACPI Warning
+AE_NOT_FOUND
+conflicts with ACPI region
+cannot stat \`/etc/modprobe.d/\*.conf'
+cdrom: open failed.
+libgpg-error
+process \`kudzu' used the deprecated sysctl system call
+PM: Resume from disk failed
+JBD: barrier-based sync failed
+aufs: module is from the staging directory, the quality is unknown
+warning: linuxlogo stop runlevel arguments (none) do not match
+insserv: warning: script .\+ missing LSB tags and overrides
+live-premount.\+ If this fails
+cannot read table of mounted file systems
+error: no alternatives for
+ERST: Error Record Serialization Table (ERST) support is initialized
+ERST: Table is not found
+HEST: Table not found
+failed to stat /dev/pts
+update-rc.d: warning: start and stop actions are no longer supported"
+
+# add pattern on some conditions
+if [ -n $FAI_ALLOW_UNSIGNED ] ; then
+   globalignorepatterns="$globalignorepatterns
+WARNING: untrusted versions
+Ignoring these trust violations"
+fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Here you can define your own patterns. Put one pattern in a line,
 # do not create empty lines.
@@ -107,15 +165,18 @@ $myignorepatterns"
 
 cd $LOGDIR || exit 3
 if [ -s $errfile ]; then
-    echo "Errorfile already exists. Aborting."
+    echo "Errorfile already exists. Aborting." >&2
     exit
 fi
 
 grep -i "$errorpatterns" *.log | grep -vi "$ignorepatterns" > $errfile
+if [ "$verbose" ]; then
+    egrep -v '^software.log:' $errfile > $LOGDIR/tempfile
+    mv $LOGDIR/tempfile $errfile
+fi
 
 if [ -s $errfile ]; then
-   echo "ERRORS found in log files. See $errfile."
+   echo "ERRORS found in log files. See $errfile" >&2
 else
    echo "Congratulations! No errors found in log files."
-   export flag_reboot=1
 fi
