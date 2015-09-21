@@ -1,9 +1,45 @@
 #!/bin/bash
 
+# Detect whether a dual-boot disk configuration is called for.
+#
+# Dual-boot is suppressed if:
+#   - the RAID class is specified
+#   - the SERVER class is specified, and installation is to a VM guest
+#
+# Otherwise, if there are at least two disks, then install Linux to the first
+# disk if it does not contain any NTFS partition, else install Linux to the
+# second disk if it does not contain any NTFS partition.
+#
+# The preferred policy at ECE is to put Windows on the first disk, and Linux
+# on the second.  Although it is possible to install Windows and Linux on
+# the same disk, we prefer to use separate disks to reduce the risk of
+# data loss due to partition-resizing errors.
+
 . /usr/lib/fai/subroutines         # For definition of ifclass
 
 if ifclass RAID || { ifclass SERVER && ifclass VM_GUEST; }; then
-    :
-elif [ "`/usr/lib/fai/fai-disk-info | wc -l`" != 1 ]; then
-    echo "DISK2"
+    exit 0
 fi
+
+avoid_disk1=
+/usr/lib/fai/fai-disk-info | sort | nl | while read disknum disk ; do
+    case "$disknum" in
+      1)
+        if /sbin/parted "/dev/$disk" p 2>/dev/null | grep -q ntfs; then
+            avoid_disk1=true
+        else
+            break
+        fi
+        ;;
+      2)
+        if [ "$avoid_disk1" = true ] &&
+           ! { /sbin/parted "/dev/$disk" p 2>/dev/null | grep -q ntfs; }; then
+            echo DISK2
+            break
+        else
+            echo "Refusing to install to a disk $disk with an NTFS partition!" >&2
+            exit 1
+        fi
+        ;;
+    esac
+done
