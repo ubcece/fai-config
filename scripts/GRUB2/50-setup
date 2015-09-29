@@ -17,7 +17,7 @@ if [ -b /dev/md0 ]; then
     bootdisks=$(echo $disklist | awk '{print $1 " " $2}')
 elif ifclass DISK2 ; then
     for disk in $disklist; do
-        dd if="$disk" of="$target/root/bootsect-backup.$disk" bs=512 count=1
+        dd if="/dev/$disk" of="$target/root/bootsect-backup.$disk" bs=512 count=1
     done
     bootdisks=$(echo $disklist | awk '{print $1 " " $2}')
 else
@@ -26,8 +26,14 @@ fi
 
 set -x
 for i in $bootdisks ; do
+    # Try the bios_grub flag for GPT partition tables, then the boot flag for
+    # MBR partition tables.
     # The "1" in parted and dd -MUST- correspond with fai/config/disk_config/???
     parted -s /dev/${i} set 1 bios_grub on || sleep 3686
+    parted -s /dev/${i} set 1 bios_grub on || \
+    parted -s /dev/${i} set 1 boot on || \
+    sleep 3686
+
 
     GRUBEXTRA=""
     # Found IBM HS20 Blades with IDE disk.
