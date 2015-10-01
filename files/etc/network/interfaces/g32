@@ -7,8 +7,11 @@ iface lo inet loopback
 # The primary network interface
 auto eth0
 iface eth0 inet dhcp
+	up   route add 10.20.0.0/16 dev eth0
+	down route del 10.20.0.0/16 dev eth0
 
 # The internal cluster interface
+# Using 10.0.0.0/8 is problematic, since the UBC campus also uses that IP range.
 auto eth1
 iface eth1 inet static
         address 10.0.1.17

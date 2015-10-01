@@ -3,17 +3,14 @@
 auto lo eth0 eth1
 iface lo inet loopback
 
-iface eth0 inet static
-        address 137.82.121.62
-        netmask 255.255.255.0
-        network 137.82.121.0
-        broadcast 137.82.121.255
-        gateway 137.82.121.254
-        dns-nameservers 137.82.52.165 137.82.52.170
-        dns-search ece.ubc.ca
+iface eth0 inet dhcp
+	up   route add 10.20.0.0/16 dev eth0
+	down route del 10.20.0.0/16 dev eth0
 
+# The internal cluster interface
+# Using 10.0.0.0/8 is problematic, since the UBC campus also uses that IP range.
 iface eth1 inet static
 	address 10.4.4.4
 	network 10.0.0.0
-	broadcast 10.255.255.254
+	broadcast 10.255.255.255
 	netmask 255.0.0.0
