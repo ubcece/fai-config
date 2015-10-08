@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. /usr/lib/fai/subroutines
+
+if ! ifclass VIDEO_NVIDIA ; then
+    echo "ERROR: Installing CUDA on a machine without an nVidia card"
+    exit 1
+elif ifclass AMD64 ; then
+    fcopy -iBM /etc/apt/sources.list.d/cuda.list
+fi

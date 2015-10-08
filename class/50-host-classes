@@ -39,6 +39,8 @@ case $HOSTNAME in
         echo "DHCPC SERVER WEBGOAT" ;;
     purang1[345])
         echo "DHCPC VM_HOST" ;;
+    bci04|mehdi-pc02)
+        echo "CUDA" ;;
     *)
         echo "DHCPC" ;;
 esac

@@ -47,7 +47,7 @@ RT              OBSOLETE: Install Request Tracker software
 SMBSERVER       Samba server with LDAP utilities
 WEB             Apache server
 WEBGOAT         Java Servlet server
-
+CUDA            Workstation for CUDA (nVidia GPGPU) software development
 
 Inferred Classes
 ----------------
@@ -88,6 +88,9 @@ HP_ILO_REV4      ... rev 4
 
 MPT_SCSI        SCSI card present: LSI Logic Fusion-MPT
 AIC79XX         Hardware RAID card present: Adaptec AIC-79XX
+
+VIDEO_ATI       ATI video card is present
+VIDEO_NVIDIA    nVidia video card is present
 
 SLOW            Long pauses before risky operations
 LAST            The last class of every FAI invocation

@@ -126,6 +126,7 @@ emacs
 evolution-mapi
 evolution-plugins
 exuberant-ctags
+fakeroot
 fdutils
 flashplugin-nonfree
 flex
@@ -263,9 +264,11 @@ libreoffice-help-en-us
 libreoffice-pdfimport
 libreoffice-presentation-minimizer
 libreoffice-presenter-console
+menu
 mono-complete
 nodejs                  # Available in Debian >= 8 and Ubuntu
 ocaml
+openmpi-checkpoint
 openvpn
 pandoc
 php-pear
@@ -364,6 +367,8 @@ python-wheel
 python3-wheel
 python-xlsxwriter
 python3-xlsxwriter
+python-yaml
+python3-yaml
 qrencode
 quilt
 quota
@@ -424,6 +429,7 @@ whois
 wireshark
 writer2latex
 wv
+x2goclient
 xchm
 xclip
 xdg-utils
