@@ -1,9 +1,0 @@
-# /data/fai/config/disk_config/commlab01 (symlinked to many others)
-
-disk_config disk1 preserve_always:1    
-primary    /media/windows   0-           ntfs rw,noauto
-primary    /                12000-12499  ext3 rw,errors=remount-ro
-logical    /var             3000-3999    ext3 rw
-logical    swap             1000-1100    swap rw
-logical    /data            50-          vfat auto,umask=0000
-
