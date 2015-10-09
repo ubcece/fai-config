@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# scripts/FAIBASE/10-misc set the timezone.  Let's set it again through
+# debconf, so that the setting persists if dpkg-reconfigure is ever invoked.
+
+TZ_AREA=${TIMEZONE%/*}
+TZ_CITY=${TIMEZONE#*/}
+
+$ROOTCMD [ -x /usr/bin/debconf-set-selections ] &&
+$ROOTCMD /usr/bin/debconf-set-selections <<DEBCONF
+tzdata  tzdata/Zones/Areas     select  $TZ_AREA
+tzdata  tzdata/Zones/$TZ_AREA  select  $TZ_CITY
+DEBCONF
