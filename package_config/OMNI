@@ -278,6 +278,8 @@ poppler-utils
 procmail
 pstoedit
 psutils
+python-dev
+python3-dev
 python-anyjson
 python3-anyjson
 python-bs4
@@ -299,6 +301,8 @@ python-ipy
 python3-ipy
 python-iso8601
 python3-iso8601
+python-lxml
+python3-lxml
 python-keyring
 python3-keyring
 python-matplotlib
@@ -316,14 +320,20 @@ python-nine
 python3-nine
 python-numexpr
 python3-numexpr
+python-numpy-dev
+python3-numpy-dev
 python-pandas
 python3-pandas
+python-pil
+python3-pil
 python-pip
 python3-pip
 python-progressbar
 python3-progressbar
 python-psycopg2
 python3-psycopg2
+python-pycurl
+python3-pycurl
 python-pygraph
 python3-pygraph
 python-pysqlite2
@@ -340,6 +350,8 @@ python-scrapy
 python-sklearn
 python-six
 python3-six
+python-tables
+python3-tables
 python-termcolor
 python3-termcolor
 python-tk
@@ -348,6 +360,8 @@ python-virtualenv
 python-vtk
 python-w3lib
 python3-w3lib
+python-wheel
+python3-wheel
 python-xlsxwriter
 python3-xlsxwriter
 qrencode
