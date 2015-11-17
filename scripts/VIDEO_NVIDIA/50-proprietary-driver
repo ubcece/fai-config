@@ -33,9 +33,6 @@ if ifclass UBUNTU ; then
 
 
 elif ifclass DEBIAN_6 ; then
-
-	#fcopy -iBM /etc/X11/xorg.conf
-
 	NVINST="runonce_nvidxorg.sh"
 
 	cat <<EOF > $target/etc/init.d/$NVINST
