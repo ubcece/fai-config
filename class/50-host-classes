@@ -41,6 +41,8 @@ case $HOSTNAME in
         echo "DHCPC VM_HOST" ;;
     bci04|mehdi-pc02)
         echo "CUDA" ;;
+    bci06)
+        echo "CUDA NO_ECE" ;;
     *)
         echo "DHCPC" ;;
 esac
