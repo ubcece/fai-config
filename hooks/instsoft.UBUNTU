@@ -16,6 +16,7 @@
 # https://bugs.launchpad.net/ubuntu/+source/system-config-printer/+bug/387970
 
 DIVERT_SCRIPTS='
+/usr/bin/lpstat
 /usr/sbin/cupsaccept
 /usr/sbin/lpadmin
 '
