@@ -29,7 +29,6 @@ for i in $bootdisks ; do
     # Try the bios_grub flag for GPT partition tables, then the boot flag for
     # MBR partition tables.
     # The "1" in parted and dd -MUST- correspond with fai/config/disk_config/???
-    parted -s /dev/${i} set 1 bios_grub on || sleep 3686
     parted -s /dev/${i} set 1 bios_grub on || \
     parted -s /dev/${i} set 1 boot on || \
     sleep 3686
