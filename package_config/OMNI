@@ -80,6 +80,7 @@ build-essential
 bzr
 bzrtools
 cadaver
+cflow
 chktex
 cjk-latex
 ckermit
@@ -89,6 +90,7 @@ console-tools
 cpuburn
 cpufrequtils
 cron-apt
+cscope
 cups
 cups-bsd
 cups-driver-gutenprint
