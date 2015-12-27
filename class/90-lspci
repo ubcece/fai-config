@@ -37,7 +37,8 @@ handle_device() {
       'VGA compatible controller:ATI Technologies Inc:'*)
         echo "VIDEO_ATI"
         ;;
-      'VGA compatible controller:NVIDIA Corporation:'*)
+      'VGA compatible controller:NVIDIA Corporation:'*|\
+      'VGA compatible controller:nVidia Corporation:'*)
         echo "VIDEO_NVIDIA"
         ;;
     esac
