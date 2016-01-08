@@ -18,7 +18,7 @@ explicit_class() {
             ;;
         esac
     done
-    return 1
+    [ -n "$most_explicit" ] && echo "$most_explicit" || return 1
 }
 
 # nfsroot_class(): generate the OS class based on the OS of NFSroot
@@ -41,7 +41,7 @@ reduce_versions() {
     case "$OS" in
         *_[0-9]*)
             reduce_versions "${OS%_*}" "$skipOS"
-    esac 
+    esac
 }
 
 # main script:
