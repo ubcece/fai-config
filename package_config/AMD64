@@ -7,9 +7,3 @@ PACKAGES aptitude DEBIAN_6
 linux-image-amd64
 isc-dhcp-client
 lvm2
-
-PACKAGES aptitude SQBPO
-isc-dhcp-client
-linux-image-2.6.38-bpo.2-amd64 linux-base/squeeze-backports
-#linux-image-2.6-amd64/testing linux-base/testing 
-

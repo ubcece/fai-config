@@ -8,14 +8,6 @@
 ###PACKAGES install I386
 ###nvidia-kernel-2.6-686
 
-PACKAGES install SQBPO
-nvidia-glx/testing
-nvidia-glx-ia32/testing
-nvidia-vdpau-driver-ia32/testing
-libgl1-nvidia-glx-ia32/testing
-nvidia-settings/testing
-nvidia-xconfig/testing
-
 PACKAGES aptitude DEBIAN
 # Should probably be replaed by tasksel, as we do for UBUNTU
 compiz

@@ -24,8 +24,7 @@ These classes may be specified explicitly by editing class/50-host-classes or
 by invoking SERVER-SIDE/bin/fai-pxe -c $classname1,$classname2.
 
 DEBIAN          The recommended version of Debian
-SQBPO           Use kernel from squeeze-backports, nVidia software from testing
-SQUEEZE         Debian 6
+DEBIAN_6        Debian 6 (squeeze)
 
 SERVER          Supress inferred classes DISK2 GNOME KDE OMNI SLOW
 NO_STANDARD     Suppress inferred class STANDARD
