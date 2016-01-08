@@ -1,4 +1,4 @@
-PACKAGES aptitude
+PACKAGES install
 
 # These conflict with the pve-firmware package, which is required by proxmox-ve
 firmware-bnx2-

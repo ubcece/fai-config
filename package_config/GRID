@@ -1,9 +1,9 @@
-PACKAGES aptitude
+PACKAGES install
 gridengine-client
 gridengine-common
 gridengine-exec
 
-PACKAGES aptitude morty
+PACKAGES install morty
 gridengine-master
 gridengine-qmon
 dhcp3-server

@@ -1,7 +1,7 @@
-PACKAGES aptitude RAID
+PACKAGES install RAID
 mdadm
 
-PACKAGES aptitude DEBIAN
+PACKAGES install DEBIAN
 acpid
 acpi-support-base
 firmware-bnx2
@@ -11,7 +11,7 @@ firmware-qlogic
 ntp
 tmux
 
-PACKAGES aptitude DEBIAN
+PACKAGES install DEBIAN
 # arping might be removed by OMNI class. That's ok.
 anacron
 #arping
@@ -119,5 +119,5 @@ xfsprogs
 zip
 zsh
 
-PACKAGES aptitude ECE
+PACKAGES install ECE
 cfengine2

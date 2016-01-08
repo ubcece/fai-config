@@ -1,4 +1,4 @@
-PACKAGES aptitude
+PACKAGES install
 apache2-mpm-prefork
 fai-doc
 fai-server

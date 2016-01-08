@@ -1,4 +1,4 @@
-PACKAGES aptitude
+PACKAGES install
 # YingW - Splitting off webmail from IMAP servers. 
 # 	- Platform change to Ubuntu
 #

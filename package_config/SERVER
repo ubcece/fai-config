@@ -1,9 +1,9 @@
-PACKAGES aptitude
+PACKAGES install
 molly-guard
 munin-node
 munin-plugins-extra
 snmpd
 
-PACKAGES aptitude UBUNTU
+PACKAGES install UBUNTU
 apparmor-profiles
 apparmor-utils

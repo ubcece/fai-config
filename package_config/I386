@@ -1,4 +1,4 @@
-PACKAGES aptitude
+PACKAGES install
 isc-dhcp-client
 linux-image-2.6-686
 lvm2

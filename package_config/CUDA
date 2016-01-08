@@ -1,17 +1,17 @@
 # Workstation for CUDA (GPGPU) development, with prerequisites for Caffe Deep
 # Learning <http://caffe.berkeleyvision.org/install_apt.html>
 
-PACKAGES aptitude UBUNTU_14_04
+PACKAGES install UBUNTU_14_04
 cuda-repo-ubuntu1404
 
-PACKAGES aptitude
+PACKAGES install
 cuda
 
 # Caffe itself is not available as a DPKG, and therefore we expect users
 # to build it themselves in /data.  However, we can install these dependencies.
 
 # General dependencies for Caffe
-PACKAGES aptitude UBUNTU
+PACKAGES install UBUNTU
 libprotobuf-dev
 libleveldb-dev
 libsnappy-dev
@@ -21,19 +21,19 @@ libhdf5-serial-dev
 protobuf-compiler
 
 # ... that require Ubuntu >= 14.04
-PACKAGES aptitude UBUNTU
+PACKAGES install UBUNTU
 libgflags-dev
 libgoogle-glog-dev
 liblmdb-dev
 
 # ATLAS / BLAS.  BLAS is reputedely faster than ATLAS, but we'll offer both
 # and let the user decide
-PACKAGES aptitude UBUNTU
+PACKAGES install UBUNTU
 libatlas-base-dev
 libopenblas-dev
 
 # Related packages for convenience
-PACKAGES aptitude UBUNTU
+PACKAGES install UBUNTU
 cython
 cython3
 h5utils

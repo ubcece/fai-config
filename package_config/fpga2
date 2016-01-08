@@ -1,3 +1,3 @@
 # fpga2 has some (unbacked-up) local data to serve.
-PACKAGES aptitude
+PACKAGES install
 nfs-kernel-server

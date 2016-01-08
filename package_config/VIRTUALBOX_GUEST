@@ -1,12 +1,12 @@
-PACKAGES aptitude
+PACKAGES install
 dkms
 virtualbox-guest-dkms
 
-PACKAGES aptitude OMNI
+PACKAGES install OMNI
 virtualbox-guest-x11
 
-PACKAGES aptitude GNOME
+PACKAGES install GNOME
 virtualbox-guest-x11
 
-PACKAGES aptitude KDE
+PACKAGES install KDE
 virtualbox-guest-x11

@@ -1,21 +1,21 @@
-PACKAGES aptitude I386
+PACKAGES install I386
 memtest86+
 
-PACKAGES aptitude CHROOT
+PACKAGES install CHROOT
 linux-image-486-
 
-PACKAGES aptitude AMD64
+PACKAGES install AMD64
 memtest86+
 
-PACKAGES aptitude DHCPC
+PACKAGES install DHCPC
 dhcp3-client
 
-PACKAGES aptitude GRUB
+PACKAGES install GRUB
 grub lilo-
 
-PACKAGES aptitude GRUB2
+PACKAGES install GRUB2
 grub2 lilo-
 os-prober
 
-PACKAGES aptitude LILO
+PACKAGES install LILO
 lilo grub-

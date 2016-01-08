@@ -1,4 +1,4 @@
-PACKAGES aptitude HP_ILO
+PACKAGES install HP_ILO
 cpqacuxe
 hp-health
 hp-smh-templates

@@ -1,8 +1,8 @@
-PACKAGES aptitude RAID
+PACKAGES install RAID
 mdadm
 
 # package list for minimal OS install
-PACKAGES aptitude UBUNTU
+PACKAGES install UBUNTU
 ubuntu-minimal
 linux-generic
 bash
@@ -16,11 +16,11 @@ ssh
 tasksel
 xfsprogs
 
-PACKAGES aptitude VMWARE_GUEST
+PACKAGES install VMWARE_GUEST
 open-vm-tools
 
 # packages required for standard ECE system
-PACKAGES aptitude STANDARD
+PACKAGES install STANDARD
 ubuntu-standard
 anacron
 apparmor
@@ -80,16 +80,16 @@ usepackage
 vim
 zsh
 
-PACKAGES aptitude ECE
+PACKAGES install ECE
 cfengine2
 
-PACKAGES aptitude STANDARD
+PACKAGES install STANDARD
 rsyslog-
 ubuntu-minimal-
 syslog-ng
 
 # utilities/tools packages for ECE systems
-PACKAGES aptitude STANDARD
+PACKAGES install STANDARD
 bind9-host
 curl
 diffstat
@@ -139,7 +139,7 @@ PACKAGES taskinst KDE
 ubuntu-desktop
 ubuntu-kde-desktop
 
-PACKAGES aptitude OMNI
+PACKAGES install OMNI
 command-not-found
 firefox-locale-en
 hyphen-en-us

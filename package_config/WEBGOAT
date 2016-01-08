@@ -1,4 +1,4 @@
-PACKAGES aptitude
+PACKAGES install
 
 default-jdk
 monit

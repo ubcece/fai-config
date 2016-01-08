@@ -1,9 +1,9 @@
-PACKAGES aptitude UBUNTU_14
+PACKAGES install UBUNTU
 linux-image-generic
 isc-dhcp-client
 lvm2
 
-PACKAGES aptitude DEBIAN_6
+PACKAGES install DEBIAN_6
 linux-image-amd64
 isc-dhcp-client
 lvm2

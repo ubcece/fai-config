@@ -8,7 +8,7 @@
 ###PACKAGES install I386
 ###nvidia-kernel-2.6-686
 
-PACKAGES aptitude DEBIAN
+PACKAGES install DEBIAN
 # Should probably be replaed by tasksel, as we do for UBUNTU
 compiz
 gdm3
@@ -29,7 +29,7 @@ libgl1-nvidia-glx-ia32
 nvidia-settings
 nvidia-xconfig
 
-PACKAGES aptitude
+PACKAGES install
 synaptic
 ttf-freefont
 fonts-arphic-ukai

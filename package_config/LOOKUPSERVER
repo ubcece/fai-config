@@ -1,6 +1,6 @@
 # Lookup servers (DNS, NIS, LDAP)
 # Packages with a trailing "-" are removed.
-PACKAGES aptitude
+PACKAGES install
 autofs5-
 nfs-common-
 nscd-

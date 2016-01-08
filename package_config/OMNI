@@ -1,13 +1,13 @@
-PACKAGES aptitude AMD64
+PACKAGES install AMD64
 libc6-dev-i386
 
-PACKAGES aptitude DEBIAN
+PACKAGES install DEBIAN
 deb-multimedia-keyring
 acroread
 foomatic-db
 system-config-printer
 
-PACKAGES aptitude SQUEEZE
+PACKAGES install DEBIAN_6
 rubygems
 sun-java6-bin
 sun-java6-demo
@@ -18,7 +18,7 @@ sun-java6-jre
 sun-java6-plugin
 sun-java6-source
 
-PACKAGES aptitude SQUEEZE
+PACKAGES install DEBIAN_6
 chromium-browser
 chromium-browser-inspector
 chromium-browser-l10n
@@ -27,7 +27,7 @@ evolution-exchange
 evolution-webcal
 tsclient
 
-PACKAGES aptitude UBUNTU
+PACKAGES install UBUNTU
 chromium-browser
 chromium-browser-inspector
 chromium-browser-l10n
@@ -37,11 +37,11 @@ chromium-codecs-ffmpeg
 unity-chromium-extension
 unity-scope-chromiumbookmarks
 
-PACKAGES aptitude UBUNTU_14_04
+PACKAGES install UBUNTU_14_04
 lua5.2
 liblua5.2-dev
 
-PACKAGES aptitude DEBIAN
+PACKAGES install DEBIAN
 # chromium-browser renamed to chromium in Debian 8
 chromium
 chromium-inspector
@@ -49,7 +49,7 @@ chromium-l10n
 libreoffice-evolution
 
 # ChrisD says "I didn't heavily vet this list."
-PACKAGES aptitude
+PACKAGES install
 a2ps
 abiword
 alacarte

@@ -1,4 +1,4 @@
-PACKAGES aptitude
+PACKAGES install
 # ChrisD says: packages with a trailing "-" are removed.
 
 apache2
@@ -99,7 +99,7 @@ gitolite
 subversion-tools
 xinetd
 
-PACKAGES aptitude DEBIAN
+PACKAGES install DEBIAN
 libapache2-mod-authn-pam
 libapache2-mod-authz-sys-group
 libapache2-mod-bigip
