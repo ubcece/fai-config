@@ -8,7 +8,7 @@ PACKAGES install AMD64
 memtest86+
 
 PACKAGES install DHCPC
-dhcp3-client
+isc-dhcp-client
 
 PACKAGES install GRUB
 grub lilo-

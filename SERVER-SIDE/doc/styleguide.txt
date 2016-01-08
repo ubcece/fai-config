@@ -25,6 +25,7 @@ by invoking SERVER-SIDE/bin/fai-pxe -c $classname1,$classname2.
 
 DEBIAN          The recommended version of Debian
 DEBIAN_6        Debian 6 (squeeze)
+UBUNTU_16_04    Ubuntu 16.04 LTS (xenial)
 
 SERVER          Supress inferred classes DISK2 GNOME KDE OMNI SLOW
 NO_STANDARD     Suppress inferred class STANDARD

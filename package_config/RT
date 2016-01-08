@@ -21,7 +21,7 @@ liblocale-maketext-fuzzy-perl
 liblocale-maketext-lexicon-perl
 liblog-dispatch-perl
 libmailtools-perl
-libmime-perl
+libmime-tools-perl
 libmodule-versions-report-perl
 libplack-perl
 libregexp-common-perl
