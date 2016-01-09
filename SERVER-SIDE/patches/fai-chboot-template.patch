@@ -1,6 +1,6 @@
---- /usr/sbin/fai-chboot.template	2014-11-21 10:48:03.000000000 +0000
-+++ /usr/sbin/fai-chboot	2015-01-30 23:05:18.552062196 +0000
-@@ -325,9 +325,20 @@
+--- /usr/sbin/fai-chboot.template	2015-11-25 01:06:59.000000000 -0800
++++ /usr/sbin/fai-chboot	2016-01-06 13:30:29.501325113 -0800
+@@ -331,9 +331,20 @@
  sub docopy {
  
 -  my ($srcfile, $pxedir, $desthex, $desthost, $ipadr) = @_;
@@ -22,28 +22,28 @@
 +     /eg;
      print DEST $_;
    }
-@@ -338,5 +349,5 @@
+@@ -344,5 +355,5 @@
  sub tcopy {
  
 -  my ($srchost,$desthost) = @_;
 +  my ($srchost,$desthost,$tmpl_subst_params) = @_;
    my ($ipadr,$srcfile,$srchex,$desthex);
  
-@@ -370,5 +381,5 @@
+@@ -376,5 +387,5 @@
      }
      print "copy pxe config from $srchost to template $desthost\n" if $verbose;
 -    docopy($srcfile,$pxedir,$desthost,$desthost,$ipadr);
 +    docopy($srcfile,$pxedir,$desthost,$desthost,$ipadr,$tmpl_subst_params);
    } else {
      ($ipadr,$desthex) = host2hex($desthost);
-@@ -378,5 +389,5 @@
+@@ -384,5 +395,5 @@
      }
      print "copy pxe config from $srchost to $desthost ($desthex)\n" if $verbose;
 -    docopy($srcfile,$pxedir,$desthex,$desthost,$ipadr);
 +    docopy($srcfile,$pxedir,$desthex,$desthost,$ipadr,$tmpl_subst_params);
    }
  }
-@@ -427,6 +438,8 @@
+@@ -433,6 +444,8 @@
    die "Missing destination host name(s). Can't copy.\n" unless @ARGV;
    # copy a template config to multiple hosts
 -  foreach (@ARGV) {
