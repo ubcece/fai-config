@@ -61,7 +61,6 @@ DEFAULT         The first class of every FAI invocation
 LINUX           The second class of every FAI invocation (from `uname -s`)
 AMD64 I386      Installation architecture (maybe different from the hardware)
 FAICD           FAI is running from an ISO image
-I386_BIGMEM     I386 with > 4 GiB RAM, which could benefit from PAE kernel
 FAIBASE         TODO: How is this different from DEFAULT and LINUX?
 DHCPC           If FAIBASE, configure eth0 to use DHCP, not static IP address
 GRUB2           Install GRUB2 bootloader
