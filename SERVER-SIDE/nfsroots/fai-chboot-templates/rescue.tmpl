@@ -1,0 +1,17 @@
+default fai-rescue-jessie
+
+label localboot
+    kernel chain
+    append hd0
+
+label fai-rescue-jessie
+    kernel ifcpu64.c32
+    append fai-rescue-jessie-amd64 -- fai-rescue-jessie-i386
+
+label fai-rescue-jessie-amd64
+    kernel fai/vmlinuz-jessie-amd64
+    append ip=dhcp initrd=fai/initrd-jessie-amd64 root=nfs:/exports/fai/nfsroot-jessie-amd64 aufs FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+
+label fai-rescue-jessie-i386
+    kernel fai/vmlinuz-jessie-i386
+    append ip=dhcp initrd=fai/initrd-jessie-i386  root=nfs:/exports/fai/nfsroot-jessie-i386  aufs FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}

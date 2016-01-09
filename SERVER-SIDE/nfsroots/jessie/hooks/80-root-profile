@@ -1,0 +1,17 @@
+# Make FAI variables and functions available to interactive root shells
+
+cat <<'BASH_PROFILE' > $NFSROOT/root/.bash_profile
+if [ -f /tmp/fai/variables.log ]; then
+    # Suppress the error when trying to set the BASHOPTS read-only variable
+    . /tmp/fai/variables.log 2>/dev/null
+    eval `while IFS='=' read var val ; do echo export "$var" ; done < /tmp/fai/variables.log`
+fi
+
+. /usr/lib/fai/subroutines
+[ -f "$FAI/hooks/subroutines" ] && . "$FAI/hooks/subroutines"
+
+# Override the die() function in /usr/lib/fai/subroutines
+die() {
+    echo $@
+}
+BASH_PROFILE

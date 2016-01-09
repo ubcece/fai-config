@@ -1,6 +1,0 @@
-# Make FAI variables and functions available to interactive root shells
-
-cat <<'BASH_PROFILE' > $NFSROOT/root/.bash_profile
-# Restore the FAI environment
-[ -x /tmp/fai/fai-env ] && eval "`/tmp/fai/fai-env`"
-BASH_PROFILE

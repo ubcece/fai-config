@@ -1,0 +1,7 @@
+deb     http://mirror.it.ubc.ca/debian              jessie           main contrib non-free
+deb-src http://mirror.it.ubc.ca/debian              jessie           main contrib non-free
+deb     http://mirror.it.ubc.ca/debian              jessie-updates   main contrib non-free
+deb     http://mirror.it.ubc.ca/debian-security     jessie/updates   main contrib non-free
+#deb     http://mirror.it.ubc.ca/deb-multimedia      jessie           main         non-free
+#deb     http://mirror.it.ubc.ca/debian-backports    jessie-backports main contrib non-free
+deb     http://download.virtualbox.org/virtualbox/debian jessie           contrib non-free

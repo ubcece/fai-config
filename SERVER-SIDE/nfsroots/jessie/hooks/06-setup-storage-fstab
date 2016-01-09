@@ -1,0 +1,72 @@
+touch $NFSROOT/usr/sbin/setup-storage-fstab
+chmod 755 $NFSROOT/usr/sbin/setup-storage-fstab
+
+cat > $NFSROOT/usr/sbin/setup-storage-fstab <<'END_SETUP_STORAGE_FSTAB'
+#!/usr/bin/perl
+
+# setup-storage-fstab: A script to generate the fstab that setup-storage would create
+#
+# This is a stripped-down version of FAI's setup-storage command that generates
+# the $FAI/fstab file without actually running the partitioning commands.  The
+# intended usage is to enable `task mountdisks` to be run in rescue mode.
+
+use strict;
+use warnings FATAL => qw(uninitialized);
+
+use lib "/usr/share/fai/setup-storage/";
+use Init;
+use Parser;
+use Fstab;
+use Exec;
+use Volumes;
+
+our ($opt_f, $opt_D);
+
+# $disklist may be provided by the environment
+my $disklist = $ENV{disklist};
+$opt_D and $disklist = $opt_D;
+if (! defined($disklist)) {
+  &FAI::in_path("/usr/lib/fai/fai-disk-info") or die "/usr/lib/fai/fai-disk-info not found\n";
+  $disklist = `/usr/lib/fai/fai-disk-info | sort`;
+}
+
+@FAI::disks = split( /[\n ]/, $disklist);
+
+# the config source file
+my $config_file = undef;
+defined ($ENV{classes}) or die "Environment variable classes is not set\n";
+foreach my $classfile (reverse split(/\s+/, $ENV{classes})) {
+  next unless (-r "$ENV{FAI}/disk_config/$classfile");
+  open($config_file, "$ENV{FAI}/disk_config/$classfile")
+    or die "Failed to open $ENV{FAI}/disk_config/$classfile\n";
+  $opt_f = "$ENV{FAI}/disk_config/$classfile\n";
+  last;
+}
+
+# if we could not find any matching class file, bail out
+defined ($config_file) or die "No matching disk_config found\n";
+
+print STDERR "Using config file: $opt_f\n";
+&FAI::run_parser($config_file);
+
+# make sure thare are no empty disk_config stanzas
+&FAI::check_config;
+
+&FAI::get_current_disks;
+&FAI::get_current_raid;
+
+# activate volume groups
+for my $key (keys %FAI::configs) {
+    my $vg;
+    if (($vg) = $key =~ /^VG_(.*)/ and $vg ne '--ANY--') {
+        &FAI::execute_ro_command("vgchange -a y $vg");
+    }
+}
+
+my @fstab = &FAI::generate_fstab(\%FAI::configs);
+open(FSTAB, ">$FAI::DATADIR/fstab")
+  or die "Failed to open $FAI::DATADIR/fstab for writing\n";
+print FSTAB "$_\n" foreach (@fstab);
+close FSTAB;
+
+END_SETUP_STORAGE_FSTAB

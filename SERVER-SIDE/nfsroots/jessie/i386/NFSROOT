@@ -1,0 +1,93 @@
+# package list for creating the NFSROOT
+
+PACKAGES install
+
+nfs-common fai-nfsroot module-init-tools ssh rdate lshw rpcbind
+rsync lftp less dump reiserfsprogs e2fsprogs usbutils
+hwinfo psmisc pciutils hdparm smartmontools parted mdadm lvm2
+dnsutils ntpdate dosfstools xfsprogs xfsdump btrfs-tools
+procinfo numactl dialog
+kbd
+iproute2 netselect moreutils udev subversion
+xz-utils
+cupt
+pxelinux syslinux-common # in jessie we need both
+curl
+nmap
+#emacs24-nox
+
+# dracut replaces live-boot and initramfs-tools
+dracut-network live-boot-
+#dracut-config-generic # this is not available in plain Debian jessie
+
+PACKAGES install DEBIAN
+console-common
+
+# some network cards needs firmware
+firmware-bnx2 firmware-bnx2x firmware-realtek
+firmware-linux firmware-linux-nonfree
+
+# you should not edit the lines below
+# architecture dependend list of packages that are installed
+
+#git # git consumes a lot of disk space on the FAI CD
+
+PACKAGES install DEBIAN_8
+sysvinit-core systemd-sysv-
+
+# packages for Ubuntu natty/oneiric/precise:
+# linux-image-generic live-boot
+
+# packages for Ubuntu
+PACKAGES install UBUNTU
+linux-image-generic
+linux-headers-generic
+
+# Custom additions
+PACKAGES install
+bash-completion
+binutils
+bridge-utils
+ca-certificates
+cfengine2
+cryptsetup
+discover
+dmsetup
+eject
+fai-doc
+#fuse-utils
+git-core
+kexec-tools
+liblinux-lvm-perl
+linux-base
+locales
+ncurses-term
+ntfs-3g
+patch
+syslinux
+uuid-runtime
+virtualbox-guest-dkms
+virtualbox-guest-utils
+
+# install LSB (Linux Standard Base) to determine the
+# distribution and release of the install system
+
+lsb-base
+lsb-core
+lsb-release
+
+PACKAGES install DEBIAN
+debootstrap/unstable
+
+# architecture dependent list of packages that are installed
+
+PACKAGES install AMD64
+grub-pc
+linux-image-amd64
+linux-headers-amd64
+
+PACKAGES install I386
+grub-pc
+linux-image-686-pae
+linux-headers-686-pae
+read-edid

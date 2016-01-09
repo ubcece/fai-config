@@ -1,0 +1,5 @@
+# Some packages, such as mdadm and rsyslogd, have postinst scripts that
+# automatically start daemons.  Running processes would prevent /proc
+# from unmounting.
+
+fuser -k -m $NFSROOT/proc || true
