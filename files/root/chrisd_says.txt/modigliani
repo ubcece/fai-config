@@ -1,9 +1,0 @@
-For modigliani:
-
-ATM, 2008-11-03, etchnhalf is being used so that Etch can be used with new
-hardware.
-
-I had to hand-adjust xorg.conf.
-
-Post-install nfs-kernel-server, samba. Unconfigured since Matthias will be
-adminstrating this box.

@@ -11,9 +11,6 @@ case $HOSTNAME in
         echo "DHCPC SERVER" ;;
     svsql[dp]*)
         echo "DHCPC SERVER DATABASE RT" ;;
-    modigliani)
-        # modigliani is not integrated with ECE.
-        echo "DHCPC GNOME KDE OMNI" ;;
     [kmx]host*)
         echo "SERVER VM_HOST" ;;
     [kmxv]ldap?|master)

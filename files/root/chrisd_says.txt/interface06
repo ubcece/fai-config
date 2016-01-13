@@ -1,4 +1,0 @@
-2008-11-17 Chris Dumont. 
-interface06, a Dell Precision 380, has a BIOS bug which results in PS/2
-keyboard or mouse not being recognized. It needs the "i8042.nomux=1" kernel
-parameter. See, for instance, http://bugs.centos.org/view.php?id=1189
