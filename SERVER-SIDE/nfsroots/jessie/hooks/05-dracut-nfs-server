@@ -1,0 +1,22 @@
+# According to dracut.cmdline(7), if root=nfs:[<server-ip>:]<root-dir> is
+# specified with no server-ip, then it should use the next-server provided by
+# DHCP.  However, the nfsroot_from_dhcp() function in nfs-lib.sh actually
+# prefers to use the DHCP server's IP address, which appears to be a bug.
+#
+# Patch the dracut code that locates the server for the NFS root filesystem,
+# then regenerate the initramfs and copy it to the TFTP server.
+
+( cd "$NFSROOT" && patch -p0 ) <<'PATCH' && \
+    $ROOTCMD dpkg-reconfigure `$ROOTCMD dpkg-query --showformat '${Package} ' -W 'linux-image-*'` && \
+    cp "$NFSROOT"/boot/initrd.img-* "$TFTPROOT/"
+--- usr/lib/dracut/modules.d/95nfs/nfs-lib.sh.orig	2015-11-28 05:08:46.000000000 -0800
++++ usr/lib/dracut/modules.d/95nfs/nfs-lib.sh	2016-01-08 23:42:58.048853731 -0800
+@@ -113,6 +113,6 @@
+     [ -z "$path" ] && [ "$(getarg root=)" == "/dev/nfs" ] && path=/tftpboot/%s
+     [ -z "$server" ] && server=$srv
+-    [ -z "$server" ] && server=$new_dhcp_server_identifier
+     [ -z "$server" ] && server=$new_next_server
++    [ -z "$server" ] && server=$new_dhcp_server_identifier
+     [ -z "$server" ] && server=${new_root_path%%:*}
+ }
+PATCH
