@@ -2,11 +2,6 @@
 
 if [ -d /proc/vz -a ! -f /proc/vz/version ]; then
     echo "VZ_CONTAINER"
-else
-    # There are some packages need to be installed only if this is not an
-    # OpenVZ container (such as kernel, modules, boot loader, and clock setting
-    # software).  Therefore, it is convenient to define a negated class.
-    echo "NOT_VZ_CONTAINER"
 fi
 
 # dmidecode can fail.  For example, in OpenVZ containers, it fails with

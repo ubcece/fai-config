@@ -2,6 +2,13 @@
 
 . /usr/lib/fai/subroutines
 
+if ! ifclass VZ_CONTAINER ; then
+    echo "NOT_VZ_CONTAINER"
+    if ! ifclass VM_GUEST ; then
+        echo "PHYSICAL"
+    fi
+fi
+
 for class in STANDARD ECE DHCPC ; do
     if ! ifclass "NO_$class" ; then
         echo "$class"

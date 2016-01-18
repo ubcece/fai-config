@@ -70,6 +70,7 @@ NOT_VZ_CONTAINER ... or not
 VM_GUEST        Installing to a virtual machine
 BOCHS_GUEST      ... KVM virtual machine
 VMWARE_GUEST     ... VMWare virtual machine
+PHYSICAL        None of the above (bare-metal physical machine)
 
 ECE             Integrate with ECE configuration management
 DISK2           Machine with 2 disks; FAI will install to second disk
