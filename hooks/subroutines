@@ -279,6 +279,14 @@ ece_setup_fetchkeys_failure() {
     fi
 }
 
+ece_fixup_hostname_domain() {
+    case "$HOSTNAME" in
+        *".$DOMAIN")
+            HOSTNAME="${HOSTNAME%%.$DOMAIN}"
+            ;;
+    esac
+}
+
 ece_setup_hook() {
     local status
 
@@ -309,6 +317,7 @@ ece_setup_hook() {
     esac
 }
 
+ece_fixup_hostname_domain
 if [ "$ece_setup_hook_run" != 1 ]; then
     ece_setup_hook && ece_setup_hook_run=1
 fi
