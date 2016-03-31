@@ -2,7 +2,7 @@
 
 . /usr/lib/fai/subroutines
 
-for class in STANDARD ECE ; do
+for class in STANDARD ECE DHCPC ; do
     if ! ifclass "NO_$class" ; then
         echo "$class"
     fi

@@ -2,44 +2,42 @@
 
 case $HOSTNAME in
     svpxe[dp]*)
-        echo "SERVER FAISERVER" ;;
+        echo "NO_DHCPC SERVER FAISERVER" ;;
     svmailp[1-5])
-        echo "DHCPC SERVER UBUNTU_MAIL_IMAP" ;;
+        echo "SERVER UBUNTU_MAIL_IMAP" ;;
     smtp?|svsmtpp?)
-        echo "DHCPC SERVER MAIL" ;;
+        echo "SERVER MAIL" ;;
     svwebmailp[1-2])
-        echo "DHCPC SERVER" ;;
+        echo "SERVER" ;;
     svsql[dp]*)
-        echo "DHCPC SERVER DATABASE RT" ;;
+        echo "SERVER DATABASE RT" ;;
     [kmx]host*)
-        echo "SERVER VM_HOST" ;;
+        echo "NO_DHCPC SERVER VM_HOST" ;;
     [kmxv]ldap?|master)
-        echo "SERVER LOOKUPSERVER" ;;
+        echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
     [kmxv]lookup?|svlookup[dp]?)
         case $HOSTNAME in klookup?) echo "RAID" ; esac
-        echo "SERVER LOOKUPSERVER" ;;
+        echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
     msmb1)
-        echo "DHCPC SERVER SMBSERVER RAID" ;;
+        echo "SERVER SMBSERVER RAID" ;;
     [kmxv]smb?|svsmbp1)
-        echo "DHCPC SERVER SMBSERVER" ;;
+        echo "SERVER SMBSERVER" ;;
     [kmxv]web?|[kmx]vweb?|svweb*)
-        echo "DHCPC SERVER WEB RT" ;;
+        echo "SERVER WEB RT" ;;
     [kmxv]mx?|[kmx]mail?|*smtp*)
-        echo "DHCPC SERVER MAIL WEB" ;;
+        echo "SERVER MAIL WEB" ;;
     [kmxv]flex?)
-        echo "DHCPC SERVER" ;;
+        echo "SERVER" ;;
     node*) # to be clear: these are nodes on Rafeef/morty.
-        echo "DHCPC GRID" ;;
+        echo "GRID" ;;
     morty)
-        echo "DHCPC RAID GRID" ;;
+        echo "RAID GRID" ;;
     *webgoat*) 
-        echo "DHCPC SERVER WEBGOAT" ;;
+        echo "SERVER WEBGOAT" ;;
     purang1[345])
-        echo "DHCPC VM_HOST" ;;
+        echo "VM_HOST" ;;
     bci04|mehdi-pc02|kramer|jerry)
         echo "CUDA" ;;
     bci06)
         echo "CUDA NO_ECE" ;;
-    *)
-        echo "DHCPC" ;;
 esac
