@@ -23,7 +23,9 @@ liblog-dispatch-perl
 libmailtools-perl
 libmime-perl
 libmodule-versions-report-perl
+libplack-perl
 libregexp-common-perl
+libsymbol-global-name-perl
 libterm-readkey-perl
 libtext-autoformat-perl
 libtext-quoted-perl
