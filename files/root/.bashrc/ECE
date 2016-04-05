@@ -2,16 +2,12 @@
 
 export VISUAL=vim
 export EDITOR=vim
-export PATH="$HOME/bin:$PATH:/opt/scc-srv/bin"
-export MANPATH='/usr/local/man:/usr/local/share/man:/usr/share/man:/opt/scc-srv/man:/opt/scc/man'
-export PS1='\h:\w\$ '
 umask 022
 
-export GREP_OPTIONS='--color'
 export LS_OPTIONS='--color=auto'
 eval "`dircolors`"
 alias ls='ls $LS_OPTIONS'
 alias ll='ls $LS_OPTIONS -l'
 alias la='ls $LS_OPTIONS -lA'
 
-alias lvi='ldapvi -h ldapi:/// -D "uid=foobar,dc=ece,dc=ubc,dc=ca"'
+alias grep='grep --color'
