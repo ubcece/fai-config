@@ -43,10 +43,8 @@ libleveldb-dev
 lmdb-utils
 protobuf-c-compiler
 python3-leveldb
-python3-pycuda-dbg
 python-leveldb
 python-protobuf
-python-pycuda-dbg
 python-snappy
 python-skimage
 python3-skimage
