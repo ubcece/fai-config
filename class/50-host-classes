@@ -10,7 +10,9 @@ case $HOSTNAME in
     svwebmailp[1-2])
         echo "SERVER" ;;
     svsql[dp]*)
-        echo "SERVER DATABASE RT" ;;
+        echo "SERVER DATABASE" ;;
+    rt|rt.*|rt-staging|rt-staging.*)
+        echo "SERVER WEB RT" ;;
     [kmx]host*)
         echo "NO_DHCPC SERVER VM_HOST" ;;
     [kmxv]ldap?|master)
