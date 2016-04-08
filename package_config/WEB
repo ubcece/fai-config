@@ -41,6 +41,7 @@ libxml-libxslt-perl
 libxml-namespacesupport-perl
 libxml-sax-perl
 mysql-client
+odbc-postgresql
 php5-cli
 php5-common
 php5-curl
