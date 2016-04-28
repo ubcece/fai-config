@@ -209,6 +209,7 @@ ldap-utils
 lftp
 lib32bz2-dev
 lib32z1-dev
+libapr1-dev
 libboost-all-dev
 libboost-dev
 libconfig++-dev
@@ -232,6 +233,10 @@ linuxdoc-tools
 littler
 llvm-dev
 lockfile-progs
+lua-cjson
+lua-posix
+lua-logging
+lua-socket
 lynx
 lyx
 m4
@@ -281,6 +286,7 @@ po-debconf
 policycoreutils
 poppler-utils
 procmail
+pssh
 pstoedit
 psutils
 python-dev
