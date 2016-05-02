@@ -38,7 +38,7 @@ case $HOSTNAME in
         echo "SERVER WEBGOAT" ;;
     purang1[345])
         echo "VM_HOST" ;;
-    bci04|mehdi-pc02|kramer|jerry)
+    bci04|mehdi-pc02|kramer|jerry|purang8)
         echo "CUDA" ;;
     bci06)
         echo "CUDA NO_ECE" ;;
