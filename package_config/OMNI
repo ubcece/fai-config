@@ -37,6 +37,9 @@ chromium-codecs-ffmpeg
 unity-chromium-extension
 unity-scope-chromiumbookmarks
 
+PACKAGES install UBUNTU_16_04
+python-letsencrypt-apache
+
 PACKAGES install UBUNTU_14_04
 lua5.2
 liblua5.2-dev
