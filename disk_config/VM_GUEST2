@@ -3,7 +3,7 @@
 
 disk_config disk1 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:2 align-at:8k
 primary		-			16M	msdos	-
-primary		-			25G-	-	-
+primary		-			15900M-	-	-
 
 disk_config disk2 disklabel:gpt preserve_lazy:1 fstabkey:uuid align-at:8k
 primary		-			16M	msdos	-
@@ -11,10 +11,10 @@ primary		-			63G-	-	-
 
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data
 vg		VGroot			disk1.2
-VGroot-LVroot 	/			8G-	ext4	rw,errors=remount-ro
+VGroot-LVroot 	/			4G-	ext4	rw,errors=remount-ro createopts="-i 12288"
 VGroot-LVswap	swap			2G	swap	rw
-VGroot-LVtmp	/tmp			2G-3G	ext4	rw,nodev,nosuid
-VGroot-LVvar 	/var			3G-8G 	ext4	rw
+VGroot-LVtmp	/tmp			1G-3G	ext4	rw,nodev,nosuid
+VGroot-LVvar 	/var			2G-8G 	ext4	rw
 VGroot-LVlog	/var/log		4G-8G	ext4	rw
 VGroot-LVaudit	/var/log/audit		1G	ext4	rw
 VGroot-snapreserve  -			1G	-	-
