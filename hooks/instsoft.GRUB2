@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if [ $FAI_ACTION = "install" ]; then
+    $ROOTCMD mkdir -p /boot/grub
+fi
