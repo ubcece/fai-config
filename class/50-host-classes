@@ -15,7 +15,9 @@ case $HOSTNAME in
         echo "SERVER WEB RT" ;;
     [kmx]host*)
         echo "NO_DHCPC SERVER VM_HOST" ;;
-    [kmxv]ldap?|master)
+    master|master[0-9])
+        echo "NO_DHCPC SERVER MASTERSERVER LOOKUPSERVER" ;;
+    [kmxv]ldap?)
         echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
     [kmxv]lookup?|svlookup[dp]?)
         case $HOSTNAME in klookup?) echo "RAID" ; esac

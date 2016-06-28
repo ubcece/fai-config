@@ -1,18 +1,21 @@
 PACKAGES install
 ipcalc
 git-svn
-ldaputils
 libcrypt-openssl-random-perl
 libio-socket-ssl-perl
-netdisco-backend
-netdisco-frontend
-netdisco-mibs-installer
 nmap
 postgresql
-slapd-shadowlastchange
 slapd-smbk5pwd
 subversion
 
+PACKAGES install
+# ECE custom packages
+ldaputils
+slapd-shadowlastchange
+
 PACKAGES install DEBIAN_6
+netdisco-backend
+netdisco-frontend
+netdisco-mibs-installer
 # For building Ruby gems
 ruby1.8-dev
