@@ -1,12 +1,8 @@
 PACKAGES install
-# ChrisD says: packages with a trailing "-" are removed.
-
 apache2
-apache2-mpm-prefork
-apache2-utils
 apachetop
+bc
 cronolog
-checkpw
 libapache2-mod-bigip
 libapache2-mod-macro
 libsasl2-modules
@@ -19,12 +15,10 @@ postfix-doc
 postfix-ldap
 postfix-pcre
 procmail
-# qpopper
-rt3.6-clients
 sasl2-bin
-tcpd
 tnef
 
+PACKAGES install
 # For spam filtering
 clamav
 clamav-daemon
@@ -39,18 +33,24 @@ rblcheck
 spamassassin
 spamc
 
+PACKAGES install
+# For rate-limiting
+libswitch-perl
+libdbd-mysql-perl
+
+PACKAGES install
+# For DKIM
+libmail-dkim-perl
+opendkim
+opendkim-tools
+
+PACKAGES install
 # For statistics
 mailgraph
 pflogsumm
 rrdtool
 
-# For Sympa
-#libapache2-mod-fastcgi
-#libdbd-mysql-perl
-#mysql-client
-## mysql-server
-#sympa
-
+PACKAGES install
 # For IMAP/webmail
 aspell
 courier-imap
