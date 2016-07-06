@@ -17,3 +17,12 @@ case "$FAI_ACTION" in
     fi
     ;;
 esac
+
+
+# Workaround for some packages being out of date on Ubuntu 16.04 just after
+# installation.  Since the updatebase task calls /usr/lib/fai/updatebase calls
+# `aptitude full-upgrade`, and aptitude is not standard on a minimal Ubuntu
+# 16.04 installation, it fails.
+
+$ROOTCMD apt-get update &&
+$ROOTCMD apt-get install -y --no-install-recommends aptitude </dev/null
