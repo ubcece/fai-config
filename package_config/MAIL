@@ -3,6 +3,7 @@ apache2
 apachetop
 bc
 cronolog
+libapache2-mod-authnz-external
 libapache2-mod-bigip
 libapache2-mod-macro
 libsasl2-modules
