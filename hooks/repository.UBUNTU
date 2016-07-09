@@ -1,3 +1,4 @@
 #!/bin/sh
 
 fcopy -iBM /etc/apt/sources.list.d/fai-project.list
+fcopy -iBM /etc/apt/sources.list.d/ubcit-ubuntu-ppa.list
