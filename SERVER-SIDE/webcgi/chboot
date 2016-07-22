@@ -2,9 +2,13 @@
 
 BEGIN {
     require 'auth';
+    eval {
+        require Digest::SHA1 && Digest::SHA1->import(qw(sha1_hex));
+    } || eval {
+        require Digest::SHA  && Digest::SHA->import(qw(sha1_hex));
+    }
 };
 use CGI;
-use Digest::SHA1 qw(sha1_hex);
 use IPC::Open2;
 use Net::Domain qw(hostfqdn);
 use feature qw(say);
