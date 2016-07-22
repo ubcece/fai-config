@@ -21,6 +21,10 @@ else
 	  broadcast $BROADCAST
 	  gateway $GATEWAYS
 EOF
+    if [ -n "$DNSSRVS" ]; then
+        echo "  dns-search $DOMAIN" >> $target/etc/network/interfaces
+        echo "  dns-nameservers $DNSSRVS" >> $target/etc/network/interfaces
+    fi
     [ -n "$NETWORK" ] && echo "localnet $NETWORK" > $target/etc/networks
     [ -s /tmp/etc/resolv.conf ] && cp -p /tmp/etc/resolv.conf $target/etc
     fcopy -i /etc/resolv.conf
