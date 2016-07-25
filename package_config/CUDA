@@ -3,9 +3,13 @@
 
 PACKAGES install UBUNTU_14_04
 cuda-repo-ubuntu1404
-
-PACKAGES install
 cuda
+
+PACKAGES install UBUNTU_16_04
+nvidia-cuda-doc
+nvidia-cuda-gdb
+nvidia-visual-profiler
+nvidia-cuda-toolkit
 
 # Caffe itself is not available as a DPKG, and therefore we expect users
 # to build it themselves in /data.  However, we can install these dependencies.
