@@ -17,7 +17,9 @@
 
 . /usr/lib/fai/subroutines         # For definition of ifclass
 
-if ifclass RAID || { ifclass SERVER && ifclass VM_GUEST; }; then
+if ifclass RAID ||
+   ifclass DISK1P3 ||
+   { ifclass SERVER && ifclass VM_GUEST; }; then
     exit 0
 fi
 

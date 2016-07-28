@@ -18,6 +18,9 @@ disk_count() {
 if ifclass RAID ; then
 	exit
 
+if ifclass DISK1P3 ; then
+	exit
+
 elif ifclass VMWARE_GUEST ; then
 	if [ `disk_count` = 1 ]; then
 		ifclass VM_GUEST || echo "VM_GUEST"

@@ -44,4 +44,6 @@ case $HOSTNAME in
         echo "CUDA" ;;
     bci06)
         echo "CUDA NO_ECE" ;;
+    tims-pc21)
+        echo "DISK1P3 CUDA" ;;
 esac

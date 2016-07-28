@@ -24,7 +24,7 @@ These classes may be specified explicitly by editing class/50-host-classes or
 by invoking SERVER-SIDE/bin/fai-pxe -c $classname1,$classname2.
 
 DEBIAN          The recommended version of Debian
-DEBIAN_6        Debian 6 (squeeze)
+UBUNTU_14_04    Ubuntu 14.04 LTS (trusty)
 UBUNTU_16_04    Ubuntu 16.04 LTS (xenial)
 
 SERVER          Supress inferred classes DISK2 GNOME KDE OMNI SLOW
@@ -37,6 +37,7 @@ NO_SLOW         Suppress inferred class SLOW
 
 VM_HOST         Install Proxmox VE with a large /var/lib/vz partition
 RAID            RAID1 using Linux md
+DISK1P3         Install Linux to partitions 3 and 4 of disk1
 
 DATABASE        MySQL and PostgreSQL server
 GRID            Oracle (Sun) Grid Engine client
