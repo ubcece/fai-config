@@ -18,7 +18,7 @@ disk_count() {
 if ifclass RAID ; then
 	exit
 
-if ifclass DISK1P3 ; then
+elif ifclass DISK1P3 ; then
 	exit
 
 elif ifclass VMWARE_GUEST ; then
