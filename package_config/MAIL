@@ -1,7 +1,6 @@
 PACKAGES install
 apache2
 apachetop
-bc
 cronolog
 libapache2-mod-authnz-external
 libapache2-mod-bigip

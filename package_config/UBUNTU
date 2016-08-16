@@ -29,6 +29,7 @@ apt-file
 autofs
 autofs-ldap
 bash-completion
+bc
 ca-certificates
 cron
 cron-apt
