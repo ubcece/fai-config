@@ -17,6 +17,7 @@ postfix-pcre
 procmail
 sasl2-bin
 tnef
+vacation
 
 PACKAGES install
 # For spam filtering
