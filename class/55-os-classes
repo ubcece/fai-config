@@ -50,27 +50,20 @@ reduce_versions() {
 
 EXPLICIT_OS=$(explicit_class $classes)
 
-if [ -z "$EXPLICIT_OS" ]; then
-    # if OS class has not been defined then choose Ubuntu LTS
-
-    OS="UBUNTU_14_04"
-
-else
-    # else provide the stable version of OS if a version has
-    # not been provided
-
-    case "$EXPLICIT_OS" in
-        DEBIAN)
-            OS="DEBIAN_6"
-            ;;
-        UBUNTU)
-            OS="UBUNTU_14_04"
-            ;;
-        *)
-            OS="$EXPLICIT_OS"
-            ;;
-    esac
-fi
+# If OS class has not been defined then choose Ubuntu LTS
+# else provide the stable version of OS if a version has
+# not been provided
+case "$EXPLICIT_OS" in
+    ""|UBUNTU)
+        OS="UBUNTU_16_04"
+        ;;
+    DEBIAN)
+        OS="DEBIAN_6"
+        ;;
+    *)
+        OS="$EXPLICIT_OS"
+        ;;
+esac
 
 # generate the list of OS classes based on OS version specified
 
