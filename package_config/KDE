@@ -1,3 +1,9 @@
 PACKAGES install
 
 kde-full
+
+# Workaround for https://bugs.launchpad.net/ubuntu/+bug/1357111
+# (filename collision for /usr/bin/svn-clean between kdesdk-scripts and
+# subversion-tools)
+PACKAGES install UBUNTU_14_04
+kdesdk-scripts-
