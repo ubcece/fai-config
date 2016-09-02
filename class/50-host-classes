@@ -3,12 +3,12 @@
 case $HOSTNAME in
     svpxe[dp]*)
         echo "NO_DHCPC SERVER FAISERVER" ;;
-    svmailp[1-5])
+    svmailp[0-9])
         echo "SERVER UBUNTU_MAIL_IMAP" ;;
     smtp?|svsmtpp?)
         echo "SERVER MAIL" ;;
-    svwebmailp[1-2])
-        echo "SERVER" ;;
+    svwebmailp[0-9])
+        echo "SERVER WEBMAIL" ;;
     svsql[dp]*)
         echo "SERVER DATABASE" ;;
     rt|rt.*|rt-staging|rt-staging.*)
@@ -24,12 +24,10 @@ case $HOSTNAME in
         echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
     msmb1)
         echo "SERVER SMBSERVER RAID" ;;
-    [kmxv]smb?|svsmbp1)
+    [kmxv]smb?|svsmbp[0-9])
         echo "SERVER SMBSERVER" ;;
     [kmxv]web?|[kmx]vweb?|svweb*)
         echo "SERVER WEB RT" ;;
-    [kmxv]mx?|[kmx]mail?|*smtp*)
-        echo "SERVER MAIL WEB" ;;
     [kmxv]flex?)
         echo "SERVER" ;;
     node*) # to be clear: these are nodes on Rafeef/morty.

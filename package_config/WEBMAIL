@@ -1,0 +1,40 @@
+PACKAGES install
+apache2
+apache2-mpm-prefork
+apache2-utils
+apachetop
+cronolog
+checkpw
+#libapache2-mod-bigip
+libapache2-mod-macro
+libio-socket-ssl-perl
+lockfile-progs
+postfix
+postfix-doc
+postfix-pcre
+
+# For statistics
+mailgraph
+pflogsumm
+rrdtool
+
+mysql-client
+
+# For webmail
+roundcube-mysql 
+roundcube-plugins 
+roundcube-plugins-extra
+apache2-utils 
+php5-gd 
+php5-pspell 
+php5-imap 
+php5-intl 
+php5-mcrypt
+
+# General system packages
+nscd
+logrotate
+sasl2-bin
+libsasl2-modules
+tcpd
+git
