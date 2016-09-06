@@ -6,7 +6,8 @@ apachetop
 cronolog
 checkpw
 #libapache2-mod-bigip
-libapache2-mod-macro
+libapache2-mod-authnz-external
+libapache2-mod-authz-unixgroup
 libio-socket-ssl-perl
 lockfile-progs
 postfix
@@ -20,17 +21,6 @@ rrdtool
 
 mysql-client
 
-# For webmail
-roundcube-mysql 
-roundcube-plugins 
-roundcube-plugins-extra
-apache2-utils 
-php5-gd 
-php5-pspell 
-php5-imap 
-php5-intl 
-php5-mcrypt
-
 # General system packages
 nscd
 logrotate
@@ -38,3 +28,24 @@ sasl2-bin
 libsasl2-modules
 tcpd
 git
+
+# For webmail
+roundcube-mysql 
+roundcube-plugins 
+roundcube-plugins-extra
+apache2-utils 
+
+PACKAGES install
+php-gd 
+php-pspell 
+php-imap 
+php-mcrypt
+
+# In Ubuntu 16.04, mod_macro is part of apache2 itself
+PACKAGES install UBUNTU_14_04
+libapache2-mod-macro
+php5-gd 
+php5-pspell 
+php5-imap 
+php5-intl 
+php5-mcrypt
