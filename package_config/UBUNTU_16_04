@@ -86,18 +86,22 @@ cfengine2
 
 PACKAGES install FAISERVER
 apache2
+cifs-utils
 fai-doc
 fai-server
 genisoimage
 git-core
+libapache2-mod-authnz-external
 libdigest-perl
 libdigest-sha-perl
 make
 nfs-kernel-server
 openssh-client
 openssh-server
+pwauth
 syslinux-common
 tftpd-hpa
+wimtools
 
 PACKAGES taskinst GNOME
 ubuntu-desktop
