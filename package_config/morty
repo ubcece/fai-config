@@ -1,12 +1,6 @@
-PACKAGES install
-gridengine-client
-gridengine-common
-gridengine-exec
-
-PACKAGES install morty
+PACKAGES install DEBIAN
 gridengine-master
 gridengine-qmon
 dhcp3-server
 icedtea-gcjwebplugin
 # no such beast as sun-java6-plugin for amd64! icedtea is a substitute.
-

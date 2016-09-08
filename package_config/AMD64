@@ -1,9 +1,0 @@
-PACKAGES install UBUNTU
-linux-image-generic
-isc-dhcp-client
-lvm2
-
-PACKAGES install DEBIAN_6
-linux-image-amd64
-isc-dhcp-client
-lvm2
