@@ -17,7 +17,7 @@ nmap
 #emacs24-nox
 
 # dracut replaces live-boot and initramfs-tools
-dracut-network live-boot-
+dracut dracut-network live-boot-
 #dracut-config-generic # this is not available in plain Debian jessie
 
 PACKAGES install DEBIAN
@@ -65,6 +65,7 @@ ncurses-term
 ntfs-3g
 patch
 syslinux
+tmux
 uuid-runtime
 virtualbox-guest-dkms
 virtualbox-guest-utils
