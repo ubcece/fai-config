@@ -28,6 +28,8 @@ DEBIAN_6        Debian 6 (squeeze)
 UBUNTU          The recommended version of Ubuntu
 UBUNTU_14_04    Ubuntu 14.04 LTS (trusty)
 UBUNTU_16_04    Ubuntu 16.04 LTS (xenial)
+CENTOS          The recommended version of CentOS
+CENTOS_7        CentOS 7
 
 SERVER          Supress inferred classes DISK2 GNOME KDE OMNI SLOW
 NO_STANDARD     Suppress inferred class STANDARD
@@ -61,7 +63,9 @@ suppressed as described above.
 UBUNTU_16_04    The distribution to install by default
 DEBIAN          Any version of Debian
 UBUNTU          Any version of Ubuntu
+CENTOS          Any version of CentOS
 DEB_BASED       Distributions based on the Debian lineage (including Ubuntu)
+RPM_BASED       Distributions based on the Red Hat lineage (including CentOS)
 
 DEFAULT         The first class of every FAI invocation
 LINUX           The second class of every FAI invocation (from `uname -s`)

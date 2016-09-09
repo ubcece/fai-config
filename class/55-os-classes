@@ -12,7 +12,7 @@ explicit_class() {
     local most_explicit=''
     for class in $*; do
         case "$class" in
-          DEBIAN|DEBIAN_[0-9]*|UBUNTU|UBUNTU_[0-9]*)
+          CENTOS|CENTOS_[0-9]*|DEBIAN|DEBIAN_[0-9]*|UBUNTU|UBUNTU_[0-9]*)
             [ "$class" '>' "$most_explicit" ] && most_explicit="$class"
             ;;
         esac
@@ -48,6 +48,9 @@ lineage() {
       DEBIAN_[0-9]*|UBUNTU_[0-9]*)
         echo "DEB_BASED"
         ;;
+      CENTOS_[0-9]*)
+        echo "RPM_BASED"
+        ;;
     esac
 }
 
@@ -66,6 +69,9 @@ case "$EXPLICIT_OS" in
         ;;
     DEBIAN)
         OS="DEBIAN_6"
+        ;;
+    CENTOS)
+        OS="CENTOS_7"
         ;;
     *)
         OS="$EXPLICIT_OS"
