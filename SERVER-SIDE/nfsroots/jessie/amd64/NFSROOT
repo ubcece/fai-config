@@ -64,6 +64,7 @@ locales
 ncurses-term
 ntfs-3g
 patch
+rinse
 syslinux
 tmux
 uuid-runtime

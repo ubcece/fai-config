@@ -1,0 +1,28 @@
+#!/bin/bash
+
+. /usr/lib/fai/subroutines
+
+# Instead of calling debootstrap, we need to call rinse
+
+ARCH="`dpkg --print-architecture`"
+case "$ARCH" in
+  i386)
+    MIRROR=http://mirror.centos.org/altarch/7/os/i386/Packages/
+    ;;
+  amd64)
+    MIRROR=http://centos.mirrors.ece.ubc.ca/7/os/x86_64/Packages/
+    ;;
+esac
+
+# FAI's fcopy command requires Perl
+echo perl > /tmp/rinse-add-pkg.list
+rinse --arch "$ARCH" \
+      --distribution centos-7 \
+      --directory "$target" \
+      --add-pkg-list /tmp/rinse-add-pkg.list \
+      --cache 0 \
+      --verbose \
+      --mirror "$MIRROR"
+
+[ -f "$LOGDIR/fstab" ] && cp -p "$LOGDIR/fstab" "$FAI_ROOT/etc/fstab"
+skiptask extrbase
