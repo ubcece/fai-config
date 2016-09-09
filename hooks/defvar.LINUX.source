@@ -1,9 +1,25 @@
 # vim: set ts=4 sw=4 et si:
 
-# On machines with less than 512 MiB RAM, don't use a performance-boosting
-# ramdisk.  The ramdisk size is half of physical memory, so /var/lib/dpkg
-# could easily run out of space during installation.
-if [ -z "$FAI_RAMDISKS" ]; then
-    FAI_RAMDISKS=`free -m | awk '/Mem/ { if ($2 < 512) print "none" }'`
-    export FAI_RAMDISKS
+has_at_least_megabytes_ram() {
+    free -m | awk -v n="$1" '
+        /Mem/ { if ($2 >= n) exit 0 }
+        END   { exit 1 }
+    '
+}
+
+# On machines with sufficient RAM, use a performance-boosting ramdisk (which
+# would use half of physical memory).
+
+if has_at_least_megabytes_ram 2048 ; then
+    if ifclass -o CENTOS ; then
+        FAI_RAMDISKS="$target/var/lib/rpm $target/var/cache/yum"
+    else
+        FAI_RAMDISKS="$target/var/lib/dpkg $target/var/cache"
+    fi
+elif has_at_least_megabytes_ram 512 ; then
+    if ifclass -o CENTOS ; then
+        FAI_RAMDISKS="$target/var/lib/rpm"
+    else
+        FAI_RAMDISKS="$target/var/lib/dpkg"
+    fi
 fi
