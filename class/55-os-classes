@@ -8,7 +8,6 @@
 
 # explicit_class(): extract the class that are prefixed by the supported OS
 # distributions (currently DEBIAN and UBUNTU) - assuming only one specified
-
 explicit_class() {
     local most_explicit=''
     for class in $*; do
@@ -22,7 +21,6 @@ explicit_class() {
 }
 
 # nfsroot_class(): generate the OS class based on the OS of NFSroot
-
 nfsroot_class() {
     lsb_release -ir 2>/dev/null | awk \
        '/Distributor/ {distribution=toupper($3)}
@@ -32,15 +30,24 @@ nfsroot_class() {
 
 # reduce_versions(): recursively generate new OS classes by
 # sequentially stripping the "_" suffix
-
 reduce_versions() {
-    OS="$1"; skipOS="$2"
+    local OS="$1" skipOS="$2"
 
     [ "$OS" != "$skipOS" ] && echo "$OS"
 
     case "$OS" in
         *_[0-9]*)
             reduce_versions "${OS%_*}" "$skipOS"
+    esac
+}
+
+# lineage(): classify OS into a broad category
+lineage() {
+    local OS="$1"
+    case "$OS" in
+      DEBIAN_[0-9]*|UBUNTU_[0-9]*)
+        echo "DEB_BASED"
+        ;;
     esac
 }
 
@@ -68,5 +75,6 @@ esac
 # generate the list of OS classes based on OS version specified
 
 reduce_versions "$OS" "$EXPLICIT_OS"
+lineage "$OS"
 
 exit 0

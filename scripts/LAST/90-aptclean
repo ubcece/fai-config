@@ -1,3 +1,0 @@
-#!/bin/bash
-
-$ROOTCMD /usr/bin/apt-get clean

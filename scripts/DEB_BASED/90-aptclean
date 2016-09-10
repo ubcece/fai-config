@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Make sure everything is configured properly
+if [ -x $target/usr/bin/apt-get ]; then
+    echo "Running \"apt-get -f install\" for the last time."
+    $ROOTCMD /usr/bin/apt-get -f --no-remove install < /dev/null
+
+    $ROOTCMD /usr/bin/apt-get clean
+fi

@@ -24,6 +24,8 @@ These classes may be specified explicitly by editing class/50-host-classes or
 by invoking SERVER-SIDE/bin/fai-pxe -c $classname1,$classname2.
 
 DEBIAN          The recommended version of Debian
+DEBIAN_6        Debian 6 (squeeze)
+UBUNTU          The recommended version of Ubuntu
 UBUNTU_14_04    Ubuntu 14.04 LTS (trusty)
 UBUNTU_16_04    Ubuntu 16.04 LTS (xenial)
 
@@ -56,8 +58,10 @@ Inferred Classes
 These classes should be automatically inferred as appropriate unless explicitly
 suppressed as described above.
 
-UBUNTU          The recommended version of Ubuntu
-UBUNTU_14_04    Ubuntu 14.04 LTS (trusty)
+UBUNTU_16_04    The distribution to install by default
+DEBIAN          Any version of Debian
+UBUNTU          Any version of Ubuntu
+DEB_BASED       Distributions based on the Debian lineage (including Ubuntu)
 
 DEFAULT         The first class of every FAI invocation
 LINUX           The second class of every FAI invocation (from `uname -s`)
