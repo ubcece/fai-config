@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ -x "$target/usr/bin/puppet" ]; then
+    PUPPET_OPTS=
+    if [ -n "$PUPPET_SERVER" ]; then
+        PUPPET_OPTS="$PUPPET_OPTS --server $PUPPET_SERVER"
+    fi
+    $ROOTCMD /usr/bin/puppet agent --test --waitforcert 0 $PUPPET_OPTS
+fi
