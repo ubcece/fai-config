@@ -1,0 +1,153 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+ipxe-config - Serve ipxe script over CGI, based on PXELINUX configuration file
+
+=head1 SYNOPSIS
+
+ipxe-config ip=127.1.2.3 - Run this command to see what would be
+                           generated for the given client IP address
+
+=head1 DESCRIPTION
+
+Based on the HTTP client's IP address, this script looks for the appropriate
+configuration file in C< $pxelinux_cfg_dir >.  It then generates the
+equivalent iPXE script, doing a crude translation of a few recognized
+SYSLINUX directives.
+
+This is just a mechanism for transitioning from PXELINUX to iPXE without
+having to generate two configuration files for each FAI client.  In the
+future, the fai-pxe command can just generate iPXE scripts and drop support
+for PXELINUX altogether.
+
+=cut
+
+use CGI;
+use File::Basename qw(dirname);
+use feature qw(say);
+use strict;
+
+my $pxelinux_cfg_dir = '/srv/tftp/fai/pxelinux.cfg';
+my $root_prefix = '';
+
+######################################################################
+# Parses an IPv4 address in dotted-quad ('123.45.67.89') format, to be
+# returned as an integer.
+######################################################################
+sub parse_ipv4addr {
+    local ($_) = @_;
+    unpack 'N', pack('C4', /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+}
+
+######################################################################
+# Prepends the global $root_prefix to a path.
+######################################################################
+sub load_path {
+    local ($_) = @_;
+    if ($root_prefix =~ /^https?:/i) {
+        $_ = s{([^^A-Za-z0-9/\-_.!~*'()])}{sprintf "%%%0x", ord $1}egr;
+    }
+    $root_prefix . $_;
+}
+
+######################################################################
+# Opens the named configuration file in the $pxelinux_cfg_dir
+# directory, translates a few recognized SYSLINUX directives into the
+# iPXE scripting language, and prints the result to STDOUT.
+#
+# Returns 1 if it was able to read the file, else undef.
+######################################################################
+sub syslinux_to_ipxe {
+    my ($q, $syslinux_cfg_filename) = @_;
+
+    open(CONFIG, "$pxelinux_cfg_dir/$syslinux_cfg_filename")
+        or return undef;
+    local ($_) = eval { local $/ = undef; <CONFIG> };
+    close CONFIG;
+
+    my $cfg_timeout = 0;
+    my $prompt_count = 0;
+
+    s{ ^(?<INDENT>\ *)(?:
+       (?<COMMENT>             \#.*?$)
+     | (?<CHAINBOOT_STMT>      (?:kernel\s+chain|com32\s+chain.c32)\s+
+                               append\s+hd0)
+     | (?<DEFAULT_STMT>        default\s+(?<DEFAULT_LABEL>\S+))
+     | (?<IFCPU64_STMT>        kernel\s+ifcpu64.c32\s+
+                               append\s+(?<IF_CPU64_LABEL>\S+)\s+--\s+(?<IF_NOT_CPU64_LABEL>\S+))
+     | (?<LABEL_STMT>          label\s+(?<LABEL>\S+))
+     | (?<PROMPT_STMT>         prompt\s+(?<SHOW_PROMPT>[01]))
+     | (?<TIMEOUT_STMT>        timeout\s+(?<TIMEOUT>\d+))
+     | (?<KERNEL_APPEND_STMTS> kernel\s+(?<KERNEL>\S+)
+                            (?:\s*$\s*append\s+(?<SOME_PARAMS>.*?)\s+initrd=(?<INITRD>\S+)\s+(?<MORE_PARAMS>.*?)$
+                              |\s*$\s*append\s+(?<PARAMS>.*?)$)?)
+    )}
+    {  $+{INDENT} . (
+       $+{COMMENT} ?
+            $+{COMMENT}
+     : $+{CHAINBOOT_STMT} ?     # A strict translation of chaining to hd0 is
+            "exit"              # actually "sanboot --no-describe --drive 0x80"
+     : $+{DEFAULT_STMT} ?
+            "goto $+{DEFAULT_LABEL}"
+     : $+{IFCPU64_STMT} ?
+            "cpuid --ext 29 && goto $+{IF_CPU64_LABEL} || goto $+{IF_NOT_CPU64_LABEL}"
+     : $+{LABEL_STMT} ?
+            ":$+{LABEL}"
+     : $+{PROMPT_STMT} && $+{SHOW_PROMPT} ?
+            eval {
+                $prompt_count++;
+                sprintf("prompt --timeout %d boot: || goto end_prompt%d\n" .
+                        ":prompt%d\n" .
+                        "echo -n boot:\n" .
+                        "read target || goto end_prompt%d\n" .
+                        "isset \${target} || goto end_prompt%d\n" .
+                        "goto \${target} || goto prompt%d\n" .
+                        ":end_prompt%d",
+                        100 * $cfg_timeout, ($prompt_count) x 6) }
+     : $+{PROMPT_STMT} ?
+            "### $+{PROMPT_STMT}"
+     : $+{TIMEOUT_STMT} ?
+            eval { $cfg_timeout = $+{TIMEOUT}; "### $+{TIMEOUT_STMT}" }
+     : $+{INITRD} ?
+            sprintf("kernel %s %s %s\n%sinitrd %s\n%sboot || goto start",
+                    load_path($+{KERNEL}), $+{SOME_PARAMS}, $+{MORE_PARAMS}, $+{INDENT},
+                    load_path($+{INITRD}), $+{INDENT})
+     : $+{KERNEL_APPEND_STMTS} ?
+            sprintf("kernel %s %s\n%sboot || goto start",
+                    load_path($+{KERNEL}), $+{PARAMS}, $+{INDENT})
+     : undef
+    )}eimgx;
+
+    print $q->header('text/plain');
+    print "#!ipxe\n### iPXE script, crudely automatically translated from PXELINUX configuration\n:start\n";
+    print;
+    1;
+}
+
+sub config_for {
+    my ($q, $ip) = @_;
+    printf('%X', $ip);
+    $ip and syslinux_to_ipxe($q, sprintf('%X', $ip))
+         or syslinux_to_ipxe($q, 'default');
+}
+
+sub cgimain {
+    my ($q) = @_;
+    $root_prefix = dirname($q->url()) . '/syslinux/';
+    my $ip = parse_ipv4addr($q->remote_addr);
+    config_for($q, $ip) or print $q->header(-status => '204 No content');
+}
+
+sub main {
+    my ($q) = @_;
+    $root_prefix = '/syslinux/';
+    my $ip = parse_ipv4addr($q->param('ip'));
+    config_for($q, $ip);
+}
+
+if ($ENV{GATEWAY_INTERFACE} =~ m!^CGI/1!) {
+    cgimain(CGI->new);
+} else {
+    exit !main(CGI->new);
+}

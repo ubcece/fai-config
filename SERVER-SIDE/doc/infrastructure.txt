@@ -2,10 +2,10 @@ FAI Dependencies
 ================
 
 ECE's FAI infrastructure has external dependencies and is not self-hosting.
-Our FAI setup relies on a DHCP server, a Git server, a Debian mirror, and a
-CFengine server.  Since these dependencies are Debian servers themselves, it
-might be possible to end up with a minor bootstrapping challenge if a disaster
-knocks out one of those services.
+Our FAI setup relies on a DHCP server, a Git server, a Debian/Ubuntu mirror,
+and a CFengine server.  Since these dependencies are Debian servers
+themselves, it might be possible to end up with a minor bootstrapping
+challenge if a disaster knocks out one of those services.
 
 
 Servers
@@ -17,7 +17,7 @@ key distribution, and FAI log archive services, since the implementation is
 much simpler when those services are all located on the same server.
 
  1) DHCP server
-    (mlookup1.ece.ubc.ca and xlookup1.ece.ubc.ca)
+    (svlookupp1.ece.ubc.ca and svlookupp2.ece.ubc.ca)
 
     The machine to be installed should be set to boot from the network.  The
     first step of network booting involves contacting the DHCP server.  The
@@ -41,9 +41,10 @@ much simpler when those services are all located on the same server.
 
     Note that even if a client is not intended to run FAI, if it is configured
     to try booting from the network before trying local media, it will still
-    need to fetch a boot menu that instructs it to run a PXELINUX binary to
-    load the bootloader on the local disk.  Therefore, misconfiguration of the
-    default PXE boot menu can prevent machines from booting normally!
+    need to fetch a boot menu that instructs it to run a PXELINUX or iPXE
+    binary to load the bootloader on the local disk.  Therefore,
+    misconfiguration of the default PXE boot menu can prevent machines from
+    booting normally!
 
     Macintosh computers do not support PXE protocol; they use their own Boot
     Server Discovery Protocol (BSDP) instead.  The topic of running FAI to
@@ -98,7 +99,7 @@ much simpler when those services are all located on the same server.
     console suggests the possibility of client-initiated reinstallations.)
 
  5) APT repositories
-    (mirrors.ece.ubc.ca)
+    (mirror.it.ubc.ca)
 
     We currently use ECE's Debian mirror on http://mirrors.ece.ubc.ca.  An
     alternative approach would be for mirrors.ece.ubc.ca to share the
@@ -106,7 +107,7 @@ much simpler when those services are all located on the same server.
     easy to reconfigure FAI to use another public Debian repository.
 
  6) CFengine server
-    (huey.ece.ubc.ca)
+    (cfmaster.ece.ubc.ca)
 
     The CFengine server does not necessarily need to reside on the same
     machine as the FAI server, and it currently doesn't.  That is not a
@@ -126,7 +127,6 @@ much simpler when those services are all located on the same server.
 
 In addition, FAI may be configured to use supplementary APT repositories to
 obtain some software, such as Proxmox VE.  Also, some scripts in the FAI
-configuration may download software from other sources, such as MATLAB and
-Maple from huey.ece.ubc.ca.
+configuration may download software from other sources, such as MATLAB.
 
 # vim: tw=78:
