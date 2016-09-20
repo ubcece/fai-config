@@ -1,53 +1,59 @@
-#!/usr/bin/perl
-# 2011-05-03 Chris Dumont. When action=dirinstall do some special things.
+#!/bin/bash
 
-die "'action' environment variable isn't defined. \n" unless ( defined $ENV{FAI_ACTION} ) ;
-unless ( $ENV{FAI_ACTION} =~ /dirinstall/ ) {
-	print "Not a dirinstall. No action. \n";
-	exit;
-}
+# When performing a dirinstall, create an fstab by swapping the root and
+# altroot mount points.
 
-unless ( defined $ENV{target} ) {
-	print "target environment variable not defined. /etc/fstab not created. \n";
-} else {
-	my $target = $ENV{target};
-	open( FSTIN, "<", "/etc/fstab" ) ||
-		die "Could not open /etc/fstab \n";
+if [ "$FAI_ACTION" != dirinstall ]; then
+    exit
+fi
 
-	open( FSOUT, ">", "$target/etc/fstab" ) ||
-		die "Could not open /$target/etc/fstab \n";
+if [ -z "$target" -o "$target" = / ]; then
+    echo "ERROR: Installation target not defined. /etc/fstab not created."
+    exit 1
+fi
 
-	my $line;
+fstab=/etc/fstab
 
-	while ( $line = <FSTIN> ) {
-		chomp $line;
-		if ( $line =~ m|^[^#]+\s/\s| ) {
-			$line =~ s|(\s)/(\s)|\1/altroot\2|;
-			print FSOUT $line . "\n";
-			next;
-		}
-		if ( $line =~ m|^[^#]+\s/altroot\s| ) {
-			$line =~ s|(\s)/altroot(\s)|\1/\2\t|;
-			print FSOUT $line . "\n";
-			next;
-		}
-		if ( $line =~ m|^[^#]+\s/var\s| ) {
-			$line =~ s|(\s)/var(\s)|\1/altroot/var\2|;
-			print FSOUT $line . "\n";
-			next;
-		}
-		if ( $line =~ m|^[^#]+\s/altroot/var\s| ) {
-			$line =~ s|(\s)/altroot/var(\s)|\1/var\2\t|;
-			print FSOUT $line . "\n";
-			next;
-		}
-		print FSOUT $line . "\n";
-	}
-	close FSTIN;
-	close FSOUT;
-	print "$target/etc/fstab created. \n";
+if [ ! -r "$fstab" ]; then
+    echo "ERROR: Could not read $fstab"
+fi
 
-	mkdir("/altroot/altroot",0755) || print $!;
-	mkdir("/altroot/data",1777) || print $!;
-	my $result = system("/usr/sbin/update-grub");
-}
+NEW_FSTAB=$(awk -v target="$target" '
+    # First pass: read fstab
+    (NR == FNR) && !/^#/ {
+        match($0, /^[^ \t]+[ \t]*([^ \t]+[ \t]*)/, captures);
+        MOUNT_POINTS[$2] = captures[1];
+    }
+
+    ENDFILE {
+        for (mount_point in MOUNT_POINTS) {
+            if (index(mount_point, target) == 1) {
+                other = substr(mount_point, 1 + length(target));
+                if (other == "") { other = "/"; }
+                NEW_MOUNT_POINTS[mount_point] = MOUNT_POINTS[other];
+                NEW_MOUNT_POINTS[other] = MOUNT_POINTS[mount_point];
+            }
+        }
+    }
+
+    # Second pass: swap mount points and create directories
+    (NR != FNR) {
+        if (!/^#/ && ($2 in NEW_MOUNT_POINTS)) {
+            # Setting $2 = NEW_MOUNT_POINTS[$2], but preserving whitespace
+            $0 = gensub(/^([^ \t]*[ \t]*)([^ \t]*[ \t]*)/, "\\1" NEW_MOUNT_POINTS[$2], 1);
+        }
+        print $0;
+    }
+    (NR != FNR) && !/^#/ && $2 ~ "^/" {
+        MKDIR_ERR = MKDIR_ERR || system(sprintf("mkdir -p \"%s%s\"", target, $2));
+    }
+    END {
+        if (MKDIR_ERR) {
+            print "ERROR: Failed to create mount point directories."
+            exit MKDIR_ERR;
+        }
+    }
+    ' "$fstab" "$fstab")
+
+echo "$NEW_FSTAB" > "$target$fstab" &&
+echo "$target$fstab created."
