@@ -72,7 +72,7 @@ sub syslinux_to_ipxe {
     s{ ^(?<INDENT>\ *)(?:
        (?<COMMENT>             \#.*?$)
      | (?<CHAINBOOT_STMT>      (?:kernel\s+chain|com32\s+chain.c32)\s+
-                               append\s+hd0)
+                               append\s+hd(?<CHAINBOOT_DISK>[01]))
      | (?<DEFAULT_STMT>        default\s+(?<DEFAULT_LABEL>\S+))
      | (?<IFCPU64_STMT>        kernel\s+ifcpu64.c32\s+
                                append\s+(?<IF_CPU64_LABEL>\S+)\s+--\s+(?<IF_NOT_CPU64_LABEL>\S+))
@@ -86,8 +86,8 @@ sub syslinux_to_ipxe {
     {  $+{INDENT} . (
        $+{COMMENT} ?
             $+{COMMENT}
-     : $+{CHAINBOOT_STMT} ?     # A strict translation of chaining to hd0 is
-            "exit"              # actually "sanboot --no-describe --drive 0x80"
+     : $+{CHAINBOOT_STMT} ?
+            "sanboot --no-describe --drive 0x8$+{CHAINBOOT_DISK}"
      : $+{DEFAULT_STMT} ?
             "goto $+{DEFAULT_LABEL}"
      : $+{IFCPU64_STMT} ?
