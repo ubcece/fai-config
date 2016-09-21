@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Attempt to relieve laptop-style disks from excessive wear.
+# For ECE this problem primarily affects BladeCenter hosts.
+
+[ $do_init_tasks -eq 1 ] || exit 0
+
+error=0; trap 'error=$(($?>$error?$?:$error))' ERR # save maximum error code
+
+. /usr/lib/fai/subroutines
+
+ifclass SERVER || exit 0
+
+
+if [ "$FAI_ACTION" = dirinstall ]; then
+    set_disk_info
+else
+    . $LOGDIR/disk_var.sh
+fi
+
+for disk in $disklist ; do
+    grep -q 1 /sys/block/$disk/queue/rotational && cat <<STANZA
+# Configured by FAI
+/dev/$disk {
+    apm = 254
+}
+done > $target/etc/hdparm.conf
