@@ -86,11 +86,12 @@ mylvmbackup
 mysql-client
 mysql-server
 mytop
-postgresql-9.0
-postgresql-contrib-9.0
-postgresql-doc-9.0
-postgresql-server-dev-9.0
 ptop
+# Ubuntu 14.04 ships with PostgreSQL 9.3; PostgreSQL 9.6 comes from apt.postgresql.org
+postgresql-9.6
+postgresql-contrib-9.6
+postgresql-doc-9.6
+postgresql-server-dev-9.6
 
 PACKAGES install ECE
 cfengine2
