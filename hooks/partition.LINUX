@@ -33,7 +33,7 @@ want_partition_tables() {
         # No suitable setup-storage config file
         exit 1
     fi
-    awk -v disks="`fai-disk-info`" '
+    awk -v disks="`/usr/lib/fai/fai-disk-info | sort`" '
         BEGIN {
             split(disks, dev);
         }
