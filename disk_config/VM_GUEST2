@@ -7,7 +7,7 @@ primary		-			15900M-	-	-
 
 disk_config disk2 disklabel:gpt preserve_lazy:1 fstabkey:uuid align-at:8k
 primary		-			16M	msdos	-
-primary		-			63G-	-	-
+primary		-			7G-	-	-
 
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data
 vg		VGroot			disk1.2
@@ -20,5 +20,4 @@ VGroot-LVaudit	/var/log/audit		1G	ext4	rw
 VGroot-snapreserve  -			1G	-	-
 
 vg		vg			disk2.2
-vg-data		/data			52G-	xfs	rw,noatime
-vg-snapreserve	-			10G-20G	-	-
+vg-data		/data			6G-95%  xfs	rw,noatime
