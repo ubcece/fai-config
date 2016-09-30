@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if [ -d "$target/tmp" ]; then
+    chown 0:0 "$target/tmp"
+    chmod 1777 "$target/tmp"
+fi
