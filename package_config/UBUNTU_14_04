@@ -604,6 +604,7 @@ python-mpltoolkits.basemap-data
 python-mpmath
 python-newt
 python-nine
+python-nltk
 python-numexpr
 python-numpy-dev
 python-pandas
