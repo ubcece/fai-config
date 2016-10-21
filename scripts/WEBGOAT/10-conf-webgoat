@@ -1,26 +1,61 @@
 #!/bin/sh
-#---------
-# Ying Wong - 2014-10-09
-#
-# Used to push out WebGoat instalation stack/conf files to be executed on first boot
-#
 
-# Download WebGoat on the fly to avoid bloating the fai-config repository with
-# the WAR file
-#fcopy -Bm root,root,0444	 /usr/local/WEBGOAT_SETUP/WebGoat-5.4.war
+set -e
 
-WEBGOAT_DOWNLOAD_URL=https://webgoat.googlecode.com/files/WebGoat-5.4.war
-if ! ( cd $target/usr/local && wget "$WEBGOAT_DOWNLOAD_URL" ); then
-    echo "Failed to download $WEBGOAT_DOWNLOAD_URL" >&2
-    exit 1
-fi
+WEBGOAT_WAR_DEST="$target/var/lib/tomcat7/webapps/WebGoat.war"
 
-fcopy -Bm root,root,0440	 /usr/local/WEBGOAT_SETUP/apache.conf
-fcopy -Bm root,root,0500	 /usr/local/WEBGOAT_SETUP/functions.sh
-fcopy -Bm root,root,0500	 /usr/local/WEBGOAT_SETUP/install.sh
-fcopy -Bm root,root,0440	 /usr/local/WEBGOAT_SETUP/iptables.rules
-fcopy -Bm root,root,0400	 /usr/local/WEBGOAT_SETUP/monitrc
-fcopy -Bm root,root,0500	 /usr/local/WEBGOAT_SETUP/webgoat_users.sh
-fcopy -Bm root,root,0750 	 /etc/init.d/webgoat_runonce
+build_webgoat_war() {
+    # Based on https://github.com/WebGoat/WebGoat/blob/develop/webgoat_developer_bootstrap.sh
+    #
+    # The second `mvn install` incorporates the lesson plugins into the .war
+    # file.
+    #
+    # TODO: Change to `mvn deploy`, but that would require configuring
+    # authentication for the Tomcat's manager app.
+    ( cd $target/var/tmp &&
+        ( [ -d WebGoat ] || git clone git://github.com/WebGoat/WebGoat.git ) &&
+        ( [ -d WebGoat-Lessons ] || git clone git://github.com/WebGoat/WebGoat-Lessons.git ) &&
 
-chroot $target update-rc.d webgoat_runonce defaults
+        $ROOTCMD mvn -DskipTests -file /var/tmp/WebGoat/pom.xml compile install &&
+
+        $ROOTCMD mvn -DskipTests -file /var/tmp/WebGoat-Lessons/pom.xml package &&
+
+        rm -f WebGoat/webgoat-container/src/main/webapp/plugin_lessons/*.jar &&
+        ln WebGoat-Lessons/target/plugins/*.jar WebGoat/webgoat-container/src/main/webapp/plugin_lessons/ &&
+        $ROOTCMD mvn -DskipTests -file /var/tmp/WebGoat/pom.xml install &&
+        rm -rf $target/var/lib/tomcat7/webapps/WebGoat* &&
+        cp WebGoat/webgoat-container/target/webgoat-container*.war "$WEBGOAT_WAR_DEST"
+    )
+}
+
+download_webgoat_war() {
+    VERSION="$1"
+    wget -O "$WEBGOAT_WAR_DEST" "https://github.com/WebGoat/WebGoat/releases/download/$VERSION/webgoat-container-$VERSION.war"
+}
+
+fcopy -Bm root,root,0755        /root/webgoat_users
+
+# https://github.com/WebGoat/WebGoat/blob/e8b9b17107b3ec46f1027377660cdb1c0a87d6ea/webgoat-container/src/main/java/org/owasp/webgoat/session/UserDatabase.java#L10
+# is hard-coded to use UserDatabase.mv.db in the System.getProperty("user.dir")
+# directory, which is the current directory (namely /var/lib/tomcat7 when
+# launched by the /etc/init.d/tomcat7 script).  It needs to exist and be
+# writable.
+$ROOTCMD install -o tomcat7 -g tomcat7 -m 0644 /dev/null /var/lib/tomcat7/UserDatabase.mv.db
+
+# https://github.com/WebGoat/WebGoat/blob/6919b15013fd831270fcb4c53c28985d73d4e9c5/webgoat-container/src/main/resources/log4j.properties#L6
+# configures Log4J to log to ${catalina.home}/logs/webgoat_main.log.
+# Since the /etc/init.d/tomcat7 launch script sets CATALINA_HOME to
+# /usr/share/tomcat7, we have to make this symlink. (Unfortunately, it's not
+# ${catalina.base}/logs/webgoat_main.log.)
+ln -s /var/lib/tomcat7/logs $target/usr/share/tomcat7/
+
+download_webgoat_war 7.0.1
+
+# iptables configuration has to be done post-boot, due to possible kernel
+# module mismatch.
+#$ROOTCMD ufw allow in OpenSSH
+#$ROOTCMD ufw allow in 'Apache Full'
+#$ROOTCMD ufw default deny incoming
+#$ROOTCMD ufw default allow outgoing
+#$ROOTCMD ufw default deny routed
+#$ROOTCMD ufw enable

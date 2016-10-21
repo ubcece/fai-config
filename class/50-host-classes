@@ -28,6 +28,8 @@ case $HOSTNAME in
         echo "SERVER SMBSERVER RAID1" ;;
     [kmxv]smb?|svsmbp[0-9])
         echo "SERVER SMBSERVER" ;;
+    *webgoat*)
+        echo "SERVER WEBGOAT" ;;
     [kmxv]web?|[kmx]vweb?|svweb*)
         echo "SERVER WEB RT" ;;
     [kmxv]flex?)
@@ -36,8 +38,6 @@ case $HOSTNAME in
         echo "GRID" ;;
     morty)
         echo "RAID1 GRID" ;;
-    *webgoat*) 
-        echo "SERVER WEBGOAT" ;;
     purang1[345])
         echo "VM_HOST" ;;
     bci04|mehdi-pc02|kramer|jerry|purang8)
