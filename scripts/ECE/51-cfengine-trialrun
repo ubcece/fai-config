@@ -1,5 +1,5 @@
 #!/bin/bash
 
 if [ -x "$target/usr/sbin/cfagent" ]; then
-    $ROOTCMD /usr/sbin/cfagent --no-splay -D Daily.Hourly.install.no_services
+    $ROOTCMD /usr/sbin/cfagent --no-splay --verbose -D Daily.Hourly.install.no_services
 fi
