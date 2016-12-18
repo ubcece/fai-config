@@ -530,6 +530,7 @@ ocaml
 openmpi-checkpoint
 openvpn
 pandoc
+parallel
 php5-cli
 php-pear
 pidgin

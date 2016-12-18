@@ -534,6 +534,7 @@ openmpi-checkpoint
 openvpn
 oracle-java8-installer  # From WebUpd8Team PPA
 pandoc
+parallel
 php5-cli
 php-pear
 pidgin
