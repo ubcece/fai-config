@@ -22,4 +22,8 @@ elif has_at_least_megabytes_ram 512 ; then
     else
         FAI_RAMDISKS="$target/var/lib/dpkg"
     fi
+else
+    # Explicitly set $FAI_RAMDISKS to a non-empty string, so that
+    # `/usr/lib/fai/mkramdisk -a` will not use its default.
+    FAI_RAMDISKS=" "
 fi
