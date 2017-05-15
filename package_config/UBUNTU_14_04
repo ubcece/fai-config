@@ -402,11 +402,12 @@ gimp-data
 gimp-gutenprint
 git
 git-arch
+git-buildpackage
 git-cvs
 git-doc
 git-email
-gitk
 git-svn
+gitk
 glipper
 gnome-btdownload
 gnome-power-manager
