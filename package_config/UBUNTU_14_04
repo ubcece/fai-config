@@ -972,7 +972,6 @@ php5-ldap
 php5-mysql
 php5-pgsql
 php-db
-php-ldap
 php-mail
 php-mail-mime
 php-mdb2-driver-mysql
