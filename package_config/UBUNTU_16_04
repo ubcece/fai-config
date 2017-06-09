@@ -997,6 +997,7 @@ apachetop
 cronolog
 libapache2-mod-apreq2
 libapache2-mod-authnz-external
+libapache2-mod-auth-cas
 libapache2-mod-auth-openid
 libapache2-mod-authz-unixgroup
 libapache2-mod-fcgid
