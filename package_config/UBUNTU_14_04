@@ -37,6 +37,7 @@ libopencv-dev
 libboost-all-dev
 libhdf5-serial-dev
 protobuf-compiler
+libgflags2
 libgflags-dev
 libgoogle-glog-dev
 liblmdb-dev
@@ -46,12 +47,20 @@ cython
 cython3
 h5utils
 hdf5-tools
+libgtest-dev
+libiomp-dev
 libleveldb-dbg
 libleveldb-dev
 lmdb-utils
+openmpi-bin
 protobuf-c-compiler
+python-flask
+python3-flask
 python-leveldb
 python3-leveldb
+python-lmdb
+python3-lmdb
+python-opencv
 python-protobuf
 python-snappy
 python-skimage
@@ -66,6 +75,7 @@ python-nose2
 python3-nose2
 python-pil
 python3-pil
+python-pydot
 
 PACKAGES install DATABASE
 ferm

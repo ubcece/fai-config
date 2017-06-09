@@ -32,6 +32,7 @@ nvidia-cuda-doc
 nvidia-cuda-gdb
 nvidia-visual-profiler
 nvidia-cuda-toolkit
+libcupti-dev
 libprotobuf-dev
 libleveldb-dev
 libsnappy-dev
@@ -48,12 +49,20 @@ cython
 cython3
 h5utils
 hdf5-tools
+libgtest-dev
+libiomp-dev
 libleveldb-dbg
 libleveldb-dev
 lmdb-utils
+openmpi-bin
 protobuf-c-compiler
+python-flask
+python3-flask
 python-leveldb
 python3-leveldb
+python-lmdb
+python3-lmdb
+python-opencv
 python-protobuf
 python-snappy
 python-skimage
@@ -68,6 +77,10 @@ python-nose2
 python3-nose2
 python-pil
 python3-pil
+python-pydot
+python3-pydot
+python-tornado
+python3-tornado
 
 PACKAGES install DATABASE
 ferm
@@ -528,7 +541,7 @@ nodejs                  # Available in Debian >= 8 and Ubuntu
 notification-daemon
 noweb
 ocaml
-openmpi-checkpoint
+openmpi-bin
 openvpn
 pandoc
 parallel
