@@ -28,10 +28,8 @@ grub2 lilo-
 os-prober
 
 PACKAGES install CUDA
-nvidia-cuda-doc
-nvidia-cuda-gdb
-nvidia-visual-profiler
-nvidia-cuda-toolkit
+cuda-repo-ubuntu1604
+cuda
 libcupti-dev
 libprotobuf-dev
 libleveldb-dev
