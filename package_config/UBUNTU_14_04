@@ -170,6 +170,9 @@ syslog-ng
 libapache2-mod-shib2
 lshell
 
+PACKAGES taskinst LXDE
+lubuntu-desktop
+
 PACKAGES install MAIL
 apache2-mpm-prefork
 apachetop
@@ -750,7 +753,6 @@ transfig
 ttf-bitstream-vera
 ttf-dejavu
 ttf-mscorefonts-installer
-twm
 ubuntu-restricted-addons
 unace
 unity-chromium-extension
@@ -1028,3 +1030,11 @@ vim
 unzip
 apache2
 postfix
+
+PACKAGES taskinst XFCE
+xubuntu-desktop
+
+# LXDE and XFCE would both install lightdm-gtk-greeter, which changes
+# the X login screen away from the Ubuntu default.  Undo that.
+PACKAGES install GNOME
+lightdm-gtk-greeter-

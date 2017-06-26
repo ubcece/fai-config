@@ -15,14 +15,14 @@ for class in STANDARD ECE DHCPC ; do
     fi
 done
 
-for class in GNOME KDE OMNI ; do
+for class in GNOME LXDE KDE XFCE OMNI ; do
     if ! ifclass "SERVER" && ! ifclass "NO_$class" ; then
         echo "$class"
     fi
 done
 
 for class in SLOW ; do
-    if [ "$action" != dirinstall ] && ! ifclass "SERVER" && ! ifclass "NO_$class" ; then
+    if [ "$FAI_ACTION" != dirinstall ] && ! ifclass "SERVER" && ! ifclass "NO_$class" ; then
         echo "$class"
     fi
 done

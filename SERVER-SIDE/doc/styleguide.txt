@@ -35,7 +35,9 @@ SERVER          Supress inferred classes DISK2 GNOME KDE OMNI SLOW
 NO_STANDARD     Suppress inferred class STANDARD
 NO_ECE          Suppress inferred class ECE
 NO_GNOME        Suppress inferred class GNOME
+NO_LXDE         Suppress inferred class LXDE
 NO_KDE          Suppress inferred class KDE
+NO_XFCE         Suppress inferred class XFCE
 NO_OMNI         Suppress inferred class OMNI
 NO_SLOW         Suppress inferred class SLOW
 
@@ -87,7 +89,9 @@ DISK2           Machine with 2 disks; FAI will install to second disk
 
 STANDARD        Install some basic packages for a not-so-bare-bones OS
 GNOME           Install GNOME desktop environment
+LXDE            Install LXDE desktop environment
 KDE             Install KDE desktop environment
+XFCE            Install XFCE desktop environment
 OMNI            General-purpose workstation with lots of packages
 
 HP_ILO          HP Integrated Lights-Out Management present
