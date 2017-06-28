@@ -24,6 +24,8 @@ Number  Start   End     Size    File system     Name     Flags
  2      210MB   8800MB  8590MB  linux-swap(v1)  primary
  3      8800MB  80.0GB  71.2GB                  primary  lvm
 
+root@machine:~# mdadm --assemble --scan
+mdadm: No arrays found in config file or automatically
 root@machine:~# vgchange -ay
   5 logical volume(s) in volume group "vg" now active
 root@machine:~# lvs

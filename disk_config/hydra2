@@ -1,0 +1,29 @@
+# This disk_config is based on 
+
+disk_config disk1 disklabel:gpt preserve_lazy:1,4 fstabkey:uuid bootable:3 align-at:8k
+primary		/boot/efi	200M	vfat	rw
+primary		-		8G	-	-
+primary		-		100G	-	-
+primary		-		80G-	-	-
+
+disk_config disk2 disklabel:gpt preserve_lazy:1,4 fstabkey:uuid bootable:3 align-at:8k
+primary		-		200M	vfat	-
+primary		-		8G	-	-
+primary		-		100G	-	-
+primary		-		8G-	-	-
+
+disk_config raid fstabkey:uuid
+raid1		swap		disk1.2,disk2.2	swap	rw
+raid1		-		disk1.3,disk2.3	-	-
+raid0		-		disk1.4,disk2.4	-	-
+
+disk_config lvm fstabkey:uuid preserve_lazy:data-data
+vg		vg		md1
+vg-root1	/		35G-	ext4	rw,errors=remount-ro
+vg-var1		/var		6G-8G	ext4	rw
+vg-root2	/altroot	35G-	ext4	rw,errors=remount-ro
+vg-var2		/altroot/var	6G-8G	ext4	rw
+vg-snapreserve	-		1G	-	-
+
+vg		data		md2
+data-data	/data		4G-	xfs	rw
