@@ -11,16 +11,15 @@
 # separate /boot but for quite different reasons.
 
 disk_config disk2 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:3
-primary		-							200M	msdos	-
-primary		swap					8G	swap	rw
-primary		-							60G-	-	-
-primary		/exchange						15G-16G	vfat	rw
+primary		/boot/efi	200M	vfat	rw
+primary		swap		8G	swap	rw
+primary		-		60G-	-	-
+primary		/exchange	15G-16G	vfat	rw
 
 disk_config lvm fstabkey:uuid
 vg				vg						disk2.3
-vg-root1	/							20G	ext3	rw,errors=remount-ro
-vg-var1		/var					5G	ext3	rw
-vg-root2	/altroot			21G	ext3	rw
+vg-root1	/		20G	ext3	rw,errors=remount-ro
+vg-var1		/var		5G	ext3	rw
+vg-root2	/altroot	21G	ext3	rw
 vg-var2		/altroot/var	6G	ext3	rw
-vg-data		/data					5G-	xfs	rw
-
+vg-data		/data		5G-	xfs	rw

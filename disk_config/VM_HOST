@@ -9,7 +9,7 @@
 # http://askubuntu.com/questions/118140/unaligned-aio-dio
 
 disk_config disk1 disklabel:gpt preserve_lazy:1,4 fstabkey:uuid bootable:3 align-at:8k
-primary  -             200M-300M   msdos        -
+primary  /boot/efi     200M-300M   vfat         rw
 primary  swap          8G          swap         rw
 primary  -             14G-60G     -            -
 primary  /data         4G-6G       xfs          rw

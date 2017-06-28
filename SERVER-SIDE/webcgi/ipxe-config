@@ -80,7 +80,7 @@ sub syslinux_to_ipxe {
      | (?<PROMPT_STMT>         prompt\s+(?<SHOW_PROMPT>[01]))
      | (?<TIMEOUT_STMT>        timeout\s+(?<TIMEOUT>\d+))
      | (?<KERNEL_APPEND_STMTS> kernel\s+(?<KERNEL>\S+)
-                            (?:\s*$\s*append\s+(?<SOME_PARAMS>.*?)\s+initrd=(?<INITRD>\S+)\s+(?<MORE_PARAMS>.*?)$
+                            (?:\s*$\s*append\s+(?<SOME_PARAMS>.*?)\s+initrd=(?<INITRD>\S+?(?<INITRD_FILENAME>[^/[:space:]]*))\s+(?<MORE_PARAMS>.*?)$
                               |\s*$\s*append\s+(?<PARAMS>.*?)$)?)
     )}
     {  $+{INDENT} . (
@@ -110,8 +110,8 @@ sub syslinux_to_ipxe {
      : $+{TIMEOUT_STMT} ?
             eval { $cfg_timeout = $+{TIMEOUT}; "### $+{TIMEOUT_STMT}" }
      : $+{INITRD} ?
-            sprintf("kernel %s %s %s\n%sinitrd %s\n%sboot || goto start",
-                    load_path($+{KERNEL}), $+{SOME_PARAMS}, $+{MORE_PARAMS}, $+{INDENT},
+            sprintf("kernel %s initrd=%s %s %s\n%sinitrd %s\n%sboot || goto start",
+                    load_path($+{KERNEL}), $+{INITRD_FILENAME}, $+{SOME_PARAMS}, $+{MORE_PARAMS}, $+{INDENT},
                     load_path($+{INITRD}), $+{INDENT})
      : $+{KERNEL_APPEND_STMTS} ?
             sprintf("kernel %s %s\n%sboot || goto start",
@@ -127,7 +127,6 @@ sub syslinux_to_ipxe {
 
 sub config_for {
     my ($q, $ip) = @_;
-    printf('%X', $ip);
     $ip and syslinux_to_ipxe($q, sprintf('%X', $ip))
          or syslinux_to_ipxe($q, 'default');
 }

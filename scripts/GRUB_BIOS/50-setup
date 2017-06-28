@@ -66,9 +66,9 @@ for disk in $bootdisks ; do
     fi
 
     if [ $? = 0 ]; then
-        echo "Installed GRUB on $disk"
+        echo "Installed GRUB (BIOS) on $disk"
     else
-        echo "ERROR: Failed to install GRUB on $disk"
+        echo "ERROR: Failed to install GRUB (BIOS) on $disk"
     fi
 done
 

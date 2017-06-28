@@ -23,9 +23,12 @@ memtest86+
 PACKAGES install DHCPC
 isc-dhcp-client
 
-PACKAGES install GRUB2
-grub2 lilo-
+PACKAGES install GRUB_BIOS
+grub-pc lilo-
 os-prober
+
+PACKAGES install GRUB_EFI
+grub-efi
 
 PACKAGES install CUDA
 cuda-repo-ubuntu1604
@@ -102,15 +105,18 @@ fai-doc
 fai-server
 genisoimage
 git-core
+isolinux
 libapache2-mod-authnz-external
 libdigest-perl
 libdigest-sha-perl
 make
+mtools
 nfs-kernel-server
 openssh-client
 openssh-server
 pwauth
 syslinux-common
+syslinux-utils
 tftpd-hpa
 wimtools
 

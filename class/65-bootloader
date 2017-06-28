@@ -1,0 +1,10 @@
+#! /bin/bash
+
+if [ -d /sys/firmware/efi ]; then
+    echo GRUB_EFI
+elif [ -d /proc/vz -o -f /proc/vz/version ]; then
+    # OpenVZ container has no kernel, hence no bootloader
+    :
+else
+    echo GRUB_BIOS
+fi

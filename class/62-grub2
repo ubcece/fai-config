@@ -1,8 +1,0 @@
-#! /bin/bash
-# 2012-11-23 Derek Poon <derekp@ece.ubc.ca>
-# Install and configure GRUB2, unless we are running in an OpenVZ container,
-# which needs no bootloader or kernel.
-
-if [ ! -d /proc/vz -o -f /proc/vz/version ]; then
-    echo GRUB2
-fi

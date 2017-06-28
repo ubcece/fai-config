@@ -5,7 +5,6 @@ PACKAGES yumi
 authconfig
 kernel
 # sysvinit-tools grub # CentOS 5 and 6
-grub2  # CentOS 7
 less
 openssh
 openssh-clients
@@ -20,6 +19,12 @@ nfs-utils
 pakchois
 ncurses-base # currently missing in the base file
 lvm2
+
+PACKAGES yumi GRUB_BIOS
+grub2  # CentOS 7
+
+PACKAGES yumi GRUB_EFI
+grub2-efi
 
 PACKAGES yumi ECE
 puppet

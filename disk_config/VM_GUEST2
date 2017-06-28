@@ -2,11 +2,11 @@
 # The second, larger, disk (/dev/sdb) will be used for data storage.
 
 disk_config disk1 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:2 align-at:8k
-primary		-			16M	msdos	-
+primary		/boot/efi		16M	vfat	rw
 primary		-			15900M-	-	-
 
 disk_config disk2 disklabel:gpt preserve_lazy:1 fstabkey:uuid align-at:8k
-primary		-			16M	msdos	-
+primary		-			16M	vfat	-
 primary		-			7G-	-	-
 
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data

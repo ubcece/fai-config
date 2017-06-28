@@ -53,6 +53,7 @@ cfengine2
 cryptsetup
 discover
 dmsetup
+efibootmgr
 eject
 fai-doc
 #fuse-utils

@@ -1,0 +1,66 @@
+#! /bin/bash
+
+error=0; trap 'error=$(($?>$error?$?:$error))' ERR # save maximum error code
+
+. /usr/lib/fai/subroutines
+
+# Find the physical devices on which the given partitions reside, tracing
+# through MD and LVM layers if necessary.
+resolve_to_phys_dev() {
+    stat -L --format '%t %T %n' $@ | while read -r major_hex minor_hex dev ; do
+        major=$((0x$major_hex))
+        minor=$((0x$minor_hex))
+        if [ -f "/sys/dev/block/$major:$minor/partition" ]; then
+            partition=$(cat "/sys/dev/block/$major:$minor/partition")
+            minor=$(($minor - $partition))
+            dev="/dev/$(basename $(readlink "/sys/dev/block/$major:$minor"))"
+        fi
+        if [ -e "/sys/dev/block/$major:$minor/device" ]; then
+            # This is a physical device
+            echo "$dev"
+        elif [ -d "/sys/dev/block/$major:$minor/slaves" ]; then
+            # This is a MD or LVM member
+            for slave in /sys/dev/block/$major:$minor/slaves/* ; do
+                resolve_to_phys_dev "/dev/$(basename $slave)"
+            done
+        fi
+    done | sort -u
+}
+
+if [ "$FAI_ACTION" = dirinstall ]; then
+    # TODO: How can we determine the boot disks for a dirinstall?
+    # Should we even try?
+    set_disk_info
+else
+    . $LOGDIR/disk_var.sh
+fi
+
+if ifclass DISK2 ; then
+    bootdisks=$(echo $disklist | awk '{printf "/dev/%s /dev/%s", $1, $2}')
+elif [ -n "$BOOT_DEVICE" ]; then
+    bootdisks=$(resolve_to_phys_dev "$BOOT_DEVICE")
+    echo "Resolved $BOOT_DEVICE to disks: $bootdisks"
+else
+    echo "ERROR: Boot disk could not be determined"
+    exit 1
+fi
+
+for disk in $bootdisks ; do
+    GRUBEXTRA=""
+    # Found IBM HS20 Blades with IDE disk.
+    /usr/bin/lspci | grep -q "IDE interface: Broadcom CSB5 IDE Controller" && GRUBEXTRA=" --modules=ata"
+
+    if $ROOTCMD which /usr/sbin/grub2-install >/dev/null 2>&1; then
+        $ROOTCMD /usr/sbin/grub2-install $GRUBEXTRA --no-floppy "$disk"
+    else
+        $ROOTCMD /usr/sbin/grub-install $GRUBEXTRA --no-floppy "$disk"
+    fi
+
+    if [ $? = 0 ]; then
+        echo "Installed GRUB (EFI) on $disk"
+    else
+        echo "ERROR: Failed to install GRUB (EFI) on $disk"
+    fi
+done
+
+exit $error
