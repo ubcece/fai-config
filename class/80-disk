@@ -33,18 +33,19 @@ elif ifclass VM_HOST ; then
 	exit 0
 
 elif [ `disk_count` -gt 2 ]; then
-	die "Too many hard disks. Too risky."
+	echo "Too many hard disks. Too risky." >&2
+	exit 1
 
 elif ifclass DISK2 ; then
 	size=`disk_sizes | tail -n 1`
-	if   [ "$size" -lt  40000000 ]; then die "The hard disk is too small (40 GB minimum)."
+	if   [ "$size" -lt  40000000 ]; then echo "The hard disk is too small (40 GB minimum)." >&2 ; exit 1
 	elif [ "$size" -lt 100000000 ]; then echo "MEDIUM2"
 	else                                 echo "LARGE2"
 	fi
 
 else
 	size=`disk_sizes | head -n 1`
-	if   [ "$size" -lt  10000000 ]; then die "The hard disk is too small (10 GB minimum)."
+	if   [ "$size" -lt  10000000 ]; then echo "The hard disk is too small (10 GB minimum)." >&2 ; exit 1
 	elif [ "$size" -lt  40000000 ]; then echo "SMALL"
 	elif [ "$size" -lt 100000000 ]; then echo "MEDIUM"
 	elif ifclass RAID             ; then echo "RAID1"
