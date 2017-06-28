@@ -13,7 +13,7 @@ resolve_to_phys_dev() {
         if [ -f "/sys/dev/block/$major:$minor/partition" ]; then
             partition=$(cat "/sys/dev/block/$major:$minor/partition")
             minor=$(($minor - $partition))
-            dev=${dev%$partition}
+            dev="/dev/$(basename $(readlink "/sys/dev/block/$major:$minor"))"
         fi
         if [ -e "/sys/dev/block/$major:$minor/device" ]; then
             # This is a physical device
