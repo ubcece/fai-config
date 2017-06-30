@@ -68,6 +68,7 @@ patch
 rinse
 syslinux
 tmux
+udftools
 uuid-runtime
 virtualbox-guest-dkms
 virtualbox-guest-utils
