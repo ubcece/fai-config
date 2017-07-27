@@ -395,6 +395,7 @@ fakeroot
 fdutils
 ffmpeg
 firefox-locale-en
+flake8
 flex
 fonts-inconsolata
 fortune-mod
@@ -559,6 +560,10 @@ procmail
 pssh
 pstoedit
 psutils
+pep8
+pep257
+pylint
+pylint3
 python-anyjson
 python3-anyjson
 python-bs4
@@ -622,6 +627,10 @@ python-pycurl
 python3-pycurl
 python-pygraph
 python3-pygraph
+python-pylint-common
+python3-pylint-common
+python-pylint-flask
+python3-pylint-flask
 python-pysimplesoap
 python3-pysimplesoap
 python-pysqlite2

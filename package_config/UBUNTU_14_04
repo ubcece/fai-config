@@ -562,6 +562,8 @@ procmail
 pssh
 pstoedit
 psutils
+pep8
+pylint
 python-anyjson
 python3-anyjson
 python-bs4
