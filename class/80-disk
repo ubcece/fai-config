@@ -15,7 +15,7 @@ disk_count() {
 	/usr/lib/fai/fai-disk-info | wc -l
 }
 
-if ifclass RAID ; then
+if ifclass RAID1 ; then
 	exit
 
 elif ifclass DISK1P3 ; then

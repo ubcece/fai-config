@@ -15,7 +15,7 @@ raid1		swap		disk1.2,disk2.2	swap	rw
 raid1		-		disk1.3,disk2.3	-	-
 
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data
-vg		vg		md0
+vg		vg		md1
 vg-root1	/		35G-60G	ext4	rw,errors=remount-ro
 vg-var1		/var		6G-8G	ext4	rw
 vg-root2	/altroot	35G-60G	ext4	rw,errors=remount-ro

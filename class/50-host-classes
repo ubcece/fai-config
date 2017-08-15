@@ -22,10 +22,10 @@ case $HOSTNAME in
     [kmxv]ldap?)
         echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
     [kmxv]lookup?|svlookup[dp]?)
-        case $HOSTNAME in klookup?) echo "RAID" ; esac
+        case $HOSTNAME in klookup?) echo "RAID1" ; esac
         echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
     msmb1)
-        echo "SERVER SMBSERVER RAID" ;;
+        echo "SERVER SMBSERVER RAID1" ;;
     [kmxv]smb?|svsmbp[0-9])
         echo "SERVER SMBSERVER" ;;
     [kmxv]web?|[kmx]vweb?|svweb*)
@@ -35,7 +35,7 @@ case $HOSTNAME in
     node*) # to be clear: these are nodes on Rafeef/morty.
         echo "GRID" ;;
     morty)
-        echo "RAID GRID" ;;
+        echo "RAID1 GRID" ;;
     *webgoat*) 
         echo "SERVER WEBGOAT" ;;
     purang1[345])
@@ -46,4 +46,6 @@ case $HOSTNAME in
         echo "CUDA NO_ECE" ;;
     tims-pc21)
         echo "DISK1P3 CUDA" ;;
+    zeus)
+        echo "RAID1" ;;
 esac
