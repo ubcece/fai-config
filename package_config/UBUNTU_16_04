@@ -122,6 +122,7 @@ nfs-kernel-server
 openssh-client
 openssh-server
 pwauth
+squashfs-tools
 syslinux-common
 syslinux-utils
 tcc
@@ -129,6 +130,7 @@ tftpd-hpa
 upx-ucl
 uuid-dev
 wimtools
+xorriso
 
 PACKAGES taskinst GNOME
 ubuntu-desktop

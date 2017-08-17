@@ -118,6 +118,7 @@ nfs-kernel-server
 openssh-client
 openssh-server
 pwauth
+squashfs-tools
 syslinux-common
 syslinux-utils
 tcc
