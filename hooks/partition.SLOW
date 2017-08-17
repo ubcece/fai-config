@@ -1,14 +1,76 @@
 #!/bin/bash
 
-# 2008-11-19 Chris Dumont. Let's have a long pause before partitioning the
-# disk. 
+# Show a confirmation dialog on the system console with a preview of the
+# partitioning actions.  Remote access is also possible by sending a signal
+# to the dialog process: SIGUSR1 to proceed, SIGUSR2 to open a shell on the
+# console, or SIGTERM to abort.  Confirmation is implied if no input is
+# received in two hours.
 
-setup-storage 2>&1 | sed -e 's/^(STDOUT) Error:/INFO:/'
-echo
-echo "########################################################################"
-echo "# ^^^ This is a preview of the disk partition scheme. ^^^              #"
-echo "# Don't like what you see? Press Ctrl-C to abort overwriting the disk. #"
-echo "# Like what you see? ssh to $HOSTNAME and 'killall sleep'              #"
-echo "########################################################################"
-sleep 10000 || true
+. /usr/lib/fai/subroutines
 
+while : ; do
+    if [ "$flag_menu" -o "$flag_createvt" ]; then
+        shell_options=(--extra-button --extra-label "Shell")
+    else
+        shell_options=()
+    fi
+
+    preview=`setup-storage 2>&1`
+    cat <<-LOG >> $LOGDIR/fai.log
+	$preview
+
+	########################################################################
+	# ^^^ This is a preview of the disk partition scheme. ^^^              #
+	#                                                                      #
+	# Like what you see? Partitioning and installation will proceed after  #
+	# 2 hours if no input is received; to proceed immediately do           #
+	# ssh root@$HOSTNAME 'killall -USR1 dialog'                            #
+	#                                                                      #
+	# Don't like what you see? Abort the installation and configure PXE    #
+	# to boot locally by doing                                             #
+	# ssh root@$HOSTNAME 'killall dialog'                                  #
+	########################################################################
+	LOG
+
+    stty_saved=`stty --save`
+    stty intr undef
+    read rows cols <<< `stty size`
+
+    # Since stdout is teed to fai.log, dialog needs to be connected to /dev/tty
+    # (FD 3).
+    dialog --backtitle "FAI $FAI_ACTION on $HOSTNAME" \
+           --title "Partitioning preview" \
+           --scrollbar \
+           --yes-label "Proceed" \
+           --no-label "Abort installation" \
+           "${shell_options[@]}" \
+           --default-button yes \
+           --timeout 7200 \
+           --yesno "$preview" $(($rows - 5)) 0 >&3
+    retval=$?
+
+    stty "$stty_saved"
+    clear >&3
+
+    case $retval in
+      0|255|138)        # "Execute" or timeout or SIGUSR1
+        echo "Preview ended; proceeding with partitioning."
+        break
+        ;;
+      3|140)            # "Shell" or SIGUSR2
+        echo "Executing shell." >> $LOGDIR/fai.log
+        echo "Exit this shell to return to the partitioning preview dialog." >&3
+        /bin/bash -i
+        ;;
+      1)                 # "Abort installation"
+        echo "Aborting installation by user choice."
+        skiptask partition mountdisks extrbase mirror debconf repository \
+                 updatebase instsoft configure tests
+        break
+        ;;
+      *)
+        echo "Unrecognized dialog exit status: $retval"
+        sleep 7200
+        ;;
+    esac
+done 3> /dev/tty
