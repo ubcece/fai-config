@@ -9,7 +9,7 @@
 . /usr/lib/fai/subroutines
 
 while : ; do
-    if [ "$flag_menu" -o "$flag_createvt" ]; then
+    if [ "$flag_createvt" ]; then
         shell_options=(--extra-button --extra-label "Shell")
     else
         shell_options=()

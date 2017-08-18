@@ -1,6 +1,33 @@
 #!/bin/bash
 
+pause_secs=3600
+
 ! ifclass SLOW && exit 0
+[ "$flag_reboot" ] || exit 0
 
-sleep 3600
+echo "Pausing for $pause_secs seconds before rebooting." | tee -a $LOGDIR/fai.log
+echo "To pause indefinitely, do ssh root@$HOSTNAME 'killall -STOP dialog'" >> $LOGDIR/fai.log
+echo "To proceed immediately, do ssh root@$HOSTNAME 'killall dialog'" >> $LOGDIR/fai.log
 
+if [ "$flag_createvt" ]; then
+    shell_options=(--extra-button --extra-label "Shell")
+else
+    shell_options=()
+fi
+
+dialog --backtitle "FAI $FAI_ACTION on $HOSTNAME" \
+       --title "Finished $FAI_ACTION" \
+       --ok-label "Finish and reboot" \
+       "${shell_options[@]}" \
+       --nocancel \
+       --pause "Pausing for possible manual intervention before rebooting.\n\n\n" \
+               0 0 $pause_secs > /dev/tty
+
+case $? in
+  3|140)                # "Shell" or SIGUSR2
+    clear
+    echo "Executing shell."
+    echo "The machine will reboot when you exit this shell." > /dev/tty
+    /bin/bash -i
+    ;;
+esac
