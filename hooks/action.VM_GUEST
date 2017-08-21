@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# If running in a virtual machine guest, disable console blanking
+setterm -blank 0 > /dev/console
