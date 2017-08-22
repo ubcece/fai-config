@@ -8,7 +8,7 @@
 # separate /boot but for quite different reasons.
 
 disk_config disk1 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:3
-primary		/boot/efi		200M	vfat	rw
+primary		-		200M	vfat	-
 primary		swap		8G	swap	rw
 primary		-		40G-	-	-
 

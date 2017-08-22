@@ -1,7 +1,7 @@
 # This disk_config is suitable for two >100GB hard disks to be put in RAID1.
 
 disk_config disk1 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:3 align-at:8k
-primary		/boot/efi	200M	vfat	rw
+primary		-		200M	vfat	-
 primary		-		8G	-	-
 primary		-		90G-	-	-
 
