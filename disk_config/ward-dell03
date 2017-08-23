@@ -10,8 +10,8 @@
 # The 200M partition is for gpt's sake. Somewhat like the old way of having a
 # separate /boot but for quite different reasons.
 
-disk_config disk2 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:3
-primary		/boot/efi	200M	vfat	rw
+disk_config disk2 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1
+primary		/boot/efi	150M-200M	vfat	rw
 primary		swap		8G	swap	rw
 primary		-		60G-	-	-
 primary		/exchange	15G-16G	vfat	rw

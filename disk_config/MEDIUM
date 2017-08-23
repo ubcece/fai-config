@@ -1,7 +1,7 @@
 # This disk_config is suitable for a hard disk with >=40GB and <100GB
 
-disk_config disk1 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:3 align-at:8k
-primary		-		200M	vfat	-
+disk_config disk1 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1 align-at:8k
+primary		/boot/efi	150M-200M	vfat	rw
 primary		swap		2G	swap	rw
 primary		-		38G-	-	-
 

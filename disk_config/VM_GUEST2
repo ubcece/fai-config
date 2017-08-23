@@ -1,8 +1,8 @@
 # This disk_config is suitable for a virtual server two virtual disks.
 # The second, larger, disk (/dev/sdb) will be used for data storage.
 
-disk_config disk1 disklabel:gpt preserve_lazy:1 fstabkey:uuid bootable:2 align-at:8k
-primary		/boot/efi		16M	vfat	rw
+disk_config disk1 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1 align-at:8k
+primary		/boot/efi		14M-16M	vfat	rw
 primary		-			15900M-	-	-
 
 disk_config disk2 disklabel:gpt preserve_lazy:1 fstabkey:uuid align-at:8k

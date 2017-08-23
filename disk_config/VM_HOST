@@ -8,7 +8,7 @@
 # http://captainkvm.com/2011/09/revisiting-file-system-alignment-for-linux/
 # http://askubuntu.com/questions/118140/unaligned-aio-dio
 
-disk_config disk1 disklabel:gpt preserve_lazy:1,4 fstabkey:uuid bootable:3 align-at:8k
+disk_config disk1 disklabel:gpt-bios preserve_lazy:1,4 fstabkey:uuid bootable:1 align-at:8k
 primary  /boot/efi     200M-300M   vfat         rw
 primary  swap          8G          swap         rw
 primary  -             14G-60G     -            -

@@ -1,0 +1,4 @@
+# Silence mtools errors saying
+# "Total number of sectors (...) not a multiple of sectors per track (...)!"
+
+ainsl $NFSROOT/etc/mtools.conf 'mtools_skip_check=1'

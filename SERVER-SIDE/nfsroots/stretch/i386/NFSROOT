@@ -53,6 +53,7 @@ efibootmgr
 eject
 fai-doc
 #fuse-utils
+gawk
 git-core
 kexec-tools
 liblinux-lvm-perl

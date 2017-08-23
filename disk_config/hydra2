@@ -1,13 +1,13 @@
 # This disk_config is based on 
 
-disk_config disk1 disklabel:gpt preserve_lazy:1,4 fstabkey:uuid bootable:3 align-at:8k
-primary		/boot/efi	200M	vfat	rw
+disk_config disk1 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1 align-at:8k
+primary		/boot/efi	150M-200M	vfat	rw
 primary		-		8G	-	-
 primary		-		100G	-	-
 primary		-		80G-	-	-
 
-disk_config disk2 disklabel:gpt preserve_lazy:1,4 fstabkey:uuid bootable:3 align-at:8k
-primary		-		200M	vfat	-
+disk_config disk2 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid align-at:8k
+primary		-		150-200M	vfat	-
 primary		-		8G	-	-
 primary		-		100G	-	-
 primary		-		8G-	-	-

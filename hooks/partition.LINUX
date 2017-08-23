@@ -26,7 +26,8 @@ disk_config_file() {
 # table type that it is supposed to have:
 #
 # /dev/sda gpt
-# /dev/sdb msdos
+# /dev/sda gpt-bios
+# /dev/sdc msdos
 want_partition_tables() {
     config_file=`disk_config_file`
     if [ -z "$config_file" ]; then
@@ -81,6 +82,7 @@ ensure_partition_tables_exist() {
     want_partition_tables |
     while read dev table ; do
         if ! has_partition_table "$dev" ; then
+            [ "$table" = "gpt-bios" ] && table=gpt
             echo "$dev has no partition table; making one of type $table"
             parted --script "$dev" mktable "$table"
         fi

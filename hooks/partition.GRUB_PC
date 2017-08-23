@@ -1,0 +1,168 @@
+#!/bin/bash
+
+# Transition aid from FAI's gpt partition scheme to gpt-bios partition scheme.
+#
+# In setup-storage, the partition type gpt-bios is a shorthand for making a
+# GPT, where a very small last-numbered bios_grub partition is inserted at the
+# beginning of the disk, before partition 1.
+#
+# Unfortunately, until August 2017, what we had been doing instead was running
+# a manual command in scripts/GRUB_BIOS/50-setup to forcibly convert partition
+# 1 into a bios_grub partition.
+#
+# To transition to the FAI convention, this hook script will delete partition
+# 1 if it is a bios_grub partition that occurs at the start of the disk
+# (starting at byte 104857).  This is not as unsafe as it sounds.  The GRUB
+# code residing in the bios_grub partition will still be there and should
+# continue to work, though it resides in disk space that is considered free
+# rather than reserved for use by GRUB.  Soon after this script runs,
+# setup-storage should re-create the bios_grub partition in the same place,
+# just with a different partition number.
+
+. /usr/lib/fai/subroutines
+
+error=0; trap 'error=$(($?>$error?$?:$error))' ERR # save maximum error code
+
+# Prints the absolute path of the disk configuration file, chosen based on
+# the last applicable class to have a configuration file in
+# /var/lib/fai/config/disk_config.
+disk_config_file() {
+    echo $classes | tr ' ' '\n' | tac | while read class ; do
+        if [ -f "$FAI/disk_config/$class" ]; then
+            echo "$FAI/disk_config/$class"
+            break
+        fi
+    done
+}
+
+# Output contains one line per disk, with the device followed by the partition
+# table type that it is supposed to have:
+#
+# /dev/sda gpt
+# /dev/sdb msdos
+want_partition_tables() {
+    config_file=`disk_config_file`
+    if [ -z "$config_file" ]; then
+        # No suitable setup-storage config file
+        exit 1
+    fi
+    awk -v disks="`/usr/lib/fai/fai-disk-info | sort`" '
+        BEGIN {
+            split(disks, dev);
+        }
+
+        $1 == "disk_config" && $2 ~ "disk.*" {
+            sub("^disk", "", $2);
+            for (i = 3; i <= NF; i++) {
+                if (split($i, optionpair, ":")) {
+                    if (optionpair[1] == "sameas") {
+                        sub("^disk", "", optionpair[2]);
+                        partition_table[$2] = partition_table[optionpair[2]];
+                        if (dev[$2]) print "/dev/" dev[$2], partition_table[$2];
+                        next;
+                    } else if (optionpair[1] == "disklabel") {
+                        partition_table[$2] = optionpair[2];
+                        if (dev[$2]) print "/dev/" dev[$2], partition_table[$2];
+                        next;
+                    }
+                }
+            }
+
+            # If no disklabel option is given, setup-storage uses "msdos" as
+            # the default.
+            if (dev[$2]) print "/dev/" dev[$2], "msdos";
+        }
+    ' "$config_file"
+}
+
+# Output commands that should be executed on a device to make room for a
+# bios_grub partition at the beginning of the device, deleting an existing
+# bios_grub partition or shrinking an existing EFI system partition if
+# necessary.
+partition_edit_ops() {
+    dev="$1"
+    parted --script "$dev" unit s print | gawk -v dev="$1" '
+        # Skip to the table (after the first blank line)
+        NR==1, NF==0 { FPAT = "[A-Z][a-z ]*"; next; }
+
+        # Skip everything after the table
+        NF==0 { nextfile; }
+
+        # Extract the column widths from the header
+        !FIELDWIDTHS {
+            for (col = 1; col <= NF; col++) {
+                FIELDWIDTHS = FIELDWIDTHS (col < NF ? length($col) " ": 80);
+                field_name[col] = gensub("^ *| *$", "", "g", $col);
+                field_num[gensub("^ *| *$", "", "g", $col)] = col;
+            }
+            next;
+        }
+
+        {
+            part_num = gensub("^ *| *$", "", "g", $field_num["Number"]);
+            # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/libfdisk/src/utils.c?id=b41bac08abadbea9bac7a093c995ca53d86c76f1#n108
+            table[part_num]["Device"] = gensub("[0-9]$", "\\0p", 1, dev) part_num;
+            for (col = 1; col <= NF; col++) {
+                table[part_num][field_name[col]] = gensub( \
+                    "([0-9]+)s", "\\1", 1, gensub("^ *| *$", "", "g", $col) \
+                );
+            }
+
+            # Correction for boot flags inappropriately set in the past
+            if ( table[part_num]["File system"] == "" &&
+                 table[part_num]["Flags"] ~ /\<boot\>/ &&
+                 table[part_num]["Flags"] !~ /\<lvm\>/ ) {
+                printf "file -s %s | grep -q \"LVM2 PV\" && parted --script %s set %d lvm on\n",
+                    table[part_num]["Device"],
+                    dev,
+                    part_num;
+            }
+        }
+
+        END {
+            if ( table[1]["Flags"] == "bios_grub" &&
+                 table[1]["Start"] <= 2048 && table[1]["End"] >= 10240 ) {
+
+                # BIOS boot partition is in the way; delete it
+                printf "parted --script %s rm 1\n", dev;
+            } else if ( table[1]["Start"] < 2048 + 64 &&
+                        table[1]["Flags"] ~ /\<esp\>/ &&
+                        table[1]["File system"] ~ /fat/ ) {
+
+                # EFI system partition is in the way; shrink it such that 64
+                # sectors are available starting from sector 2048 for the BIOS
+                # boot partition
+
+                BACKUP_DIR = "/tmp/efi-system-partition.bak";
+                printf "mkdir %s &&\n", BACKUP_DIR;
+                printf "mcopy -b -m -p -s -v -i %s :: %s &&\n",
+                    table[1]["Device"],
+                    BACKUP_DIR;
+                printf "eval `blkid -o export -s LABEL %s` &&\n",
+                    table[1]["Device"];
+                printf "parted --script %s rm 1 mkpart primary fat16 %ds %ds set 1 boot on &&\n",
+                    dev,
+                    4096,
+                    table[1]["End"];
+                printf "mkfs.vfat -n \"$LABEL\" %s &&\n",
+                    table[1]["Device"];
+                printf "compgen -G \"%s/*\" >/dev/null &&\n",
+                    BACKUP_DIR;
+                printf "mcopy -b -m -p -s -v -i %s %s/* :: &&\n",
+                    table[1]["Device"],
+                    BACKUP_DIR;
+                printf "rm -rf %s\n",
+                    BACKUP_DIR;
+            }
+        }
+    '
+}
+
+set -o pipefail
+want_partition_tables | while read dev table ; do
+    case "$table" in
+      gpt-bios)
+        partition_edit_ops "$dev" | bash -x
+        ;;
+    esac
+done
