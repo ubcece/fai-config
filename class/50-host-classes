@@ -44,6 +44,8 @@ case $HOSTNAME in
         echo "CUDA" ;;
     bci06)
         echo "CUDA NO_ECE" ;;
+    jwang-pc22)
+        echo "LARGE CUDA" ;;    # Has multiple disks; install to just the SSD
     tims-pc21)
         echo "DISK1P3 CUDA" ;;
     zeus)
