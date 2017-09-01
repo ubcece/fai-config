@@ -407,7 +407,9 @@ fortunes
 fortunes-min
 fping
 ftp
+g++-4.8-multilib
 gcc-doc
+gcc-4.8-multilib
 gcc-multilib
 gdb
 gdb-doc

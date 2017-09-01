@@ -410,7 +410,9 @@ fortunes
 fortunes-min
 fping
 ftp
+g++-4.9-multilib
 gcc-doc
+gcc-4.9-multilib
 gcc-multilib
 gdb
 gdb-doc
