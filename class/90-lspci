@@ -46,4 +46,4 @@ handle_device() {
 
 lspci -mm | while read line ; do
     eval "handle_device $line"
-done
+done | sort -u
