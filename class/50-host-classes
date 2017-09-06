@@ -28,6 +28,8 @@ case $HOSTNAME in
         echo "SERVER SMBSERVER RAID1" ;;
     [kmxv]smb?|svsmbp[0-9])
         echo "SERVER SMBSERVER" ;;
+    fog*|svfog*)
+        echo "SERVER SLOW" ;;
     *webgoat*)
         echo "SERVER WEBGOAT" ;;
     [kmxv]web?|[kmx]vweb?|svweb*)
