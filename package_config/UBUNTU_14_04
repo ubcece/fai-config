@@ -917,6 +917,7 @@ htop
 hwdata
 iotop
 iptables
+iperf3
 iptraf
 iputils-arping
 iputils-clockdiff

@@ -1021,6 +1021,7 @@ hdparm
 htop
 hwdata
 iotop
+iperf3
 iptables
 iptraf
 iputils-arping
