@@ -24,4 +24,5 @@ for disk in $disklist ; do
 /dev/$disk {
     apm = 254
 }
+STANZA
 done > $target/etc/hdparm.conf
