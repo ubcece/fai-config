@@ -945,7 +945,6 @@ apparmor-utils
 molly-guard
 munin-node
 munin-plugins-extra
-python-letsencrypt-apache
 snmpd
 
 PACKAGES install SMBSERVER
