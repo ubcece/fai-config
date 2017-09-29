@@ -73,6 +73,8 @@ rinse
 strace
 syslinux
 tmux
+tpm-tools
+trousers
 udftools
 uuid-runtime
 virtualbox-guest-dkms

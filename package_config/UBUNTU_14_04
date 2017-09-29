@@ -853,6 +853,8 @@ zlib1g-dev
 
 PACKAGES install PHYSICAL
 lm-sensors
+tpm-tools
+trousers
 
 PACKAGES install RAID
 array-info
@@ -900,6 +902,7 @@ bind9-host
 ca-certificates
 cron
 cron-apt
+cryptsetup
 curl
 diffstat
 diffutils
@@ -907,6 +910,7 @@ discover
 dkms
 dnsutils
 dsh
+encfs
 ethtool
 fai-client
 fai-setup-storage
@@ -930,7 +934,9 @@ ldap-auth-client
 ldap-utils
 libnfsidmap2
 libnss-ldapd
+libpam-encfs
 libpam-ldapd
+libpam-mount
 libpam-passwdqc
 lockfile-progs
 logrotate

@@ -39,11 +39,16 @@ base
 
 PACKAGES yumi STANDARD
 acpid
+cryptsetup
 ncurses-term
 sssd-tools
 
 PACKAGES yumi ECE
 puppet
+
+PACKAGES yumi PHYSICAL
+tpm-tools
+trousers
 
 PACKAGES yumgroup GNOME
 gnome-desktop
@@ -98,6 +103,7 @@ server-platform-devel
 server-policy
 tex
 technical-writing
+cryptsetup
 workstation-policy
 
 PACKAGES yumr OMNI
