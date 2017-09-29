@@ -23,7 +23,7 @@ memtest86+
 PACKAGES install DHCPC
 isc-dhcp-client
 
-PACKAGES install GRUB_BIOS
+PACKAGES install GRUB_PC
 grub-pc lilo-
 os-prober
 

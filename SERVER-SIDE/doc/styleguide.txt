@@ -75,7 +75,7 @@ AMD64 I386      Installation architecture (maybe different from the hardware)
 FAICD           FAI is running from an ISO image
 FAIBASE         TODO: How is this different from DEFAULT and LINUX?
 DHCPC           If FAIBASE, configure eth0 to use DHCP, not static IP address
-GRUB_BIOS       Install GRUB 2 bootloader for PC BIOS
+GRUB_PC         Install GRUB 2 bootloader for PC BIOS
 GRUB_EFI        Install GRUB 2 bootloader for UEFI
 
 VZ_CONTAINER    Installing to an OpenVZ container

@@ -20,7 +20,7 @@ pakchois
 ncurses-base # currently missing in the base file
 lvm2
 
-PACKAGES yumi GRUB_BIOS
+PACKAGES yumi GRUB_PC
 grub2  # CentOS 7
 
 PACKAGES yumi GRUB_EFI
