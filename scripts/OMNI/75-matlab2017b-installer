@@ -6,12 +6,12 @@ if [ -z "$SERVER" ]; then
 fi
 
 # Idempotency!
-if [ -L $target/opt/Matlab_R2017a ]; then
+if [ -L $target/opt/Matlab_R2017b ]; then
     ( cd $target/opt
-      rm -rf "$(readlink Matlab_R2017a)"
-      mkdir -p "$(readlink Matlab_R2017a)" )
-elif [ -d $target/opt/Matlab_R2017a ]; then
-    rm -rf $target/opt/Matlab_R2017a
+      rm -rf "$(readlink Matlab_R2017b)"
+      mkdir -p "$(readlink Matlab_R2017b)" )
+elif [ -d $target/opt/Matlab_R2017b ]; then
+    rm -rf $target/opt/Matlab_R2017b
 fi
 
 MOUNTPT=/tmp/$SERVER/matlab
@@ -25,8 +25,8 @@ case `uname -m` in
 	exit 1
 	;;
   x86_64)
-        mkdir Matlab_R2017a &&
-	tar -xz --no-same-owner -C Matlab_R2017a --strip-components=1 -f "$MOUNTPT"/Matlab_R2017a.tar.gz
+        mkdir Matlab_R2017b &&
+	tar -xz --no-same-owner -C Matlab_R2017b --strip-components=1 -f "$MOUNTPT"/Matlab_R2017b.tar.gz
 	;;
   *)
 	echo "Don't know my own architecture." >&2
@@ -38,8 +38,8 @@ umount "$MOUNTPT"
 
 mkdir -p $target/usr/local/bin
 cd $target/usr/local/bin
-ln -sf /opt/Matlab_R2017a/bin/matlab
-ln -sf /opt/Matlab_R2017a/bin/mbuild
-ln -sf /opt/Matlab_R2017a/bin/mcc
-ln -sf /opt/Matlab_R2017a/bin/mex
+ln -sf /opt/Matlab_R2017b/bin/matlab
+ln -sf /opt/Matlab_R2017b/bin/mbuild
+ln -sf /opt/Matlab_R2017b/bin/mcc
+ln -sf /opt/Matlab_R2017b/bin/mex
 
