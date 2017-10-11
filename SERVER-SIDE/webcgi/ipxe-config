@@ -87,6 +87,10 @@ sub syslinux_to_ipxe {
        $+{COMMENT} ?
             $+{COMMENT}
      : $+{CHAINBOOT_STMT} ?
+            # https://github.com/puppetlabs/Razor/issues/357
+            # Some BIOSes work with the sanboot command; others work better
+            # if iPXE just exits.  Reportedly, the most reliable hack is to
+            # chain-load GRUB to do "rootnoverify (hd0); chainloader +1".
             "sanboot --no-describe --drive 0x8$+{CHAINBOOT_DISK}"
      : $+{DEFAULT_STMT} ?
             "goto $+{DEFAULT_LABEL}"
@@ -127,7 +131,7 @@ sub syslinux_to_ipxe {
 
 sub config_for {
     my ($q, $ip) = @_;
-    $ip and syslinux_to_ipxe($q, sprintf('%X', $ip))
+    $ip and syslinux_to_ipxe($q, sprintf('%08X', $ip))
          or syslinux_to_ipxe($q, 'default');
 }
 
