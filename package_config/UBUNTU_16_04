@@ -106,19 +106,23 @@ fai-doc
 fai-server
 genisoimage
 git-core
-isolinux
 libapache2-mod-authnz-external
 libdigest-perl
 libdigest-sha-perl
+liblzma-dev
 make
 mtools
+nasm
 nfs-kernel-server
 openssh-client
 openssh-server
 pwauth
 syslinux-common
 syslinux-utils
+tcc
 tftpd-hpa
+upx-ucl
+uuid-dev
 wimtools
 
 PACKAGES taskinst GNOME

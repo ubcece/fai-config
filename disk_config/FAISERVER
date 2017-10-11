@@ -1,0 +1,17 @@
+# This disk_config is suitable for a hard disk with >=100GB
+
+disk_config disk1 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1 align-at:8k
+primary		/boot/efi	150M-200M	vfat	rw
+primary		swap		8G	swap	rw
+primary		-		95G-	-	-
+
+disk_config lvm fstabkey:uuid preserve_lazy:vg-data
+vg		vg		disk1.3
+vg-root1	/		25G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
+vg-var1		/var		10G	ext4	rw createopts="-O ^metadata_csum"
+vg-root2	/altroot	25G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
+vg-var2		/altroot/var	10G	ext4	rw createopts="-O ^metadata_csum"
+vg-data		/data		10G	xfs	rw
+vg-exports	/exports	10G-	xfs	rw
+
+vg-snapreserve	-		1G	-	-

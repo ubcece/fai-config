@@ -106,14 +106,19 @@ git-core
 libapache2-mod-authnz-external
 libdigest-perl
 libdigest-sha-perl
+liblzma-dev
 make
 mtools
+nasm
 nfs-kernel-server
 openssh-client
 openssh-server
 pwauth
 syslinux-common
+tcc
 tftpd-hpa
+upx-ucl
+uuid-dev
 wimtools
 
 PACKAGES taskinst GNOME
