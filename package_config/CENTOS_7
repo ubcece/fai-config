@@ -4,7 +4,6 @@ core
 PACKAGES yumi
 authconfig
 kernel
-# sysvinit-tools grub # CentOS 5 and 6
 less
 openssh
 openssh-clients
@@ -21,7 +20,7 @@ ncurses-base # currently missing in the base file
 lvm2
 
 PACKAGES yumi GRUB_PC
-grub2  # CentOS 7
+grub2
 
 PACKAGES yumi GRUB_EFI
 efibootmgr
@@ -32,6 +31,225 @@ PACKAGES yumi ECE
 puppet
 
 PACKAGES yumgroup GNOME
-#gnome-desktop base-x # slc5/CentOS 5
-#basic-desktop x11 fonts #slc6/CentOS 6
-gnome-desktop # CentOS 7
+gnome-desktop
+
+PACKAGES yumgroup STANDARD
+base
+
+PACKAGES yumgroup OMNI
+additional-devel
+arabic-support
+chinese-support
+console-internet
+compat-libraries
+debugging
+basic-desktop
+desktop-debugging
+desktop-platform
+desktop-platform-devel
+development
+directory-client
+eclipse
+emacs
+fonts
+french-support
+general-desktop
+graphical-admin-tools
+graphics
+hardware-monitoring
+haskell
+input-methods
+internet-applications
+internet-browser
+japanese-support
+java-platform
+korean-support
+legacy-unix
+legacy-x
+mysql-client
+network-file-system-client
+network-tools
+office-suite
+performance
+perl-runtime
+postgresql-client
+print-client
+remote-desktop-clients
+scientific
+security-tools
+server-platform
+server-platform-devel
+server-policy
+tex
+technical-writing
+workstation-policy
+
+PACKAGES yumi OMNI
+libgcrypt-devel
+libXinerama-devel
+openmotif-devel
+libXmu-devel
+xorg-x11-proto-devel
+startup-notification-devel
+libgnomeui-devel
+libbonobo-devel
+junit
+libXau-devel
+libXrandr-devel
+popt-devel
+gnome-python2-desktop
+libdrm-devel
+libxslt-devel
+libglade2-devel
+gnutls-devel
+mtools
+pax
+oddjob
+wodim
+sgpio
+genisoimage
+device-mapper-persistent-data
+ftp
+lftp
+fetchmail
+mutt
+systemtap-client
+abrt-gui
+desktop-file-utils
+ant
+libstdc++-docs
+expect
+rpmdevtools
+gcc-java
+jpackage-utils
+gcc-objc
+rpmlint
+gcc-objc++
+samba-winbind
+certmonger
+pam_krb5
+krb5-workstation
+gnome-games
+gnome-pilot
+vim-X11
+netpbm-progs
+xfig
+ImageMagick
+inkscape
+dcraw
+lm_sensors
+evolution-exchange
+thunderbird
+java-1.8.0-openjdk
+telnet
+tcp_wrappers
+openmotif
+libXmu
+libXp
+libreoffice-base
+libreoffice-emailmerge
+# not available in 6.7
+#libreoffice-report-builder
+libreoffice-wiki-publisher
+sdparm
+tuned-utils
+tuned
+perl-DBD-SQLite
+postgresql-jdbc
+hplip-gui
+hplip
+rdesktop
+vinagre
+tigervnc
+freerdp
+atlas
+numpy
+gsl
+p11-kit-trust
+openscap
+hmaccalc
+openscap-utils
+xmltoman
+texinfo
+docbook-utils-pdf
+xmlto-tex
+openswan-
+
+## Packages below primarily for CMC applications
+ksh
+glibc.i686
+libXt.i686
+libXext.i686
+libX11.i686
+libstdc++.i686
+freetype.i686
+fontconfig.i686
+libXi.i686
+elfutils-libelf.i686
+libXrender.i686
+mesa-libGLU.i686
+
+xorg-x11-fonts-ISO8859-1-100dpi
+xorg-x11-fonts-ISO8859-1-75dpi
+xorg-x11-fonts-ISO8859-14-100dpi
+xorg-x11-fonts-ISO8859-14-75dpi
+xorg-x11-fonts-ISO8859-2-100dpi
+xorg-x11-fonts-ISO8859-2-75dpi
+
+sssd-client.i686
+
+openmotif22
+openmotif22.i686
+compat-expat1.i686
+libXmu.i686
+
+#RT253273
+xmlsec1.x86_64
+libxml2.i686
+libgpg-error.i686
+libgcrypt.i686
+libxslt.i686
+libtool-ltdl.i686
+xmlsec1.i686
+xmlsec1.x86_64
+xmlsec1-openssl.i686
+xmlsec1-openssl.x86_64
+
+
+## CMC recommended but I think a lot of it is redundant
+nss-pam-ldapd.i686
+openldap.i686
+krb5-libs.i686
+keyutils-libs.i686
+libselinux.i686
+libcom_err.i686
+pam_ldap.i686
+audit-libs.i686
+cracklib.i686
+cyrus-sasl-lib.i686
+
+nspr.i686
+nss.i686
+nss-softokn.i686
+nss-util.i686
+zlib.i686
+sqlite.i686
+readline.i686
+ncurses-libs.i686
+
+PackageKit-
+
+## Matlab from ECE repository
+matlab
+
+## Java 1.8
+java-1.8.0-openjdk
+java-1.8.0-openjdk-devel
+java-1.6.0-openjdk-javadoc
+
+## NTFS support
+ntfs-3g
+
+## ECE Repo, custom
+klayout
+ncdu
