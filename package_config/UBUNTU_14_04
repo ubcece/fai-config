@@ -549,7 +549,6 @@ mtr
 mtr-tiny-
 mutt
 mythes-thesaurus
-ncdu
 netdiag
 netmask
 nmap
@@ -876,7 +875,6 @@ munin-plugins-extra
 snmpd
 
 PACKAGES install SMBSERVER
-ncdu
 pwcplxchk
 samba
 samba-common-bin
@@ -948,6 +946,7 @@ mlocate
 monit
 mtr-tiny
 nano
+ncdu
 nfs-common
 nscd
 nslcd
