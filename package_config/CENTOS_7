@@ -97,7 +97,6 @@ junit
 libXau-devel
 libXrandr-devel
 popt-devel
-gnome-python2-desktop
 libdrm-devel
 libxslt-devel
 libglade2-devel
@@ -120,7 +119,6 @@ ant
 libstdc++-docs
 expect
 rpmdevtools
-gcc-java
 jpackage-utils
 gcc-objc
 rpmlint
@@ -129,8 +127,6 @@ samba-winbind
 certmonger
 pam_krb5
 krb5-workstation
-gnome-games
-gnome-pilot
 vim-X11
 netpbm-progs
 xfig
@@ -138,9 +134,7 @@ ImageMagick
 inkscape
 dcraw
 lm_sensors
-evolution-exchange
 thunderbird
-java-1.8.0-openjdk
 telnet
 tcp_wrappers
 openmotif
@@ -158,7 +152,6 @@ perl-DBD-SQLite
 postgresql-jdbc
 hplip-gui
 hplip
-rdesktop
 vinagre
 tigervnc
 freerdp
@@ -173,7 +166,7 @@ xmltoman
 texinfo
 docbook-utils-pdf
 xmlto-tex
-openswan-
+ncdu
 
 ## Packages below primarily for CMC applications
 ksh
@@ -198,9 +191,8 @@ xorg-x11-fonts-ISO8859-2-75dpi
 
 sssd-client.i686
 
-openmotif22
-openmotif22.i686
-compat-expat1.i686
+motif
+motif.i686
 libXmu.i686
 
 #RT253273
@@ -223,7 +215,6 @@ krb5-libs.i686
 keyutils-libs.i686
 libselinux.i686
 libcom_err.i686
-pam_ldap.i686
 audit-libs.i686
 cracklib.i686
 cyrus-sasl-lib.i686
@@ -237,19 +228,16 @@ sqlite.i686
 readline.i686
 ncurses-libs.i686
 
-PackageKit-
-
 ## Matlab from ECE repository
 matlab
 
 ## Java 1.8
 java-1.8.0-openjdk
 java-1.8.0-openjdk-devel
-java-1.6.0-openjdk-javadoc
+java-1.8.0-openjdk-javadoc
 
 ## NTFS support
 ntfs-3g
 
 ## ECE Repo, custom
 klayout
-ncdu
