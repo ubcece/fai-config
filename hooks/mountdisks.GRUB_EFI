@@ -1,0 +1,31 @@
+#!/bin/bash
+
+FSTAB="$LOGDIR/fstab"
+
+if [ -n "`awk '$1 !~ /^#/ && $2 == "/boot/efi"' "$FSTAB"`" ]; then
+    # Mountpoint /boot/efi already exists in fstab
+    exit 0
+fi
+
+# Find an EFI System Partition and add it to fstab
+lsblk -P -o KNAME,PARTTYPE,FSTYPE,UUID | while read line ; do
+    eval "$line"
+    case "$PARTTYPE" in
+      0xef|c12a7328-f81f-11d2-ba4b-00a0c93ec93b)
+        case "$FSTYPE" in
+          fat*|vfat)
+            # Found an EFI system partition
+            echo "Found EFI System Partition: /dev/$KNAME"
+            printf "\n# device during installation: /dev/%s\n" "$KNAME"
+            printf "UUID=%s\t/boot/efi\t%s\trw\t0\t0\n" "$UUID" "$FSTYPE"
+            break
+            ;;
+        esac
+        ;;
+    esac
+done >> "$FSTAB"
+
+if [ -z "`awk '$1 !~ /^#/ && $2 == "/boot/efi"' "$FSTAB"`" ]; then
+    echo "No EFI System Partition found."
+    exit 1
+fi
