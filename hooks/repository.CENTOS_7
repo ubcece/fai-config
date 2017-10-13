@@ -1,0 +1,7 @@
+# Must update nss first to avoid an SSL certificate error with the epel
+# repository's mirrorlist/metalink.
+$ROOTCMD yum --quiet --assumeyes update nss
+
+# pyliblzma is needed to provide yum with support for xz compression.
+# ca-certificates is needed for yum to handle HTTPS.
+$ROOTCMD yum --quiet --assumeyes install ca-certificates pyliblzma epel-release
