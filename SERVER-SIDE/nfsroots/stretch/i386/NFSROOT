@@ -2,41 +2,38 @@
 
 PACKAGES install
 
-nfs-common fai-nfsroot module-init-tools ssh rdate lshw rpcbind
+nfs-common fai-nfsroot ssh rdate lshw rpcbind
 rsync lftp less dump reiserfsprogs e2fsprogs usbutils
 hwinfo psmisc pciutils hdparm smartmontools parted mdadm lvm2
-dnsutils ntpdate dosfstools xfsprogs xfsdump btrfs-tools
+dnsutils ntpdate dosfstools xfsprogs xfsdump btrfs-progs
 procinfo numactl dialog
 kbd
 iproute2 netselect moreutils udev subversion
 xz-utils
-cupt
 pxelinux syslinux-common # in jessie we need both
-curl
+curl netcat-traditional
+apt-transport-https
+ca-certificates
 nmap
-#emacs24-nox
-
-# dracut replaces live-boot and initramfs-tools
-dracut dracut-network live-boot-
-#dracut-config-generic # this is not available in plain Debian jessie
-
-PACKAGES install DEBIAN
-console-common
+#emacs25-nox
 
 # some network cards needs firmware
 firmware-bnx2 firmware-bnx2x firmware-realtek
 firmware-linux firmware-linux-nonfree
 
-# you should not edit the lines below
-# architecture dependend list of packages that are installed
+# dracut replaces live-boot and initramfs-tools
+dracut dracut-network live-boot-
+dracut-config-generic # for jessie add "deb http://fai-project.org/download jessie koeln"
 
 #git # git consumes a lot of disk space on the FAI CD
 
-PACKAGES install DEBIAN_8
 sysvinit-core systemd-sysv-
 
 # packages for Ubuntu natty/oneiric/precise:
 # linux-image-generic live-boot
+
+PACKAGES install DEBIAN
+console-common
 
 # packages for Ubuntu
 PACKAGES install UBUNTU
@@ -48,7 +45,6 @@ PACKAGES install
 bash-completion
 binutils
 bridge-utils
-ca-certificates
 cfengine2
 cryptsetup
 discover
@@ -62,10 +58,12 @@ kexec-tools
 liblinux-lvm-perl
 linux-base
 locales
+man
 ncurses-term
 ntfs-3g
 patch
 rinse
+strace
 syslinux
 tmux
 udftools
@@ -83,7 +81,8 @@ lsb-release
 PACKAGES install DEBIAN
 debootstrap/unstable
 
-# architecture dependent list of packages that are installed
+# you should not edit the lines below
+# architecture dependend list of packages that are installed
 
 PACKAGES install AMD64
 grub-pc
@@ -95,3 +94,9 @@ grub-pc
 linux-image-686-pae
 linux-headers-686-pae
 read-edid
+
+PACKAGES install DEBIAN_10
+fdisk
+
+PACKAGES install DEBIAN_11
+fdisk

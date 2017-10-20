@@ -1,17 +1,17 @@
-default fai-rescue-jessie
+default fai-rescue-stretch
 
 label localboot
     kernel chain
     append hd0
 
-label fai-rescue-jessie
+label fai-rescue-stretch
     kernel ifcpu64.c32
-    append fai-rescue-jessie-amd64 -- fai-rescue-jessie-i386
+    append fai-rescue-stretch-amd64 -- fai-rescue-stretch-i386
 
-label fai-rescue-jessie-amd64
-    kernel fai/vmlinuz-jessie-amd64
-    append ip=dhcp initrd=fai/initrd-jessie-amd64 root=nfs:/exports/fai/nfsroot-jessie-amd64 aufs nomodeset FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+label fai-rescue-stretch-amd64
+    kernel fai/vmlinuz-stretch-amd64
+    append ip=dhcp initrd=fai/initrd-stretch-amd64 root=nfs:/exports/fai/nfsroot-stretch-amd64:vers=3 rootovl nomodeset FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
 
-label fai-rescue-jessie-i386
-    kernel fai/vmlinuz-jessie-i386
-    append ip=dhcp initrd=fai/initrd-jessie-i386  root=nfs:/exports/fai/nfsroot-jessie-i386  aufs nomodeset FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+label fai-rescue-stretch-i386
+    kernel fai/vmlinuz-stretch-i386
+    append ip=dhcp initrd=fai/initrd-stretch-i386  root=nfs:/exports/fai/nfsroot-stretch-i386:vers=3  rootovl nomodeset FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}

@@ -1,0 +1,4 @@
+deb     http://mirror.it.ubc.ca/debian              stretch           main contrib non-free
+deb-src http://mirror.it.ubc.ca/debian              stretch           main contrib non-free
+deb     http://mirror.it.ubc.ca/debian              stretch-updates   main contrib non-free
+deb     http://mirror.it.ubc.ca/debian-security     stretch/updates   main contrib non-free

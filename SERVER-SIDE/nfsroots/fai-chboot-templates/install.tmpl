@@ -1,17 +1,17 @@
-default fai-install-jessie
+default fai-install-stretch
 
 label localboot
     kernel chain
     append hd0
 
-label fai-install-jessie
+label fai-install-stretch
     kernel ifcpu64.c32
-    append fai-install-jessie-amd64 -- fai-install-jessie-i386
+    append fai-install-stretch-amd64 -- fai-install-stretch-i386
 
-label fai-install-jessie-amd64
-    kernel fai/vmlinuz-jessie-amd64
-    append ip=dhcp initrd=fai/initrd-jessie-amd64 root=nfs:/exports/fai/nfsroot-jessie-amd64 aufs nomodeset FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+label fai-install-stretch-amd64
+    kernel fai/vmlinuz-stretch-amd64
+    append ip=dhcp initrd=fai/initrd-stretch-amd64 root=nfs:/exports/fai/nfsroot-stretch-amd64:vers=3 rootovl nomodeset FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
 
-label fai-install-jessie-i386
-    kernel fai/vmlinuz-jessie-i386
-    append ip=dhcp initrd=fai/initrd-jessie-i386  root=nfs:/exports/fai/nfsroot-jessie-i386  aufs nomodeset FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+label fai-install-stretch-i386
+    kernel fai/vmlinuz-stretch-i386
+    append ip=dhcp initrd=fai/initrd-stretch-i386  root=nfs:/exports/fai/nfsroot-stretch-i386:vers=3  rootovl nomodeset FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}

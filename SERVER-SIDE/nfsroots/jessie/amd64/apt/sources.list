@@ -1,4 +1,0 @@
-deb     http://mirror.it.ubc.ca/debian              jessie           main contrib non-free
-deb-src http://mirror.it.ubc.ca/debian              jessie           main contrib non-free
-deb     http://mirror.it.ubc.ca/debian              jessie-updates   main contrib non-free
-deb     http://mirror.it.ubc.ca/debian-security     jessie/updates   main contrib non-free
