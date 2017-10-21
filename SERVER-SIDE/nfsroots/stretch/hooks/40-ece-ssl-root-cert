@@ -1,4 +1,0 @@
-# curl and wget need the ECE Root SSL Certificate to contact https://$SERVER
-
-cp /etc/ssl/certs/CA.ece.ubc.ca.pem $NFSROOT/usr/local/share/ca-certificates/CA.ece.ubc.ca.crt
-$ROOTCMD /usr/sbin/update-ca-certificates
