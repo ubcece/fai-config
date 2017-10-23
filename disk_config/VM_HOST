@@ -36,4 +36,4 @@ primary  -             98%-        -            -
 # disabled if the disk has battery backup.
 disk_config lvm fstabkey:device preserve_lazy:hostdata-vz
 vg        hostdata       disk2.2
-hostdata-vz   /var/lib/vz  90%         ext4         rw,relatime,barrier=1,data=ordered
+hostdata-vz   /var/lib/vz  90%         ext4         rw,relatime,barrier=1,data=ordered createopts="-O ^metadata_csum"

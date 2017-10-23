@@ -6,12 +6,12 @@ primary		-			15900M-	-	-
 
 disk_config lvm fstabkey:uuid
 vg		VGroot			disk1.2
-VGroot-LVroot 	/			4G-	ext4	rw,errors=remount-ro createopts="-i 12288"
+VGroot-LVroot 	/			4G-	ext4	rw,errors=remount-ro createopts="-i 12288 -O ^metadata_csum"
 VGroot-LVswap	swap			2G	swap	rw
-VGroot-LVtmp	/tmp			1G-3G	ext4	rw,nodev,nosuid
-VGroot-LVvar 	/var			2G-8G 	ext4	rw
-VGroot-LVlog	/var/log		4G-8G	ext4	rw
-VGroot-LVaudit	/var/log/audit		1G	ext4	rw
+VGroot-LVtmp	/tmp			1G-3G	ext4	rw,nodev,nosuid createopts="-O ^metadata_csum"
+VGroot-LVvar 	/var			2G-8G 	ext4	rw createopts="-O ^metadata_csum"
+VGroot-LVlog	/var/log		4G-8G	ext4	rw createopts="-O ^metadata_csum"
+VGroot-LVaudit	/var/log/audit		1G	ext4	rw createopts="-O ^metadata_csum"
 
 # Leave some unused space in VGroot for snapshot volume
 VGroot-snapreserve  -			1G	-	-
