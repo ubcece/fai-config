@@ -91,7 +91,9 @@ sub syslinux_to_ipxe {
             # Some BIOSes work with the sanboot command; others work better
             # if iPXE just exits.  Reportedly, the most reliable hack is to
             # chain-load GRUB to do "rootnoverify (hd0); chainloader +1".
-            "sanboot --no-describe --drive 0x8$+{CHAINBOOT_DISK}"
+            # As a compromise, we will try exiting if it's EFI, but
+            # sanboot if it's BIOS.
+            "iseq \${platform} efi && exit || sanboot --no-describe --drive 0x8$+{CHAINBOOT_DISK}"
      : $+{DEFAULT_STMT} ?
             "goto $+{DEFAULT_LABEL}"
      : $+{IFCPU64_STMT} ?
