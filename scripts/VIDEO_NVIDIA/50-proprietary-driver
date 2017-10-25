@@ -3,7 +3,7 @@
 # For definition of ifclass
 . /usr/lib/fai/subroutines
 
-if ! ifclass GNOME && ! ifclass KDE && ! ifclass XFCE ; then
+if ! ifclass GNOME && ! ifclass KDE && ! ifclass LXDE && ! ifclass XFCE ; then
 	exit 0
 fi
 
@@ -24,13 +24,20 @@ if ifclass UBUNTU ; then
 	# driver   : nvidia-340-updates - distro non-free
 	# driver   : nvidia-346-updates - distro non-free
 	# 
-	$ROOTCMD ubuntu-drivers devices | awk '
+	recommended=`$ROOTCMD ubuntu-drivers devices | awk '
 	    $1 == "==" { VENDOR = "" }
 	    $1 == "vendor" { $1 = $2 = ""; VENDOR = $0 }
 	    $1 == "driver" && VENDOR ~ "NVIDIA" && /recommended/ { print $3 }
-	' |
-	xargs $ROOTCMD apt-get install -y &&
-	$ROOTCMD update-initramfs -u -k all
+	'`
+	# Decline to downgrade or remove any existing packages (such as
+	# an nvidia-NNN package installed for CUDA).
+	if $ROOTCMD apt-get install --assume-no $recommended ; then
+		$ROOTCMD update-initramfs -u -k all
+		echo "Installed recommended nVidia driver: $recommended"
+	else
+		echo "Did not install recommended nVidia driver: $recommended"
+		exit 1
+	fi
 
 
 elif ifclass DEBIAN_6 ; then
