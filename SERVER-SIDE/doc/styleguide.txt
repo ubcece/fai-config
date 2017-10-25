@@ -28,7 +28,7 @@ DEBIAN_6        Debian 6 (squeeze)
 UBUNTU          The recommended version of Ubuntu
 UBUNTU_14_04    Ubuntu 14.04 LTS (trusty)
 UBUNTU_16_04    Ubuntu 16.04 LTS (xenial)
-UBUNTU_17_04    Ubuntu 17.04 (zesty)
+UBUNTU_17_10    Ubuntu 17.10 (artful)
 CENTOS          The recommended version of CentOS
 CENTOS_7        CentOS 7
 
