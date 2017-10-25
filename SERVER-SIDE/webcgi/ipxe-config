@@ -92,8 +92,10 @@ sub syslinux_to_ipxe {
             # if iPXE just exits.  Reportedly, the most reliable hack is to
             # chain-load GRUB to do "rootnoverify (hd0); chainloader +1".
             # As a compromise, we will try exiting if it's EFI, but
-            # sanboot if it's BIOS.
-            "iseq \${platform} efi && exit || sanboot --no-describe --drive 0x8$+{CHAINBOOT_DISK}"
+            # sanboot if it's BIOS.  Furthermore, in the VMware EFI
+            # implementation, exit 0 causes the EFI boot menu to be displayed,
+            # but exit 1 causes it to try the next boot option.
+            "iseq \${platform} efi && exit 1 || sanboot --no-describe --drive 0x8$+{CHAINBOOT_DISK}"
      : $+{DEFAULT_STMT} ?
             "goto $+{DEFAULT_LABEL}"
      : $+{IFCPU64_STMT} ?
