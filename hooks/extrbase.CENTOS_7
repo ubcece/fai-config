@@ -10,7 +10,7 @@ case "$ARCH" in
     MIRROR=http://mirror.centos.org/altarch/7/os/i386/Packages/
     ;;
   amd64)
-    MIRROR=http://centos.mirrors.ece.ubc.ca/7/os/x86_64/Packages/
+    MIRROR=http://mirror.it.ubc.ca/centos/7/os/x86_64/Packages/
     ;;
 esac
 
