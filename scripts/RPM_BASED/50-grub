@@ -1,0 +1,101 @@
+#! /bin/bash
+
+# Script to install GRUB when installing an RPM-based target OS.
+#
+# In contrast, when installing .deb packages of GRUB, the postinst script can
+# automatically run /sbin/grub-install.  See hooks/debconf.DEB_BASED.
+
+error=0; trap 'error=$(($?>$error?$?:$error))' ERR # save maximum error code
+
+. /usr/lib/fai/subroutines
+
+# Find the physical devices on which the given partitions reside, tracing
+# through MD and LVM layers if necessary.
+resolve_to_phys_dev() {
+    stat -L --format '%t %T %n' $@ | while read -r major_hex minor_hex dev ; do
+        major=$((0x$major_hex))
+        minor=$((0x$minor_hex))
+        if [ -f "/sys/dev/block/$major:$minor/partition" ]; then
+            partition=$(cat "/sys/dev/block/$major:$minor/partition")
+            minor=$(($minor - $partition))
+            dev="/dev/$(basename $(readlink "/sys/dev/block/$major:$minor"))"
+        fi
+        if [ -e "/sys/dev/block/$major:$minor/device" ]; then
+            # This is a physical device
+            echo "$dev"
+        elif [ -d "/sys/dev/block/$major:$minor/slaves" ]; then
+            # This is a MD or LVM member
+            for slave in /sys/dev/block/$major:$minor/slaves/* ; do
+                resolve_to_phys_dev "/dev/$(basename $slave)"
+            done
+        fi
+    done | sort -u
+}
+
+if ifclass GRUB_EFI && [ -L "$target/etc/grub2-efi.cfg" ]; then
+    if ! mountpoint -q $target/boot/efi ; then
+        echo "ERROR: /boot/efi is not a mount point"
+        exit 1
+    fi
+
+    # According to https://fedoraproject.org/wiki/GRUB_2 :
+    #
+    #     grub2-install shouldn't be used on EFI systems. The grub2-efi package
+    #     installs a prebaked grubx64.efi on the EFI System partition, which
+    #     looks for grub.cfg on the ESP in /EFI/fedora/ whereas the
+    #     grub2-install command creates a custom grubx64.efi, deletes the
+    #     original installed one, and looks for grub.cfg in /boot/grub2/.
+    #
+    # However, it would be a good idea to (re-)generate the GRUB configuration.
+    # TODO: run efibootmgr?
+    $ROOTCMD grub2-mkconfig -o /etc/grub2-efi.cfg
+    if [ $? = 0 ]; then
+        echo "Generated GRUB (EFI) configuration"
+    else
+        echo "ERROR: Failed to generate GRUB (EFI) configuration"
+    fi
+
+elif ifclass GRUB_PC; then
+    case "$FAI_ACTION" in
+      install|dirinstall)
+         # Get $BOOT_DEVICE from disk config
+        . $LOGDIR/disk_var.sh
+
+        if ifclass DISK2 ; then
+            bootdisks=$(echo $disklist | awk '{printf "/dev/%s /dev/%s", $1, $2}')
+        elif [ -n "$BOOT_DEVICE" ]; then
+            bootdisks=$(resolve_to_phys_dev "$BOOT_DEVICE")
+        elif [ -x /usr/bin/debconf-get-selections ]; then
+            # Hopefully doing a dirinstall of an RPM-based OS from a
+            # Debian-based OS?
+            bootdisks=$(debconf-get-selections | awk '
+                $1 == "grub-pc" && $2 == "grub-pc/install_devices" && $3 == "multiselect" {
+                    $1 = $2 = $3 = "";
+                    print;
+                }
+            ' | sed -e 's/^\s\+//')
+        else
+            # Desperate effort: use all disks that FAI has detected
+            set_disk_info
+        fi
+
+        if [ -z "$bootdisks" ]; then
+            echo "ERROR: Boot disk could not be determined"
+            exit 1
+        fi
+
+        for disk in $bootdisks ; do
+            $ROOTCMD /usr/sbin/grub2-install --no-floppy $disk
+
+            if [ $? = 0 ]; then
+                echo "Installed GRUB (BIOS) on $disk"
+            else
+                echo "ERROR: Failed to install GRUB (BIOS) on $disk"
+            fi
+        done
+        ;;
+    esac
+fi
+
+
+exit $error

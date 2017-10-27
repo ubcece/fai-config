@@ -1,0 +1,31 @@
+#! /bin/bash
+
+error=0; trap 'error=$(($?>$error?$?:$error))' ERR # save maximum error code
+
+. /usr/lib/fai/subroutines
+
+if ! mountpoint -q $target/boot/efi ; then
+    echo "ERROR: /boot/efi is not a mount point"
+    exit 1
+fi
+
+case "$FAI_ACTION" in
+  install|dirinstall)
+    # The grub-pc postinst script will have run grub-install automatically
+    # (see hooks/debconf.DEB_BASED).
+    #
+    # The grub-efi-amd64 postinst script re-runs grub-install automatically,
+    # but only to reinstall an existing bootloader that already exists in the
+    # EFI directory.
+    if ifclass GRUB_EFI; then
+        if ! $ROOTCMD /usr/sbin/grub-install; then
+            echo "ERROR: Failed to install GRUB (EFI)"
+        else
+            echo "Installed GRUB (EFI)"
+        fi
+    fi
+
+    ;;
+esac
+
+exit $error

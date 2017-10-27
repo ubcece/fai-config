@@ -27,6 +27,7 @@ PACKAGES yumi GRUB_EFI
 efibootmgr
 grub2-efi
 grub2-efi-modules
+grub2-tools-efi
 
 PACKAGES yumi ECE
 puppet
