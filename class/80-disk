@@ -21,12 +21,8 @@ if ifclass RAID1 ; then
 elif ifclass DISK1P3 ; then
 	exit
 
-elif ifclass VMWARE_GUEST ; then
-	if [ `disk_count` = 1 ]; then
-		ifclass VM_GUEST || echo "VM_GUEST"
-	else
-		echo "VM_GUEST2"
-	fi
+elif ifclass VM_GUEST && [ `disk_count` -gt 1 ]; then
+	echo "DATA2"
 
 elif ifclass VM_HOST ; then
 	# FIXME: It would be nice if all servers could use a common layout and this line could go away.
