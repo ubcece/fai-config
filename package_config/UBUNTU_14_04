@@ -119,7 +119,6 @@ tcc
 tftpd-hpa
 upx-ucl
 uuid-dev
-wimtools
 
 PACKAGES taskinst GNOME
 ubuntu-desktop
