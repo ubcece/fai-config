@@ -1,5 +1,4 @@
 #!/bin/bash
 
-fcopy -iBM /etc/apt/sources.list.d/fai-project.list
 fcopy -iBM /etc/apt/sources.list.d/ubcit-ubuntu-ppa.list
 fcopy -iBM /etc/apt/sources.list.d/webupd8team-java.list
