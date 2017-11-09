@@ -51,6 +51,7 @@ cfengine2
 cryptsetup
 discover
 dmsetup
+dpkg-dev
 efibootmgr
 eject
 fai-doc
