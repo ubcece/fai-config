@@ -149,7 +149,7 @@ sub cgimain {
 sub main {
     my ($q) = @_;
     $root_prefix = '/syslinux/';
-    my $ip = parse_ipv4addr($q->param('ip'));
+    my $ip = parse_ipv4addr(scalar $q->param('ip'));
     config_for($q, $ip);
 }
 
