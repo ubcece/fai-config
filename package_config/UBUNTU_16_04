@@ -54,6 +54,7 @@ libgtest-dev
 libiomp-dev
 libleveldb-dbg
 libleveldb-dev
+libtorch-dev
 lmdb-utils
 openmpi-bin
 protobuf-c-compiler
