@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Must be #!/bin/bash, not #!/bin/sh, to pick up the ifclass function.
+# For the ifclass function:
+. /usr/lib/fai/subroutines
 
 # The Perl script below rewrites any udev rules file.  This shell script
 # snippet calls the Perl script to rewrite *persistent-net.rules.

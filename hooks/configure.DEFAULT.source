@@ -1,4 +1,10 @@
-ece_sync_keys_to_target
+case "$FAI_ACTION" in
+  sysinfo|softupdate)
+    : ;;
+  *)
+    ece_sync_keys_to_target
+    ;;
+esac
 
 # According to the FAI user guide, Bash scripts under $FAI/scripts can use
 # the ifclass function.  However, fai-do-scripts doesn't make the function
