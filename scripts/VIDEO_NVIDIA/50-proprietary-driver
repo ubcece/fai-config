@@ -29,7 +29,8 @@ if ifclass UBUNTU ; then
 	    $1 == "vendor" { $1 = $2 = ""; VENDOR = $0 }
 	    $1 == "driver" && VENDOR ~ "NVIDIA" && /recommended/ { print $3 }
 	' |
-	xargs $ROOTCMD apt-get install -y
+	xargs $ROOTCMD apt-get install -y &&
+	$ROOTCMD update-initramfs -u -k all
 
 
 elif ifclass DEBIAN_6 ; then
