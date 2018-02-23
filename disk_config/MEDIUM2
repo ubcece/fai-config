@@ -1,12 +1,12 @@
-# This disk_config is suitable for a hard disk with >=40GB and <100GB
+# This disk_config is suitable for a hard disk with >=50GB and <150GB
 
 disk_config disk2 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid align-at:8k
 primary		-		150M-200M	vfat	-
 primary		swap		2G	swap	rw
-primary		-		38G-	-	-
+primary		-		48G-	-	-
 
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data
 vg		vg		disk2.3
-vg-root 	/		30G-40G	ext4 rw,errors=remount-ro createopts="-O ^metadata_csum"
-vg-var 		/var		3G-6G	ext4 rw createopts="-O ^metadata_csum"
+vg-root 	/		40G-80G	ext4 rw,errors=remount-ro createopts="-O ^metadata_csum"
+vg-var 		/var		3G-8G	ext4 rw createopts="-O ^metadata_csum"
 vg-data		/data		5G-	xfs  rw
