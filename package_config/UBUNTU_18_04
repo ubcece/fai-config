@@ -1195,3 +1195,6 @@ xubuntu-desktop
 # the X login screen away from the Ubuntu default.  Undo that.
 PACKAGES install GNOME
 lightdm-gtk-greeter-
+
+PACKAGES install GNOME KDE LXDE XFCE
+lirc-
