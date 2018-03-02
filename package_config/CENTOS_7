@@ -93,6 +93,9 @@ tex
 technical-writing
 workstation-policy
 
+PACKAGES yumr OMNI
+perl-homedir
+
 PACKAGES yumi OMNI
 libgcrypt-devel
 libXinerama-devel
