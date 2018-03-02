@@ -11,6 +11,7 @@ openssh-server
 vim-enhanced
 man
 curl
+libfastjson
 screen
 unzip
 which
