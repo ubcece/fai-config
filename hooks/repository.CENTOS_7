@@ -1,3 +1,7 @@
+#!/bin/bash
+
+. /usr/lib/fai/subroutines
+
 # Must update nss first to avoid an SSL certificate error with the epel
 # repository's mirrorlist/metalink.
 $ROOTCMD yum --quiet --assumeyes update nss
@@ -5,3 +9,8 @@ $ROOTCMD yum --quiet --assumeyes update nss
 # pyliblzma is needed to provide yum with support for xz compression.
 # ca-certificates is needed for yum to handle HTTPS.
 $ROOTCMD yum --quiet --assumeyes install ca-certificates pyliblzma epel-release
+
+if ifclass VIDEO_NVIDIA ; then
+    $ROOTCMD rpm --import - < $FAI/package_config/ELREPO.asc
+    $ROOTCMD rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+fi

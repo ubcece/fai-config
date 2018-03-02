@@ -7,7 +7,15 @@ if ! ifclass GNOME && ! ifclass KDE && ! ifclass LXDE && ! ifclass XFCE ; then
 	exit 0
 fi
 
-if ifclass UBUNTU ; then
+if ifclass RPM_BASED ; then
+	# Using nvidia-detect from https://elrepo.org/
+	recommended=`$ROOTCMD nvidia-detect`
+        if [ -n "$recommended" ]; then
+		$ROOTCMD yum install -y $recommended $&&
+		echo "Installed recommended nVidia driver: $recommended"
+	fi
+
+elif ifclass UBUNTU ; then
 
 	# Install the recommended nVidia driver package.
 	# Sample output from `ubuntu-drivers devices`:

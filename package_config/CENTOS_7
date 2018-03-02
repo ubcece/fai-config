@@ -29,6 +29,9 @@ grub2-efi
 grub2-efi-modules
 grub2-tools-efi
 
+PACKAGES yumi VIDEO_NVIDIA
+nvidia-detect
+
 PACKAGES yumi STANDARD
 acpid
 sssd-tools
