@@ -950,6 +950,8 @@ procmail
 PACKAGES install SERVER
 apparmor-profiles
 apparmor-utils
+bridge-utils
+git
 molly-guard
 munin-node
 munin-plugins-extra
