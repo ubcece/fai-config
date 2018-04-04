@@ -382,6 +382,7 @@ default-jdk
 deskbar-applet
 devscripts
 dia
+dos2unix
 ebtables
 eclipse
 eclipse-cdt
