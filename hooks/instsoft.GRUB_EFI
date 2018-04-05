@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Ensure that the EFI System Partition is mounted if doing a dirinstall.
+# (The mountdisks tasks is skipped when doing a dirinstall.)
+
+if [ $FAI_ACTION = "dirinstall" ]; then
+    if mountpoint -q "/boot/efi" && ! mountpoint -q "$target/boot/efi"; then
+        mkdir -p "$target/boot/efi"
+        mount -o bind "/boot/efi" "$target/boot/efi"
+        echo "Mounted $target/boot/efi"
+    fi
+fi
