@@ -24,7 +24,9 @@ PACKAGES yumi GRUB_PC
 grub2  # CentOS 7
 
 PACKAGES yumi GRUB_EFI
+efibootmgr
 grub2-efi
+grub2-efi-modules
 
 PACKAGES yumi ECE
 puppet
