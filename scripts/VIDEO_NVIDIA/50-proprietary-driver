@@ -39,7 +39,7 @@ elif ifclass UBUNTU ; then
 	'`
 	# Decline to downgrade or remove any existing packages (such as
 	# an nvidia-NNN package installed for CUDA).
-	if $ROOTCMD apt-get install --assume-no $recommended ; then
+	if $ROOTCMD apt-get install --no-remove --assume-yes $recommended ; then
 		$ROOTCMD update-initramfs -u -k all
 		echo "Installed recommended nVidia driver: $recommended"
 	else
