@@ -553,6 +553,7 @@ mutt
 mythes-thesaurus
 netdiag
 netmask
+ninja-build
 nmap
 nodejs                  # Available in Debian >= 8 and Ubuntu
 notification-daemon

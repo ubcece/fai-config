@@ -81,6 +81,7 @@ legacy-x
 mysql-client
 network-file-system-client
 network-tools
+ninja-build
 office-suite
 performance
 perl-runtime
