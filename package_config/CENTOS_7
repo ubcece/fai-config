@@ -42,6 +42,9 @@ puppet
 PACKAGES yumgroup GNOME
 gnome-desktop
 
+PACKAGES yumr GNOME
+gnome-initial-setup
+
 PACKAGES yumgroup STANDARD
 base
 
