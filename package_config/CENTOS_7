@@ -32,8 +32,12 @@ grub2-tools-efi
 PACKAGES yumi VIDEO_NVIDIA
 nvidia-detect
 
+PACKAGES yumgroup STANDARD
+base
+
 PACKAGES yumi STANDARD
 acpid
+ncurses-term
 sssd-tools
 
 PACKAGES yumi ECE
@@ -44,9 +48,6 @@ gnome-desktop
 
 PACKAGES yumr GNOME
 gnome-initial-setup
-
-PACKAGES yumgroup STANDARD
-base
 
 PACKAGES yumgroup OMNI
 additional-devel
