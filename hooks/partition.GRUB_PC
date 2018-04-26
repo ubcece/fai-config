@@ -81,7 +81,7 @@ want_partition_tables() {
 # necessary.
 partition_edit_ops() {
     dev="$1"
-    parted --script "$dev" unit s print | gawk -v dev="$1" '
+    ( parted --script "$dev" unit s print 2>/dev/null || true ) | gawk -v dev="$1" '
         # Skip to the table (after the first blank line)
         NR==1, NF==0 { FPAT = "[A-Z][a-z ]*"; next; }
 
