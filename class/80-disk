@@ -15,6 +15,14 @@ disk_count() {
 	/usr/lib/fai/fai-disk-info | wc -l
 }
 
+# Allow the disk_config classes to be manually overridden
+if ifclass SMALL  ||
+   ifclass MEDIUM || ifclass MEDIUM2 ||
+   ifclass LARGE  || ifclass LARGE2  ||
+   ifclass RAID1  || ifclass DATA2 ; then
+	exit
+fi
+
 if ifclass RAID1 ; then
 	exit
 
