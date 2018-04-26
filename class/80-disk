@@ -34,16 +34,16 @@ elif [ `disk_count` -gt 2 ]; then
 
 elif ifclass DISK2 ; then
 	size=`disk_sizes | tail -n 1`
-	if   [ "$size" -lt  50000000 ]; then echo "The hard disk is too small (50 GB minimum)." >&2 ; exit 1
-	elif [ "$size" -lt 120000000 ]; then echo "MEDIUM2"
+	if   [ "$size" -lt  60000000 ]; then echo "The hard disk is too small (50 GB minimum)." >&2 ; exit 1
+	elif [ "$size" -lt 150000000 ]; then echo "MEDIUM2"
 	else                                 echo "LARGE2"
 	fi
 
 else
 	size=`disk_sizes | head -n 1`
 	if   [ "$size" -lt  10000000 ]; then echo "The hard disk is too small (10 GB minimum)." >&2 ; exit 1
-	elif [ "$size" -lt  50000000 ]; then echo "SMALL"
-	elif [ "$size" -lt 120000000 ]; then echo "MEDIUM"
+	elif [ "$size" -lt  60000000 ]; then echo "SMALL"
+	elif [ "$size" -lt 150000000 ]; then echo "MEDIUM"
 	elif ifclass RAID             ; then echo "RAID1"
 	else                                 echo "LARGE"
 	fi
