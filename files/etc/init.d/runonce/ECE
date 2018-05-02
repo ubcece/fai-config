@@ -34,20 +34,6 @@ if id monitor >/dev/null 2>/dev/null ; then
     [ -x /sbin/insserv ] && /sbin/insserv -r runonce
 
     rm -f /root/runonce_no_success /etc/init.d/runonce
-
-    # 2011-11-03 Derek and Chris:
-    # Workstations tend to need rebooting, especially to since the nouveau
-    # video driver cannot be unloaded.  Servers (that don't have an X server)
-    # may be able to get away without a reboot.
-    if [ -x /etc/init.d/gdm3 ]; then
-        /etc/init.d/gdm3 stop
-        chvt 1
-        echo
-        echo "Integration of `hostname` into ECE done."
-        echo "Therefore a reboot is necessary. Will reboot in 10s."
-        sleep 10
-        /sbin/shutdown -r now
-    fi
 else
     touch /root/runonce_no_success
     echo -n "LDAP accounts not integrated"
