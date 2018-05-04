@@ -269,6 +269,7 @@ nscd
 php-gd
 php-pspell
 php-imap
+php-imagick
 php-mcrypt
 postfix
 postfix-doc
