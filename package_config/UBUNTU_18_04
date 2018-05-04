@@ -1031,6 +1031,7 @@ memtester
 mlocate
 monit
 mtr-tiny
+net-tools
 nano
 nfs-common
 nscd
