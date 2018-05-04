@@ -1,0 +1,4 @@
+# Change "use_lvmetad = 1" to "use_lvmetad = 0", to avoid
+# "WARNING: Failed to connect to lvmetad. Falling back to device scanning."
+
+sed -i -e 's/\(^\s*use_lvmetad\s*=\s*\)1/\10/' $NFSROOT/etc/lvm/lvm.conf
