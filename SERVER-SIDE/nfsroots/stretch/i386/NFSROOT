@@ -58,6 +58,7 @@ fai-doc
 #fuse-utils
 gawk
 git-core
+gnupg
 kexec-tools
 liblinux-lvm-perl
 linux-base
