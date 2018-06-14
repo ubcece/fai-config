@@ -177,7 +177,9 @@ nis
 postgresql-client
 slapd
 syslog-ng
-libapache2-mod-shib2
+# DLL hell on Linux: https://bugs.launchpad.net/ubuntu/+source/curl/+bug/1754294
+# libapache2-mod-shib2 uses libcurl3, which conflicts with other packages that
+# use libcurl4
 lshell
 
 PACKAGES taskinst LXDE
@@ -188,8 +190,6 @@ apache2
 apachetop
 cronolog
 libapache2-mod-authnz-external
-libapache2-mod-bigip
-libapache2-mod-macro
 libsasl2-modules
 libio-socket-ssl-perl
 lockfile-progs
@@ -615,6 +615,8 @@ python3-lxml
 python-matplotlib
 python3-matplotlib
 python-matplotlib-data
+python-mechanicalsoup
+python3-mechanicalsoup
 python-mock
 python3-mock
 python-mpltoolkits.basemap
@@ -989,6 +991,7 @@ autofs-ldap
 bash-completion
 bc
 bind9-host
+bubblewrap
 ca-certificates
 cron
 cron-apt
@@ -1110,7 +1113,9 @@ libapache2-mod-md
 libapache2-mod-perl2
 libapache2-mod-php
 libapache2-mod-php-forbid-if-disabled   # From ppa:ubcit/ppa
-libapache2-mod-shib2
+# DLL hell on Linux: https://bugs.launchpad.net/ubuntu/+source/curl/+bug/1754294
+# libapache2-mod-shib2 uses libcurl3, which conflicts with other packages that
+# use libcurl4
 libapache2-mod-wsgi
 libapache2-request-perl
 libcache-cache-perl
@@ -1171,9 +1176,7 @@ texlive                                 # For LaTeX support in MediaWiki
 poppler-utils                           # For PDF analysis support in HotCRP
 gitolite3                               # For dev.ece.ubc.ca
 trac                                    # For dev.ece.ubc.ca
-trac-git                                # For dev.ece.ubc.ca
-libapache2-mod-python                   # For dev.ece.ubc.ca
-libapache2-svn                          # For dev.ece.ubc.ca
+libapache2-mod-svn                      # For dev.ece.ubc.ca
 python-clearsilver                      # For dev.ece.ubc.ca
 python-configobj                        # For dev.ece.ubc.ca
 python-subversion                       # For dev.ece.ubc.ca
