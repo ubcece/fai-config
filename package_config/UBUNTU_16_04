@@ -519,6 +519,7 @@ libmpc-dev
 libmpfr4
 libmpfr-dev
 libncurses5-dbg
+libnss3-tools
 libnet-ldap-perl # mutt -> lbdb -> libnet-ldap-perl
 libnss3-tools
 libpolarssl-dev

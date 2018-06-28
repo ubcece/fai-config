@@ -495,6 +495,7 @@ libmpfr4
 libmpfr-dev
 libncurses5-dbg
 libnet-ldap-perl # mutt -> lbdb -> libnet-ldap-perl
+libnss3-tools
 libpolarssl-dev
 libreoffice
 libreoffice-gnome
