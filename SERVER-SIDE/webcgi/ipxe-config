@@ -80,7 +80,7 @@ sub syslinux_to_ipxe {
      | (?<PROMPT_STMT>         prompt\s+(?<SHOW_PROMPT>[01]))
      | (?<TIMEOUT_STMT>        timeout\s+(?<TIMEOUT>\d+))
      | (?<KERNEL_APPEND_STMTS> kernel\s+(?<KERNEL>\S+)
-                            (?:\s*$\s*append\s+(?<SOME_PARAMS>.*?)\s+initrd=(?<INITRD>\S+?(?<INITRD_FILENAME>[^/[:space:]]*))\s+(?<MORE_PARAMS>.*?)$
+                            (?:\s*$\s*append\s+(?<SOME_PARAMS>.*?)\s+initrd=(?<INITRD>\S*?(?<INITRD_FILENAME>[^/[:space:]]*))\s+(?<MORE_PARAMS>.*?)$
                               |\s*$\s*append\s+(?<PARAMS>.*?)$)?)
     )}
     {  $+{INDENT} . (
