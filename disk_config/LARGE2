@@ -11,6 +11,6 @@ vg-root1	/		60G-90G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
 vg-var1		/var		6G-8G	ext4	rw createopts="-O ^metadata_csum"
 vg-root2	/altroot	60G-90G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
 vg-var2		/altroot/var	6G-8G	ext4	rw createopts="-O ^metadata_csum"
-vg-data		/data		5G-	xfs	rw
+vg-data		/data		5G-	xfs	rw createopts="-m crc=0"
 
 vg-snapreserve	-		1G	-	-

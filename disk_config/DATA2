@@ -21,4 +21,4 @@ os-tmp		/tmp		4G	ext4	rw createopts="-O ^metadata_csum"
 os-snapreserve  -		1G	-	-
 
 vg		vg			disk2.2
-vg-data		/data		6G-95%  xfs	rw,noatime
+vg-data		/data		6G-95%  xfs	rw,noatime createopts="-m crc=0"
