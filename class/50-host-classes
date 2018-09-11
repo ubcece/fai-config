@@ -42,6 +42,8 @@ case $HOSTNAME in
         echo "CUDA" ;;
     bci06)
         echo "CUDA NO_ECE" ;;
+    g32)
+        echo "DISK2 SERVER OMNI" ;;
     jwang-pc22)
         echo "LARGE CUDA" ;;    # Has multiple disks; install to just the SSD
     tims-pc21)
