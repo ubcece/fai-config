@@ -6,7 +6,7 @@
 
 disk_sizes() {
 	# Output the size of each disk, in kiB, in the natural enumeration order
-	/usr/lib/fai/fai-disk-info | while read dev ; do
+	/usr/lib/fai/fai-disk-info | sort | while read dev ; do
 		awk -v dev="$dev" '$4 == dev { print $3 }' /proc/partitions
 	done
 }
