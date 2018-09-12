@@ -1,6 +1,0 @@
-gridengine-exec		shared/gridenginecell		string morty_cluster
-gridengine-common	shared/gridenginecell		string morty_cluster
-gridengine-exec		shared/gridengineconfig		boolean true
-gridengine-common	shared/gridengineconfig		boolean true
-gridengine-exec		shared/gridenginemaster		string morty.ece.ubc.ca
-gridengine-common	shared/gridenginemaster		string morty.ece.ubc.ca

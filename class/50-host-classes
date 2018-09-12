@@ -36,10 +36,6 @@ case $HOSTNAME in
         echo "SERVER WEB RT" ;;
     [kmxv]flex?)
         echo "SERVER" ;;
-    node*) # to be clear: these are nodes on Rafeef/morty.
-        echo "GRID" ;;
-    morty)
-        echo "RAID1 GRID" ;;
     purang1[345])
         echo "VM_HOST" ;;
     bci04|mehdi-pc02|kramer|purang8|oceanus|vwong-pc11)

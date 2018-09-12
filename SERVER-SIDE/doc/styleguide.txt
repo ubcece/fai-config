@@ -47,7 +47,6 @@ RAID            RAID1 using Linux md
 DISK1P3         Install Linux to partitions 3 and 4 of disk1
 
 DATABASE        MySQL and PostgreSQL server
-GRID            Oracle (Sun) Grid Engine client
 LOOKUPSERVER    BIND, DHCP, LDAP, NIS, NTP server (no NFS support)
 MAIL            Mail server (SMTP, IMAP, and/or mailing list)
 NET             Routing/bridging/firewalling/VPN server

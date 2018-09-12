@@ -132,11 +132,6 @@ ttf-freefont
 fonts-arphic-ukai
 fonts-arphic-uming
 
-PACKAGES install GRID
-gridengine-client
-gridengine-common
-gridengine-exec
-
 PACKAGES install HP_ILO
 cpqacuxe                                # HP-provided package
 hp-health                               # HP-provided package
