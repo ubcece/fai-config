@@ -1,0 +1,17 @@
+# Also install the strech-backports kernel.  Install the dependency of
+# linux-image-686-pae or linux-image-amd64 that has a "bpo" version.
+# But don't install the linux-image-686-pae/strech-backports or
+# linux-image-amd64/stretch-backports packages themselves, since that would
+# cause an upgrade instead.
+
+echo -n "Installing stretch-backport kernel... "
+
+case "$ARCH" in
+  i386)
+    $ROOTCMD apt-cache show linux-image-686-pae linux-headers-686-pae ; ;;
+  amd64)
+    $ROOTCMD apt-cache show linux-image-amd64 linux-headers-amd64 ; ;;
+esac |
+awk '/^Depends: .*bpo/ { print $2 }' |
+tee |
+xargs $ROOTCMD apt-get install -V -y linux-compiler-gcc-6-x86/stretch-backports

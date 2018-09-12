@@ -1,3 +1,8 @@
+# With FAI 4.0.4, fai-make-nfsroot no longer copies FAI configuration files
+# into the NFS root.  (The so-called copy_fai_files() function in
+# fai-make-nfsroot doesn't!)
+cp "$cfdir"/fai.conf "$NFSROOT"/etc/fai/fai.conf
+
 # fai-make-nfsroot, in copy_fai_files(), removes /etc/fai/nfsroot.conf
 # from the NFS root.  Restore it so that dirinstall can run from the NFS root.
 cp "$cfdir"/nfsroot.conf "$NFSROOT"/etc/fai/

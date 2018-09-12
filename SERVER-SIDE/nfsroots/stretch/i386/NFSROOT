@@ -103,10 +103,12 @@ linux-headers-generic
 PACKAGES install-norec I386
 grub-pc
 linux-image-686-pae
+# Backport kernel installed via hook
 
 PACKAGES install-norec AMD64
 grub-pc
 linux-image-amd64
+# Backport kernel installed via hook
 
 PACKAGES install-norec ARM64
 grub-efi-arm64

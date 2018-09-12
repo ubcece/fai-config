@@ -1,9 +1,3 @@
-# With FAI 4.0.4, fai-make-nfsroot no longer copies FAI configuration files
-# into the NFS root.  (The so-called copy_fai_files() function in
-# fai-make-nfsroot doesn't!)
-
-cp $cfdir/fai.conf $NFSROOT/etc/fai/fai.conf
-
 # Make the NFSROOT generic.  This does the same thing as `fai-make-nfsroot -g`,
 # except that `fai-make-nfsroot -g` also removes $NFSROOT/etc/fai/fai.conf,
 # which we want to keep.

@@ -7,12 +7,14 @@
 
 for kernel in "$NFSROOT"/boot/vmlinuz-* ; do
     basename="`basename "$kernel"`"
+    cp "$kernel" "$TFTPROOT/$basename"
     chmod a+r "$TFTPROOT/$basename"
     ln -sf "$basename" "$TFTPROOT/vmlinuz-$SUITE-$ARCH"
 done
 
 for initrd in "$NFSROOT"/boot/initrd.img-* ; do
     basename="`basename "$initrd"`"
+    cp "$initrd" "$TFTPROOT/$basename"
     chmod a+r "$TFTPROOT/$basename"
     ln -sf "$basename" "$TFTPROOT/initrd-$SUITE-$ARCH"
 done
