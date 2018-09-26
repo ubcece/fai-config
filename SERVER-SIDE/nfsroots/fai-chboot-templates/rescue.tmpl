@@ -10,8 +10,8 @@ label fai-rescue-stretch
 
 label fai-rescue-stretch-amd64
     kernel fai/vmlinuz-stretch-amd64
-    append ip=dhcp initrd=fai/initrd-stretch-amd64 root=nfs:/exports/fai/nfsroot-stretch-amd64:vers=3 rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+    append ip=dhcp initrd=fai/initrd-stretch-amd64 root=nfs:/exports/fai/nfsroot-stretch-amd64:vers=3 rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
 
 label fai-rescue-stretch-i386
     kernel fai/vmlinuz-stretch-i386
-    append ip=dhcp initrd=fai/initrd-stretch-i386  root=nfs:/exports/fai/nfsroot-stretch-i386:vers=3  rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+    append ip=dhcp initrd=fai/initrd-stretch-i386  root=nfs:/exports/fai/nfsroot-stretch-i386:vers=3  rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,createvt FAI_CLASSES=${FAI_CLASSES:=} auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
