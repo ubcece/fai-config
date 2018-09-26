@@ -16,10 +16,10 @@ case $HOSTNAME in
     master|master[0-9])
         echo "NO_DHCPC SERVER MASTERSERVER LOOKUPSERVER" ;;
     cfmaster*)
-        echo "SERVER" ;;
+        echo "SERVER CFENGINESERVER UBUNTU_18_04" ;;
     s?ldap[dp]?)
         echo "SERVER LOOKUPSERVER" ;;
-    s?lookup[dp]?)
+    s?lookup[dp]?|s?dns[dp]?)
         echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
     s?etl[dp]?)
         echo "SERVER ETL NO_ECE UBUNTU_18_04" ;;

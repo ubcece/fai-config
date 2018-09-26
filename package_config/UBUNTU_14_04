@@ -262,15 +262,22 @@ rrdtool
 PACKAGES install MASTERSERVER
 ipcalc
 git-svn
+libapache2-mod-svn
 libcrypt-openssl-random-perl
+libdbd-pg-perl
 libio-socket-ssl-perl
 nmap
 postgresql
+ruby-ipaddress
+ruby-dev                                # For building Ruby gems
 slapd-smbk5pwd
-subversion
+subversion-tools
 ldaputils                               # ECE custom package
 slapd-shadowlastchange                  # ECE custom package
-ruby-dev                                # For building Ruby gems
+
+PACKAGES install CFENGINESERVER
+git-svn
+subversion-tools
 
 PACKAGES install MPT_SCSI
 mpt-status
@@ -858,6 +865,7 @@ git
 molly-guard
 munin-node
 munin-plugins-extra
+rsyncrypto
 snmpd
 
 PACKAGES install SMBSERVER

@@ -284,15 +284,22 @@ rrdtool
 PACKAGES install MASTERSERVER
 ipcalc
 git-svn
+libapache2-mod-svn
 libcrypt-openssl-random-perl
+libdbd-pg-perl
 libio-socket-ssl-perl
 nmap
 postgresql
+ruby-ipaddress
+ruby-dev                                # For building Ruby gems
 slapd-smbk5pwd
-subversion
+subversion-tools
 ldaputils                               # ECE custom package
 slapd-shadowlastchange                  # ECE custom package
-ruby-dev                                # For building Ruby gems
+
+PACKAGES install CFENGINESERVER
+git-svn
+subversion-tools
 
 PACKAGES install MPT_SCSI
 mpt-status
@@ -405,6 +412,7 @@ evolution-plugins
 exuberant-ctags
 fakeroot
 fdutils
+fish
 ffmpeg
 firefox-locale-en
 flake8
@@ -510,6 +518,7 @@ libmpfr4
 libmpfr-dev
 libncurses5-dbg
 libnet-ldap-perl # mutt -> lbdb -> libnet-ldap-perl
+libnss3-tools
 libpolarssl-dev
 libreoffice
 libreoffice-gnome
@@ -552,7 +561,6 @@ mtr
 mtr-tiny-
 mutt
 mythes-thesaurus
-ncdu
 netdiag
 netmask
 ninja-build
@@ -561,7 +569,7 @@ nodejs                  # Available in Debian >= 8 and Ubuntu
 notification-daemon
 noweb
 ocaml
-openmpi-checkpoint
+openmpi-bin
 openvpn
 pandoc
 parallel
@@ -960,6 +968,7 @@ git
 molly-guard
 munin-node
 munin-plugins-extra
+rsyncrypto
 snmpd
 
 PACKAGES install SMBSERVER
@@ -1038,6 +1047,7 @@ monit
 mtr-tiny
 net-tools
 nano
+ncdu
 nfs-common
 nscd
 nslcd
