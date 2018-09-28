@@ -52,6 +52,7 @@ HELP_MESSAGE
 ######################################################################
 
 task_chboot() {
+    case "$FAI_CONFIG_SRC" in file://*) return ;; esac
     echo "Running fai-chboot on server to disable PXE booting for this client"
     wget -nv -O - --post-data="host=$FQDN&auth=$auth" \
          "https://$SERVER/fai/chboot"
@@ -86,6 +87,11 @@ task_savelog() {
 ece_fai_auth() {
     local timeout tries_left username password
     local status
+
+    # If $FAI_CONFIG_SRC points to a local filesystem rather than a version
+    # control repository, assume that we are running in standalone mode, with
+    # no FAI server.
+    case "$FAI_CONFIG_SRC" in file://*) return ;; esac
 
     timeout="$1"
     if [ -n "$timeout" ]; then
@@ -160,6 +166,8 @@ ece_setup_setclock() {
 ece_setup_fetchkeys() {
     local status wget_verbosity
 
+    case "$FAI_CONFIG_SRC" in file://*) return ;; esac
+
     echo "Fetching keys for host $FQDN..."
     wget_verbosity=-nv
     (
@@ -213,6 +221,8 @@ ece_sync_keys_to_target() {
 }
 
 ece_savelog_remote() {
+    case "$FAI_CONFIG_SRC" in file://*) return ;; esac
+
     local uploads
     for i in $LOGDIR/* ; do
         uploads="$uploads -F file=@$i"
