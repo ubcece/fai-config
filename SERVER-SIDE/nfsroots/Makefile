@@ -26,4 +26,4 @@ $(NFSROOTS): PHONY/%: %
 	/usr/sbin/fai-make-nfsroot -v -f -C '$<'
 
 $(ISOS):
-	verbose=1 /usr/sbin/fai-cd -f -M -J -C '$(@D)' -d git+http://dev.ece.ubc.ca/git/fai-config.git '$@'
+	verbose=1 /usr/sbin/fai-cd -f -M -J -C '$(@D)' '$@'

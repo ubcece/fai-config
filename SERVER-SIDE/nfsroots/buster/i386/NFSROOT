@@ -50,6 +50,7 @@ bridge-utils
 cfengine2
 cryptsetup
 discover
+dpkg-dev
 dmsetup
 dpkg-dev
 efibootmgr
