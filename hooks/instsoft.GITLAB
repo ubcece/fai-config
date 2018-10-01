@@ -1,0 +1,7 @@
+#!/bin/bash
+
+case "$FAI_ACTION" in
+  install|dirinstall)
+    $ROOTCMD apt-get install -y apt-transport-https
+    ;;
+esac

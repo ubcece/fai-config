@@ -1200,6 +1200,9 @@ python-subversion                       # For dev.ece.ubc.ca
 subversion-tools                        # For dev.ece.ubc.ca
 xinetd                                  # For dev.ece.ubc.ca
 
+PACKAGES install GITLAB
+gitlab-ce
+
 PACKAGES install WEBGOAT
 apache2
 default-jdk-headless
