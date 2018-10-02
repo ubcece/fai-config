@@ -2,9 +2,12 @@
 
 cat <<'BASH_PROFILE' > $NFSROOT/root/.bash_profile
 if [ -f /tmp/fai/variables.log ]; then
-    # Suppress the error when trying to set the BASHOPTS read-only variable
-    . /tmp/fai/variables.log 2>/dev/null
-    eval `while IFS='=' read var val ; do echo export "$var" ; done < /tmp/fai/variables.log`
+    while IFS='=' read var val ; do
+        case "$var" in
+            BASHOPTS|OPTERR|OPTIND|OLDPWD|SECONDS|SHELL|SHLVL|TERM) : ;;
+            *) eval export "$var=$val" ;;
+        esac
+    done < /tmp/fai/variables.log
 fi
 
 . /usr/lib/fai/subroutines
