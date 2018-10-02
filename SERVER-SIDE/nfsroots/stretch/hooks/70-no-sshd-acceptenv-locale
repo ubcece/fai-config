@@ -1,3 +1,0 @@
-# Prevent complaints about missing locale information when a Perl script
-# is invoked from an shell in SSH
-sed -e 's/^\(AcceptEnv LANG LC_\*\)$/#\1/' -i $NFSROOT/etc/ssh/sshd_config

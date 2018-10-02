@@ -1,0 +1,6 @@
+$ROOTCMD debconf-set-selections <<DEBCONF
+    locales locales/locales_to_be_generated multiselect en_CA.UTF-8 UTF-8
+DEBCONF
+
+rm -f $NFSROOT/etc/locale.gen
+$ROOTCMD dpkg-reconfigure -f noninteractive locales
