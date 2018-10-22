@@ -29,6 +29,9 @@ if ifclass RAID1 ; then
 elif ifclass DISK1P3 ; then
 	exit
 
+elif ifclass DISK1P5 ; then
+	exit
+
 elif ifclass VM_GUEST && [ `disk_count` -gt 1 ]; then
 	echo "DATA2"
 
