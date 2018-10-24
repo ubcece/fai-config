@@ -2,7 +2,7 @@
 
 cat <<'BASH_PROFILE' > $NFSROOT/root/.bash_profile
 if [ -f /tmp/fai/variables.log ]; then
-    while IFS='=' read var val ; do
+    while IFS='=' read -r var val ; do
         case "$var" in
             BASHOPTS|OPTERR|OPTIND|OLDPWD|SECONDS|SHELL|SHLVL|TERM) : ;;
             *) eval export "$var=$val" ;;
