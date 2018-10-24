@@ -5,6 +5,7 @@ Generate series of numbered accounts for WebGoat with random passwords,
 replacing any existing accounts in spring-security.xml.
 """
 
+from glob import glob
 from itertools import chain
 from subprocess import check_output
 import xml.etree.ElementTree as ET
@@ -49,9 +50,9 @@ users = [
 ] + [
     {'name': 'tc-admin{}'.format(i), 'authorities': 'ROLE_SERVER_ADMIN'}
     for i in range(1, 6)
+] + [
+    {'name': 'ubcit', 'authorities': 'ROLE_WEBGOAT_ADMIN'}
 ]
 users = [dict(u, password=pw) for u, pw in zip(users, pwgen(N=len(users)))]
-edit_spring_users(
-    '/var/lib/tomcat7/webapps/WebGoat/WEB-INF/spring-security.xml',
-    users
-)
+for f in glob('/var/lib/tomcat?/webapps/WebGoat/WEB-INF/spring-security.xml'):
+    edit_spring_users(f, users)

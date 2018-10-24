@@ -475,6 +475,7 @@ ipython
 iverilog
 jadetex
 jove
+jq
 jython
 kile
 ksh
@@ -682,6 +683,7 @@ python3-xlsxwriter
 python-xlwt
 python-yaml
 python3-yaml
+qalc
 qrencode
 quilt
 quota
@@ -998,6 +1000,7 @@ fai-client
 fai-setup-storage
 fping
 ftp
+gnutls-bin
 hdparm
 htop
 hwdata
@@ -1181,11 +1184,9 @@ maven
 monit
 postfix
 pwgen
-tomcat7
-tomcat7-admin
-unzip
-vim
-wget
+tomcat8
+tomcat8-admin
+xsltproc
 
 PACKAGES taskinst XFCE
 xubuntu-desktop

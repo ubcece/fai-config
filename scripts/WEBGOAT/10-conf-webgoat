@@ -2,7 +2,15 @@
 
 set -e
 
-WEBGOAT_WAR_DEST="$target/var/lib/tomcat7/webapps/WebGoat.war"
+[ -d "$target/var/lib/tomcat7" ] && TOMCAT=tomcat7
+[ -d "$target/var/lib/tomcat8" ] && TOMCAT=tomcat8
+if [ -z "$TOMCAT" ]; then
+    echo "ERROR: tomcat not installed." >&2
+    exit 1
+fi
+
+TOMCAT_WEBAPPS="/var/lib/$TOMCAT/webapps"
+WEBGOAT_WAR_DEST="$TOMCAT_WEBAPPS/WebGoat.war"
 
 build_webgoat_war() {
     # Based on https://github.com/WebGoat/WebGoat/blob/develop/webgoat_developer_bootstrap.sh
@@ -23,33 +31,48 @@ build_webgoat_war() {
         rm -f WebGoat/webgoat-container/src/main/webapp/plugin_lessons/*.jar &&
         ln WebGoat-Lessons/target/plugins/*.jar WebGoat/webgoat-container/src/main/webapp/plugin_lessons/ &&
         $ROOTCMD mvn -DskipTests -file /var/tmp/WebGoat/pom.xml install &&
-        rm -rf $target/var/lib/tomcat7/webapps/WebGoat* &&
-        cp WebGoat/webgoat-container/target/webgoat-container*.war "$WEBGOAT_WAR_DEST"
+        rm -rf $target/var/lib/$TOMCAT/webapps/WebGoat* &&
+        cp WebGoat/webgoat-container/target/webgoat-container*.war "$target$WEBGOAT_WAR_DEST"
     )
 }
 
-download_webgoat_war() {
+install_webgoat_war() {
     VERSION="$1"
-    wget -O "$WEBGOAT_WAR_DEST" "https://github.com/WebGoat/WebGoat/releases/download/$VERSION/webgoat-container-$VERSION.war"
+    wget -O "$target$WEBGOAT_WAR_DEST" "https://github.com/WebGoat/WebGoat/releases/download/$VERSION/webgoat-container-$VERSION.war"
+    $ROOTCMD unzip -d "$TOMCAT_WEBAPPS/WebGoat" "$WEBGOAT_WAR_DEST"
+    $ROOTCMD chown -R $TOMCAT:$TOMCAT "$TOMCAT_WEBAPPS/WebGoat"
+}
+
+install_servlet_proxyfix() {
+    # ECE RT 280047: rewrite URLs for Tomcat behind reverse proxy
+    git clone https://github.com/dpoon/servlet-proxyfix.git $target/tmp/servlet-proxyfix
+    $ROOTCMD mvn -f /tmp/servlet-proxyfix package
+    cp $target/tmp/servlet-proxyfix/target/servlet-proxyfix-*.jar \
+      "$target$TOMCAT_WEBAPPS/WebGoat/WEB-INF/lib/"
+    $ROOTCMD xsltproc -o "$TOMCAT_WEBAPPS/WebGoat/WEB-INF/web.xml" \
+                      /tmp/servlet-proxyfix/tools/web-xml.xslt \
+                      "$TOMCAT_WEBAPPS/WebGoat/WEB-INF/web.xml"
 }
 
 fcopy -Bm root,root,0755        /root/webgoat_users
 
 # https://github.com/WebGoat/WebGoat/blob/e8b9b17107b3ec46f1027377660cdb1c0a87d6ea/webgoat-container/src/main/java/org/owasp/webgoat/session/UserDatabase.java#L10
 # is hard-coded to use UserDatabase.mv.db in the System.getProperty("user.dir")
-# directory, which is the current directory (namely /var/lib/tomcat7 when
-# launched by the /etc/init.d/tomcat7 script).  It needs to exist and be
+# directory, which is the current directory (namely /var/lib/$TOMCAT when
+# launched by the /etc/init.d/$TOMCAT script).  It needs to exist and be
 # writable.
-$ROOTCMD install -o tomcat7 -g tomcat7 -m 0644 /dev/null /var/lib/tomcat7/UserDatabase.mv.db
+$ROOTCMD install -o $TOMCAT -g $TOMCAT -m 0644 /dev/null /var/lib/$TOMCAT/UserDatabase.mv.db
 
 # https://github.com/WebGoat/WebGoat/blob/6919b15013fd831270fcb4c53c28985d73d4e9c5/webgoat-container/src/main/resources/log4j.properties#L6
 # configures Log4J to log to ${catalina.home}/logs/webgoat_main.log.
-# Since the /etc/init.d/tomcat7 launch script sets CATALINA_HOME to
-# /usr/share/tomcat7, we have to make this symlink. (Unfortunately, it's not
+# Since the /etc/init.d/$TOMCAT launch script sets CATALINA_HOME to
+# /usr/share/$TOMCAT, we have to make this symlink. (Unfortunately, it's not
 # ${catalina.base}/logs/webgoat_main.log.)
-ln -s /var/lib/tomcat7/logs $target/usr/share/tomcat7/
+ln -fs /var/lib/$TOMCAT/logs $target/usr/share/$TOMCAT/
 
-download_webgoat_war 7.0.1
+install_webgoat_war 7.1
+install_servlet_proxyfix
+$ROOTCMD /root/webgoat_users
 
 # iptables configuration has to be done post-boot, due to possible kernel
 # module mismatch.
