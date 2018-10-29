@@ -1,7 +1,7 @@
 
 # Preserve partitions 1, 2, 3, and 4 of disk1 (for Windows dual-boot UEFI)
 
-disk_config disk1 disklabel:gpt preserve_lazy:1,2,3,4 fstabkey:uuid bootable:6 align-at:8k
+disk_config disk1 disklabel:gpt preserve_lazy:1,2,3,4 fstabkey:uuid align-at:8k
 primary		-		0-	-	-
 primary		-		0-	-	-
 primary		-		0-	-	-
