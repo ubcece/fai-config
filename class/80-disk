@@ -4,6 +4,12 @@
 
 . /usr/lib/fai/subroutines         # For definition of ifclass
 
+non_removable_disk_info() {
+	/usr/lib/fai/fai-disk-info | sort | while read dev ; do
+		[ "$(cat /sys/block/"$dev"/removable)" = 1 ] || echo "$dev"
+	done
+}
+
 disk_sizes() {
 	# Output the size of each disk, in kiB, in the natural enumeration order
 	/usr/lib/fai/fai-disk-info | sort | while read dev ; do
@@ -12,7 +18,7 @@ disk_sizes() {
 }
 
 disk_count() {
-	/usr/lib/fai/fai-disk-info | wc -l
+	non_removable_disk_info | wc -l
 }
 
 # Allow the disk_config classes to be manually overridden
