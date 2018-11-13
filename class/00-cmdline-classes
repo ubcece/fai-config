@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Workaround for dirinstall's behaviour when both -N and -c are specified.
+#
+# If both -N and -c are specified, then task_defclass() in
+# /usr/lib/fai/subroutines calls fai-class to execute the class-determination
+# scripts, but ignores the classes that are manually specified using -c.
+# This script recognizes those manually specified classes.
+
+if [ -n "$cmdlineclasses" ]; then
+    for class in $cmdlineclasses ; do
+        echo $class
+    done
+fi
