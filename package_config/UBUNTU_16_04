@@ -228,22 +228,24 @@ ilohamail
 libapache2-mod-php5
 libapache2-mod-php-forbid-if-disabled
 
-PACKAGES install UBUNTU_MAIL_IMAP
-libsasl2-modules
-lockfile-progs
-logrotate
-postfix
-postfix-doc
-postfix-pcre
-procmail
-sasl2-bin
-tcpd
-mailgraph                               # For statistics...
-pflogsumm
-rrdtool
-courier-imap                            # For IMAP
-maildrop                                # For IMAP
-nscd
+PACKAGES install ETL
+groovy
+libaio1
+openjdk-8-jre-headless
+
+PACKAGES install SYMPA
+incron
+liblog-dispatch-perl
+libset-object-perl
+libtext-csv-perl
+libyaml-syck-perl
+mylvmbackup
+nanoc
+policyd-weight
+postfwd
+ruby-haml-contrib
+ruby-maruku
+sympa
 
 PACKAGES install WEBMAIL
 apache2

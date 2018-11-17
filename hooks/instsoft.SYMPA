@@ -1,0 +1,18 @@
+#!/bin/bash
+
+mkdir -p $target/data/var/lib/mysql
+ln -s ../../data/var/lib/mysql $target/var/lib/
+
+mkdir -p $target/data/var/lib/sympa
+ln -s ../../data/var/lib/sympa $target/var/lib/
+
+mkdir -p $target/etc/apparmor.d/local
+cat > $target/etc/apparmor.d/local/usr.sbin.mysqld <<APPARMOR
+# https://bugs.launchpad.net/ubuntu/+source/mysql-5.7/+bug/1658233
+/sys/devices/system/node/ r,
+/sys/devices/system/node/** r,
+
+# Allow /var/lib/mysql to be symlinked to a directory on /data
+/data/var/lib/mysql/ r,
+/data/var/lib/mysql/** rwk,
+APPARMOR

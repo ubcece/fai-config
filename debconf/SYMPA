@@ -1,0 +1,2 @@
+sympa   sympa/dbconfig-install  boolean false
+sympa   wwsympa/webserver_type  select  Apache 2

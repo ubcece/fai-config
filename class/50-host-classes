@@ -1,15 +1,13 @@
 #! /bin/bash
 
 case $HOSTNAME in
-    svpxe[dp]*)
+    s?pxe[dp]?)
         echo "NO_DHCPC SERVER FAISERVER" ;;
-    svmailp[0-9])
-        echo "SERVER UBUNTU_MAIL_IMAP" ;;
-    smtp?|svsmtpp?)
+    s?mail[dp]?|smtp?)
         echo "SERVER MAIL" ;;
-    svwebmailp[0-9])
+    s?webmail[dp]?)
         echo "SERVER WEBMAIL" ;;
-    svsql[dp]*)
+    s?sql[dp]?)
         echo "SERVER DATABASE" ;;
     rt|rt.*|rt-staging|rt-staging.*)
         echo "SERVER WEB RT" ;;
@@ -19,20 +17,23 @@ case $HOSTNAME in
         echo "NO_DHCPC SERVER MASTERSERVER LOOKUPSERVER" ;;
     cfmaster*)
         echo "SERVER" ;;
-    [kmxv]ldap?)
+    s?ldap[dp]?)
         echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
-    [kmxv]lookup?|svlookup[dp]?)
-        case $HOSTNAME in klookup?) echo "RAID1" ; esac
+    s?lookup[dp]?)
         echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
+    s?etl[dp]?)
+        echo "SERVER ETL NO_ECE UBUNTU_18_04" ;;
+    s?sympa[dp]?)
+        echo "SERVER MAIL SYMPA NO_ECE UBUNTU_18_04" ;;
     msmb1)
         echo "SERVER SMBSERVER RAID1" ;;
-    [kmxv]smb?|svsmbp[0-9])
+    s?smb[dp]?|s?filer[dp]?)
         echo "SERVER SMBSERVER" ;;
-    fog*|svfog*)
+    fog*|s?fog[dp]*)
         echo "SERVER SLOW" ;;
     *webgoat*)
         echo "SERVER WEBGOAT" ;;
-    [kmxv]web?|[kmx]vweb?|svweb*)
+    [kmxv]web?|[kmx]vweb?|s?web[dp]*)
         echo "SERVER WEB RT" ;;
     [kmxv]flex?)
         echo "SERVER" ;;
