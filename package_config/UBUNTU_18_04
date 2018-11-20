@@ -1198,3 +1198,5 @@ lightdm-gtk-greeter-
 
 PACKAGES install GNOME KDE LXDE XFCE
 lirc-
+kgpg-
+
