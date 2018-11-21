@@ -152,8 +152,7 @@ ECE_PUB_HS_DIRS=( /etc/ssh )
 # executes AFTER the setup hook, which is too late, because an incorrect clock
 # can cause SSL certificate validation errors in ece_setup_fetchkeys().
 ece_setup_setclock() {
-    [ "$TIMESRVS_1" ] && rdate $TIMESRVS_1
-    [ "$NTPSRVS_1" ]  && ntpdate -b $NTPSRVS
+    ntpdate -b ${NTPSRVS:=pool.ntp.org}
 }
 
 # Downloads host-specific keys.  Error messages, if any, are directed to
@@ -281,9 +280,15 @@ ece_setup_fetchkeys_failure() {
 
 ece_fixup_hostname_domain() {
     case "$HOSTNAME" in
-        *".$DOMAIN")
-            HOSTNAME="${HOSTNAME%%.$DOMAIN}"
-            ;;
+      *".$DOMAIN")
+        HOSTNAME="${HOSTNAME%%.$DOMAIN}"
+        ;;
+      *.*)
+        if [ "$DOMAIN" = localdomain ]; then
+            DOMAIN="${HOSTNAME#*.}"
+            HOSTNAME="${HOSTNAME%%.*}"
+        fi
+        ;;
     esac
 }
 
