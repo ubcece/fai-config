@@ -4,3 +4,5 @@ samba-common    samba-common/workgroup  string  UBC_ECE
 samba-common    samba-common/do_debconf boolean true
 
 ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula boolean true
+
+wireshark-common wireshark-common/install-setuid boolean true
