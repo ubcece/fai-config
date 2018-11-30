@@ -88,6 +88,7 @@ case "$FAI_ACTION" in
         if [ -n "$ALT_NIC1" ]; then
             netplan_yaml $ALT_NIC1 $METHOD > $target/etc/netplan/01-${ALT_NIC1}.yaml
         fi
+        fcopy -iMr /etc/netplan
     elif [ -d $target/etc/network/interfaces.d ]; then
         # ifupdown >= 0.7.41 (Debian >= 8, Ubuntu >= 14.04)
         iface_stanza lo loopback > $target/etc/network/interfaces.d/lo
@@ -99,12 +100,15 @@ case "$FAI_ACTION" in
             iface_stanza $ALT_NIC1 $METHOD > \
                 $target/etc/network/interfaces.d/$ALT_NIC1
         fi
+        fcopy -iMr /etc/network/interfaces.d
+        fcopy -iM /etc/network/interfaces
     else
         (
             iface_stanza lo loopback
             iface_stanza $NIC1 $METHOD
             iface_stanza $ALT_NIC1 $METHOD
         ) > $target/etc/network/interfaces
+        fcopy -iM /etc/network/interfaces
     fi
 
     if ! ifclass DHCPC ; then
@@ -119,6 +123,6 @@ esac
 # here fcopy is mostly used, when installing a client for running in a
 # different subnet than during the installation
 fcopy -iM /etc/resolv.conf
-fcopy -iM /etc/network/interfaces /etc/networks
+fcopy -iM /etc/networks
 
 exit $error

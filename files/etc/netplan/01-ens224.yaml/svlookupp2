@@ -1,0 +1,16 @@
+network:
+    version: 2
+    ethernets:
+        ens224:
+            addresses: [206.87.227.132/25]
+            routes:
+                - to: 206.87.227.128/25
+                  via: 0.0.0.0
+                  scope: link
+                  table: 17
+                - to: 0.0.0.0/0
+                  via: 206.87.227.254
+                  table: 17
+            routing-policy:
+                - from: 206.87.227.132/32
+                  table: 17
