@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MATLAB_VERSION=R2018a
+MATLAB_VERSION=R2018b
 
 if [ -z "$SERVER" ]; then
 	echo "Error: \$SERVER is not set in $0."
