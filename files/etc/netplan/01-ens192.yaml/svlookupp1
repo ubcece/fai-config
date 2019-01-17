@@ -14,6 +14,8 @@ network:
                 - to: 0.0.0.0/0
                   via: 142.103.83.254
                   table: 16
+                - to: 0.0.0.0/0
+                  via: 142.103.83.254
             routing-policy:
                 - from: 142.103.83.132/32
                   table: 16
