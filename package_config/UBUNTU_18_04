@@ -93,10 +93,10 @@ mysql-client
 mysql-server
 mytop
 ptop
-postgresql-9.6
-postgresql-contrib-9.6
-postgresql-doc-9.6
-postgresql-server-dev-9.6
+postgresql
+postgresql-contrib
+postgresql-doc
+postgresql-server-dev
 
 PACKAGES install ECE
 cfengine2

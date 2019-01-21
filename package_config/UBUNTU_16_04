@@ -94,11 +94,12 @@ mysql-client
 mysql-server
 mytop
 ptop
-# Ubuntu 16.04 ships with PostgreSQL 9.5; PostgreSQL 9.6 comes from apt.postgresql.org
-postgresql-9.6
-postgresql-contrib-9.6
-postgresql-doc-9.6
-postgresql-server-dev-9.6
+# Ubuntu 16.04 ships with PostgreSQL 9.5;
+# these refer to the latest supported release from apt.postgresql.org
+postgresql
+postgresql-contrib
+postgresql-doc
+postgresql-server-dev
 
 PACKAGES install ECE
 cfengine2

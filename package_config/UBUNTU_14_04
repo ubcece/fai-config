@@ -88,11 +88,12 @@ mysql-client
 mysql-server
 mytop
 ptop
-# Ubuntu 14.04 ships with PostgreSQL 9.3; PostgreSQL 9.6 comes from apt.postgresql.org
-postgresql-9.6
-postgresql-contrib-9.6
-postgresql-doc-9.6
-postgresql-server-dev-9.6
+# Ubuntu 14.04 ships with PostgreSQL 9.3;
+# these refer to the latest supported release from apt.postgresql.org
+postgresql
+postgresql-contrib
+postgresql-doc
+postgresql-server-dev
 
 PACKAGES install ECE
 cfengine2
