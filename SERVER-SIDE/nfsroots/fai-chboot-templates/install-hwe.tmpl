@@ -1,0 +1,17 @@
+default fai-install-stretch-hwe
+
+label localboot
+    kernel chain
+    append hd0
+
+label fai-install-stretch-hwe
+    kernel ifcpu64.c32
+    append fai-install-stretch-amd64-hwe -- fai-install-stretch-i386-hwe
+
+label fai-install-stretch-amd64-hwe
+    kernel fai/vmlinuz-stretch-amd64-hwe
+    append ip=dhcp initrd=fai/initrd-stretch-amd64-hwe root=nfs:/exports/fai/nfsroot-stretch-amd64:vers=3 rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+
+label fai-install-stretch-i386-hwe
+    kernel fai/vmlinuz-stretch-i386-hwe
+    append ip=dhcp initrd=fai/initrd-stretch-i386-hwe  root=nfs:/exports/fai/nfsroot-stretch-i386:vers=3  rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} hostname=$hostname auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}

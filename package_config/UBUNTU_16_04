@@ -17,6 +17,9 @@ xfsprogs
 PACKAGES install NOT_VZ_CONTAINER
 linux-generic
 
+PACKAGES install HWE
+linux-generic- linux-generic-hwe-16.04 xserver-xorg- xserver-xorg-hwe-16.04 
+
 PACKAGES install AMD64 I386
 memtest86+
 

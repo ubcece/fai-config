@@ -57,6 +57,10 @@ WEB             Apache server
 WEBGOAT         Java Servlet server
 CUDA            Workstation for CUDA (nVidia GPGPU) software development
 
+
+HWE             Kernel and server-xorg for hardware not supported by GA
+                kernel.  Currently defined only for UBUNTU_16_04. 
+
 Inferred Classes
 ----------------
 
