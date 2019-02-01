@@ -10,7 +10,8 @@ appropriate boot parameters.
 The easiest way to put that boot menu in place is to use the fai-pxe command.
 A typical invocation might be:
 
-    1 $ SERVER-SIDE/bin/fai-pxe -t install bofh.ece.ubc.ca
+$ SERVER-SIDE/bin/fai-pxe -t install bofh.ece.ubc.ca # install-hwe for newer
+kernel
 
 You can run SERVER-SIDE/bin/fai-pxe from your Git work directory, or you can
 run /usr/local/sbin/fai-pxe on the FAI server.  If you are not running fai-pxe

@@ -9,7 +9,7 @@ Here is an outline of how to install or reinstall GRUB by network-booting
 into FAI's rescue mode.
 
 
-$ SERVER-SIDE/bin/fai-pxe -t rescue-squeeze machine.ece.ubc.ca
+$ SERVER-SIDE/bin/fai-pxe -t rescue machine.ece.ubc.ca # rescue-hwe for newer kernel
 ...
 $ ssh -lroot machine.ece.ubc.ca
 ...
