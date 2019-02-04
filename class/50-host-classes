@@ -18,7 +18,7 @@ case $HOSTNAME in
     cfmaster*)
         echo "SERVER" ;;
     s?ldap[dp]?)
-        echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
+        echo "SERVER LOOKUPSERVER" ;;
     s?lookup[dp]?)
         echo "NO_DHCPC SERVER LOOKUPSERVER" ;;
     s?etl[dp]?)
@@ -49,8 +49,12 @@ case $HOSTNAME in
         echo "LARGE CUDA" ;;    # Has multiple disks; install to just the SSD
     tims-pc21)
         echo "DISK1P3 CUDA" ;;
-    zeus)
+    newton|leibnitz|darwin|zeus)
         echo "RAID1" ;;
+    galileo|pleiades)
+        echo "RAID1 CUDA" ;;
+    sumi|miga|quatchi)
+        echo "RAID1 SERVER NO_ECE" ;;
     cpen291*)
         echo "SERVER NO_ECE" ;;
 esac
