@@ -75,6 +75,10 @@ iface_stanza() {
         echo "    netmask $NETMASK"
         echo "    broadcast $BROADCAST"
         echo "    gateway $GATEWAYS"
+        if [ -n "$DNSSRVS" ]; then
+            echo "    dns-nameservers $DNSSRVS"
+            echo "    dns-search $DOMAIN"
+        fi
         ;;
     esac
 }
