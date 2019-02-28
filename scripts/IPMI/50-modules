@@ -3,4 +3,4 @@
 # The IPMI class causes the ipmitool package to be installed.  In the package,
 # ipmievd will expect /dev/ipmi0 to exist.  Loading the ipmi_devintf kernel
 # module will cause /dev/ipmi0 to be created.
-ainsl "$target/etc/modules" ipmi_devintf
+ainsl /etc/modules ipmi_devintf
