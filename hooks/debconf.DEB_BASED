@@ -43,7 +43,7 @@ resolve_to_phys_dev() {
 if ifclass DISK2 ; then
     bootdisks=$(echo $disklist | awk '{printf "/dev/%s /dev/%s", $1, $2}')
 elif [ -n "$BOOT_DEVICE" ]; then
-    bootdisks=$(resolve_to_phys_dev "$BOOT_DEVICE")
+    bootdisks=$(resolve_to_phys_dev "$BOOT_DEVICE" | xargs echo -n)
 elif [ -x /usr/bin/debconf-get-selections ]; then
     # Doing a dirinstall, maybe?  Hopefully not trying to dirinstall a
     # Debian-based system while running an RPM-based OS.
