@@ -23,10 +23,12 @@ mask2cdr() {
 alt_ifname() {
     local IFNAME="$1"
     $ROOTCMD udevadm test --action=ADD "/sys/class/net/$IFNAME" 2>/dev/null |
+    tac |
     while IFS== read var value ; do
         case "$var" in
-          ID_NET_NAME_SLOT)
+          ID_NET_NAME_PATH|ID_NET_NAME_SLOT)
             [ "$value" != "$IFNAME" ] && echo "$value"
+            break
             ;;
         esac
     done
