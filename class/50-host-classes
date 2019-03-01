@@ -51,4 +51,6 @@ case $HOSTNAME in
         echo "DISK1P3 CUDA" ;;
     zeus)
         echo "RAID1" ;;
+    cpen291*)
+        echo "SERVER NO_ECE" ;;
 esac

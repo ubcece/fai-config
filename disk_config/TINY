@@ -1,0 +1,10 @@
+# This disk_config is suitable for hard disk with >=2GB
+
+disk_config disk1 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1 align-at:8k
+primary		/boot/efi	80M-100M	vfat	rw
+primary		swap		512M	swap	rw
+primary		-		1406M-	-	-
+
+disk_config lvm fstabkey:uuid
+vg		vg		disk1.3
+vg-root 	/		1G-	ext4 rw,errors=remount-ro createopts="-O ^metadata_csum"

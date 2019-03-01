@@ -22,7 +22,8 @@ disk_count() {
 }
 
 # Allow the disk_config classes to be manually overridden
-if ifclass SMALL  ||
+if ifclass TINY   ||
+   ifclass SMALL  ||
    ifclass MEDIUM || ifclass MEDIUM2 ||
    ifclass LARGE  || ifclass LARGE2  ||
    ifclass RAID1  || ifclass DATA2 ; then
@@ -58,7 +59,7 @@ elif ifclass DISK2 ; then
 
 else
 	size=`disk_sizes | head -n 1`
-	if   [ "$size" -lt  10000000 ]; then echo "The hard disk is too small (10 GB minimum)." >&2 ; exit 1
+	if   [ "$size" -lt  10000000 ]; then echo "TINY"
 	elif [ "$size" -lt  60000000 ]; then echo "SMALL"
 	elif [ "$size" -lt 150000000 ]; then echo "MEDIUM"
 	elif ifclass RAID             ; then echo "RAID1"
