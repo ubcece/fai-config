@@ -8,5 +8,5 @@ primary		-		58G-	-	-
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data
 vg		vg		disk1.3
 vg-root 	/		50G-80G	ext4 rw,errors=remount-ro createopts="-O ^metadata_csum"
-vg-var 		/var		3G-8G	ext4 rw createopts="-O ^metadata_csum"
+vg-var 		/var		3G-12G	ext4 rw createopts="-O ^metadata_csum"
 vg-data		/data		5G-	xfs  rw createopts="-m crc=0"

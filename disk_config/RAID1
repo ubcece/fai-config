@@ -17,9 +17,9 @@ raid1		-		disk1.3,disk2.3	-	-
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data
 vg		vg		md1
 vg-root1	/		35G-60G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
-vg-var1		/var		6G-8G	ext4	rw createopts="-O ^metadata_csum"
+vg-var1		/var		6G-12G	ext4	rw createopts="-O ^metadata_csum"
 vg-root2	/altroot	35G-60G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
-vg-var2		/altroot/var	6G-8G	ext4	rw createopts="-O ^metadata_csum"
+vg-var2		/altroot/var	6G-12G	ext4	rw createopts="-O ^metadata_csum"
 vg-data		/data		5G-	xfs	rw
 
 vg-snapreserve	-		1G	-	-

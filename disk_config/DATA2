@@ -14,7 +14,7 @@ primary		-		7G-	-	-
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data
 vg		os			disk1.3
 os-root1	/		4G-	ext4	rw,errors=remount-ro createopts="-i 12288 -O ^metadata_csum"
-os-var1		/var		5G-8G	ext4	rw createopts="-O ^metadata_csum"
+os-var1		/var		5G-12G	ext4	rw createopts="-O ^metadata_csum"
 os-root2	/altroot	4G-	ext4	rw,errors=remount-ro createopts="-i 12288 -O ^metadata_csum"
 os-var2		/altroot/var	5G-8G	ext4	rw createopts="-O ^metadata_csum"
 os-tmp		/tmp		4G	ext4	rw createopts="-O ^metadata_csum"
