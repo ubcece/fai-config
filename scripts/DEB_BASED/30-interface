@@ -14,24 +14,26 @@ mask2cdr() {
 
 
 # Given a traditional Linux interface name (e.g. "eth0"), find out what the
-# persistent name would be, based on hotplug slot number (e.g. "ens192").
-# See https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
-#
-# Note that this prediction is not always right, since there are other
-# possible persistent device naming schemes (see NamePolicy in
-# https://www.freedesktop.org/software/systemd/man/systemd.link.html).
+# persistent name would be.  We use the same prioritization rule as in the
+# default NamePolicy setting in /lib/systemd/network/99-default.link
+# (NamePolicy=kernel databae onboard slot path).  See NamePolicy in
+# https://www.freedesktop.org/software/systemd/man/systemd.link.html and
+# https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
 alt_ifname() {
     local IFNAME="$1"
     $ROOTCMD udevadm test --action=ADD "/sys/class/net/$IFNAME" 2>/dev/null |
-    tac |
-    while IFS== read var value ; do
-        case "$var" in
-          ID_NET_NAME_PATH|ID_NET_NAME_SLOT)
-            [ "$value" != "$IFNAME" ] && echo "$value"
-            break
-            ;;
-        esac
-    done
+    awk -F= '
+        /=/ { VAL[$1] = $2 }
+        END {
+            split("FROM_DATABASE,ONBOARD,SLOT,PATH", POLICIES, ",");
+            for (p in POLICIES) {
+                if (VAL["ID_NET_NAME_" POLICIES[p]]) {
+                     print VAL["ID_NET_NAME_" POLICIES[p]];
+                     break;
+                }
+            }
+        }
+    '
 }
 
 netplan_yaml() {
@@ -79,36 +81,29 @@ iface_stanza() {
 
 case "$FAI_ACTION" in
   install|dirinstall)
-    ALT_NIC1=$(alt_ifname "$NIC1")
     ifclass DHCPC && METHOD=dhcp || METHOD=static
 
     if [ -d $target/etc/netplan ]; then
         # Ubuntu >= 17.10 with netplan.io
-        if [ -n "$NIC1" ]; then
-            netplan_yaml $NIC1 $METHOD > $target/etc/netplan/01-${NIC1}.yaml
-        fi
-        if [ -n "$ALT_NIC1" ]; then
-            netplan_yaml $ALT_NIC1 $METHOD > $target/etc/netplan/01-${ALT_NIC1}.yaml
-        fi
+        [ -n "$NIC1" ] && for NIC in "$NIC1" $(alt_ifname "$NIC1") ; do
+            netplan_yaml $NIC $METHOD > $target/etc/netplan/01-${NIC}.yaml
+        done
         fcopy -iMr /etc/netplan
     elif [ -d $target/etc/network/interfaces.d ]; then
         # ifupdown >= 0.7.41 (Debian >= 8, Ubuntu >= 14.04)
         iface_stanza lo loopback > $target/etc/network/interfaces.d/lo
-        if [ -n "$NIC1" ]; then
-            iface_stanza $NIC1 $METHOD > \
-                $target/etc/network/interfaces.d/$NIC1
-        fi
-        if [ -n "$ALT_NIC1" ]; then
-            iface_stanza $ALT_NIC1 $METHOD > \
-                $target/etc/network/interfaces.d/$ALT_NIC1
-        fi
+        [ -n "$NIC1" ] && for NIC in "$NIC1" $(alt_ifname "$NIC1") ; do
+            iface_stanza $NIC $METHOD > \
+                $target/etc/network/interfaces.d/$NIC
+        done
         fcopy -iMr /etc/network/interfaces.d
         fcopy -iM /etc/network/interfaces
     else
         (
             iface_stanza lo loopback
-            iface_stanza $NIC1 $METHOD
-            iface_stanza $ALT_NIC1 $METHOD
+            [ -n "$NIC1" ] && for NIC in "$NIC1" $(alt_ifname "$NIC1") ; do
+                iface_stanza $NIC $METHOD
+            done
         ) > $target/etc/network/interfaces
         fcopy -iM /etc/network/interfaces
     fi
