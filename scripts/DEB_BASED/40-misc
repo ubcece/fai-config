@@ -40,5 +40,6 @@ rm -f $target/etc/dpkg/dpkg.cfg.d/fai
 ainsl -av /etc/fai/fai.conf "FAI_CONFIG_SRC=$FAI_CONFIG_SRC"
 
 fcopy -Miv /etc/fai/fai.conf
+touch $target/etc/fai/nfsroot.conf
 
 exit $error
