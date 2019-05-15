@@ -208,7 +208,6 @@ clamav-daemon
 clamav-freshclam
 clamav-unofficial-sigs
 clamsmtp
-libmail-spf-query-perl
 libnet-dns-perl
 pyzor
 razor
