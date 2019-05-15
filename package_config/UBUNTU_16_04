@@ -193,8 +193,6 @@ apache2
 apachetop
 cronolog
 libapache2-mod-authnz-external
-libapache2-mod-bigip
-libapache2-mod-macro
 libsasl2-modules
 libio-socket-ssl-perl
 lockfile-progs
@@ -213,7 +211,6 @@ clamav-daemon
 clamav-freshclam
 clamav-unofficial-sigs
 clamsmtp
-libmail-spf-query-perl
 libnet-dns-perl
 pyzor
 razor
@@ -231,7 +228,7 @@ rrdtool
 aspell                                  # For IMAP/webmail...
 courier-imap
 ilohamail
-libapache2-mod-php5
+libapache2-mod-php
 libapache2-mod-php-forbid-if-disabled
 
 PACKAGES install ETL
@@ -578,7 +575,7 @@ openmpi-bin
 openvpn
 pandoc
 parallel
-php5-cli
+php-cli
 php-pear
 pidgin
 pilot
@@ -1124,7 +1121,7 @@ libapache2-mod-auth-openid
 libapache2-mod-authz-unixgroup
 libapache2-mod-fcgid
 libapache2-mod-perl2
-libapache2-mod-php5
+libapache2-mod-php
 libapache2-mod-php-forbid-if-disabled   # From ppa:ubcit/ppa
 libapache2-mod-shib2
 libapache2-mod-wsgi
@@ -1153,14 +1150,14 @@ libxml-namespacesupport-perl
 libxml-sax-perl
 mysql-client
 odbc-postgresql
-php5-cli
-php5-common
-php5-curl
-php5-gd
-php5-intl
-php5-ldap
-php5-mysql
-php5-pgsql
+php-cli
+php-common
+php-curl
+php-gd
+php-intl
+php-ldap
+php-mysql
+php-pgsql
 php-db
 php-ldap
 php-mail

@@ -6,7 +6,7 @@ case $HOSTNAME in
     s?mail[dp]?|smtp?)
         echo "SERVER MAIL" ;;
     s?webmail[dp]?)
-        echo "SERVER WEBMAIL" ;;
+        echo "SERVER MAIL WEBMAIL" ;;
     s?sql[dp]?)
         echo "SERVER DATABASE" ;;
     rt|rt.*|rt-staging|rt-staging.*)
