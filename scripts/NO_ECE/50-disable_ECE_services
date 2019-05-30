@@ -1,0 +1,17 @@
+#! /bin/bash
+
+# script to disable nslcd, nscd, and automount services for class NO_ECE.
+#
+# Computers with class NO_ECE do not use these services.  If left 
+# enabled, attempts to start the services at boot cause significant
+# start-up delay on machines booting without an Ethernet connection,
+# such as most laptops.
+#
+# Would typically be set in cfengine, but units with class NO_ECE are
+# not under configuration management.
+
+# randyg@ece.ubc.ca
+
+$ROOTCMD systemctl disable autofs
+$ROOTCMD systemctl disable nscd
+$ROOTCMD systemctl disable nslcd
