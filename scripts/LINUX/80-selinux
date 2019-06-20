@@ -1,0 +1,19 @@
+#!/bin/bash
+
+[ -f "$target/etc/selinux/config" ] || exit
+
+echo "Detected SELinux."
+
+$ROOTCMD systemctl list-unit-files '*-autorelabel.service' |
+while read -r unit state ; do
+    case "$state" in
+      disabled)
+        echo "Enabling $unit"
+        $ROOTCMD systemctl enable "$unit"
+        ;;
+    esac
+done
+
+# fixfiles needs to run in an SELinux-enabled kernel, so we may not be able
+# to do it now.
+$ROOTCMD fixfiles onboot
