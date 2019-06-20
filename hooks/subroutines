@@ -53,7 +53,7 @@ HELP_MESSAGE
 
 task_chboot() {
     echo "Running fai-chboot on server to disable PXE booting for this client"
-    wget -nv -O - --post-data="host=$HOSTNAME.$DOMAIN&auth=$auth" \
+    wget -nv -O - --post-data="host=$FQDN&auth=$auth" \
          "https://$SERVER/fai/chboot"
     if [ $? != 0 ]; then
         task_error 3
@@ -112,7 +112,7 @@ ece_fai_auth() {
         # use the --ask-password option.  With --ask-password, the input is
         # read from /dev/tty, but the prompt is printed to STDOUT, which
         # pollutes the output.  (src/main.c: prompt_for_password())
-        #wget -q -O- --user="$username" --ask-password "https://$SERVER/fai/auth?host=$HOSTNAME.$DOMAIN"
+        #wget -q -O- --user="$username" --ask-password "https://$SERVER/fai/auth?host=$FQDN"
         #case $? in
         #  0) return 0 ;;
         #  4) echo "ERROR: Network failure." >/dev/tty ;;
@@ -134,7 +134,7 @@ ece_fai_auth() {
             shopt -q -s -o pipefail
             exec 2>&1 1>/dev/tty
             echo "user=$username:$password" | \
-              curl -K- -fsS --output /dev/stderr --stderr - -G --data-urlencode host="$HOSTNAME.$DOMAIN" "https://$SERVER/fai/auth" | \
+              curl -K- -fsS --output /dev/stderr --stderr - -G --data-urlencode host="$FQDN" "https://$SERVER/fai/auth" | \
               sed -e 's/^curl: (22) The requested URL returned error: 401$/ERROR: Authorization failure/' \
                   -e 's/^curl: ([0-9]*)/ERROR:/'
         )
@@ -160,12 +160,13 @@ ece_setup_setclock() {
 ece_setup_fetchkeys() {
     local status wget_verbosity
 
+    echo "Fetching keys for host $FQDN..."
     wget_verbosity=-nv
     (
         umask 077 ;
         wget $wget_verbosity --recursive -e robots=off --level=0 \
              --directory-prefix=/tmp/keydist --no-host-directories --cut-dirs=2 \
-             --post-data="host=$HOSTNAME.$DOMAIN&auth=$auth" \
+             --post-data="host=$FQDN&auth=$auth" \
              "https://$SERVER/fai/keydist"
     )
     status=$?
@@ -217,7 +218,7 @@ ece_savelog_remote() {
         uploads="$uploads -F file=@$i"
     done
     # wget does not support file uploads; use curl
-    curl -f -o- -F host="$HOSTNAME.$DOMAIN" -F auth="$auth" \
+    curl -f -o- -F host="$FQDN" -F auth="$auth" \
                 -F action="$FAI_ACTION" -F rundate="$fai_rundate" \
                 $uploads \
                 "https://$SERVER/fai/savelog"
@@ -278,18 +279,32 @@ ece_setup_fetchkeys_failure() {
     fi
 }
 
-ece_fixup_hostname_domain() {
-    case "$HOSTNAME" in
-      *".$DOMAIN")
-        HOSTNAME="${HOSTNAME%%.$DOMAIN}"
-        ;;
-      *.*)
-        if [ "$DOMAIN" = localdomain ]; then
-            DOMAIN="${HOSTNAME#*.}"
-            HOSTNAME="${HOSTNAME%%.*}"
-        fi
-        ;;
-    esac
+ece_resolve_fqdn() {
+    export FQDN=$(
+        hostname -I | xargs -n1 host | while read -r addr domain name pointer fqdn ; do
+            case "$addr $domain $name $pointer $fqdn" in
+              *' domain name pointer '${HOSTNAME%%.*}.*)
+                echo "${fqdn%.}"
+                break
+                ;;
+            esac
+        done
+    )
+    if [ -z "$FQDN" ]; then
+        case "$HOSTNAME" in
+          *".$DOMAIN")
+            FQDN="${HOSTNAME}"
+            HOSTNAME="${HOSTNAME%%.$DOMAIN}"
+            ;;
+          *.*)
+            if [ "$DOMAIN" = localdomain ]; then
+                FQDN="${HOSTNAME}"
+                HOSTNAME="${HOSTNAME%%.*}"
+                DOMAIN="${HOSTNAME#*.}"
+            fi
+            ;;
+        esac
+    fi
 }
 
 ece_setup_hook() {
@@ -322,7 +337,7 @@ ece_setup_hook() {
     esac
 }
 
-ece_fixup_hostname_domain
+ece_resolve_fqdn
 if [ "$ece_setup_hook_run" != 1 ]; then
     ece_setup_hook && ece_setup_hook_run=1
 fi
