@@ -8,13 +8,13 @@ fi
 # "/dev/mem: Operation not permitted".
 /usr/sbin/dmidecode -q -s system-product-name 2>/dev/null | while read desc ; do
     case "$desc" in
-      "Bochs")
+      Bochs)
         echo "VM_GUEST BOCHS_GUEST"
         ;;
-      "VMware Virtual Platform")
+      VMware*)  # e.g. "VMware Virtual Platform" or "VMware7,1"
         echo "VM_GUEST VMWARE_GUEST"
         ;;
-      "VirtualBox")
+      VirtualBox)
         echo "VM_GUEST VIRTUALBOX_GUEST"
         ;;
     esac
