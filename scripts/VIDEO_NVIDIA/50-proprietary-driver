@@ -11,7 +11,7 @@ if ifclass RPM_BASED ; then
 	# Using nvidia-detect from https://elrepo.org/
 	recommended=`$ROOTCMD nvidia-detect`
         if [ -n "$recommended" ]; then
-		$ROOTCMD yum install -y $recommended $&&
+		$ROOTCMD yum install -y $recommended &&
 		echo "Installed recommended nVidia driver: $recommended"
 	fi
 
