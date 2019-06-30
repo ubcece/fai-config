@@ -34,7 +34,8 @@ handle_device() {
       'RAID bus controller:Adaptec:AIC-79'*)
         echo 'AIC79XX'
         ;;
-      'VGA compatible controller:ATI Technologies Inc:'*)
+      'VGA compatible controller:ATI Technologies Inc:'*|\
+      'VGA compatible controller:Advanced Micro Devices, Inc. [AMD/ATI]:'*)
         echo "VIDEO_ATI"
         ;;
       'VGA compatible controller:NVIDIA Corporation:'*|\
