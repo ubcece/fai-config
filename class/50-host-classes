@@ -55,6 +55,8 @@ case $HOSTNAME in
         echo "RAID1 CUDA" ;;
     sumi|miga|quatchi)
         echo "RAID1 SERVER NO_ECE" ;;
+    gattaca)
+        echo "HWE DATA2" ;;
     cpen291*)
         echo "SERVER NO_ECE" ;;
 esac

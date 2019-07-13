@@ -1,11 +1,11 @@
-# This disk_config is suitable for a virtual server two disks.
+# This disk_config is suitable for a server with two disks.
 # The first disk should be >= 32 GB and will be used for the operating system.
 # The second disk (/dev/sdb) will be used for data storage.
 
 disk_config disk1 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1 align-at:8k
 primary		/boot/efi	150M-200M	vfat	rw
 primary		swap		4G	swap	rw
-primary		-		15900M-	-	-
+primary		-		31000M-	-	-
 
 disk_config disk2 disklabel:gpt preserve_lazy:1 fstabkey:uuid align-at:8k
 primary		-		16M	vfat	-
@@ -16,7 +16,7 @@ vg		os			disk1.3
 os-root1	/		4G-	ext4	rw,errors=remount-ro createopts="-i 12288 -O ^metadata_csum"
 os-var1		/var		5G-12G	ext4	rw createopts="-O ^metadata_csum"
 os-root2	/altroot	4G-	ext4	rw,errors=remount-ro createopts="-i 12288 -O ^metadata_csum"
-os-var2		/altroot/var	5G-8G	ext4	rw createopts="-O ^metadata_csum"
+os-var2		/altroot/var	5G-12G	ext4	rw createopts="-O ^metadata_csum"
 os-tmp		/tmp		4G	ext4	rw createopts="-O ^metadata_csum"
 os-snapreserve  -		1G	-	-
 
