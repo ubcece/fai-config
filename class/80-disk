@@ -5,20 +5,55 @@
 . /usr/lib/fai/subroutines         # For definition of ifclass
 
 non_removable_disk_info() {
-	/usr/lib/fai/fai-disk-info | sort | while read dev ; do
-		[ "$(cat /sys/block/"$dev"/removable)" = 1 ] || echo "$dev"
-	done
+    /usr/lib/fai/fai-disk-info | sort | while read dev ; do
+        [ "$(cat /sys/block/"$dev"/removable)" = 1 ] || echo "$dev"
+    done
 }
 
 disk_sizes() {
-	# Output the size of each disk, in kiB, in the natural enumeration order
-	/usr/lib/fai/fai-disk-info | sort | while read dev ; do
-		awk -v dev="$dev" '$4 == dev { print $3 }' /proc/partitions
-	done
+    # Output the size of each disk, in kiB, in the natural enumeration order
+    /usr/lib/fai/fai-disk-info | sort | while read dev ; do
+        awk -v dev="$dev" '$4 == dev { print $3 }' /proc/partitions
+    done
 }
 
 disk_count() {
-	non_removable_disk_info | wc -l
+    non_removable_disk_info | wc -l
+}
+
+make_raid_disk_config() {
+    # Using $FAI/disk_config/RAID1 as a template, make a RAID configuration
+    # for as many disks as we have (as long as there are at least two, and
+    # all of the same size), by replicating the disk2 configuration to all
+    # subsequent disks.
+    local raid_level="$1"
+    local ndisks=`disk_count`
+    if [ "$ndisks" -lt 2 ]; then
+        echo "Not enough disks for RAID5" >&2
+        exit 1
+    elif [ "`disk_sizes | uniq | wc -l`" != 1 ]; then
+        echo "Declining to make RAID5 for disks of different sizes" >&2
+        exit 1
+    fi
+    gawk -v raid_level="$raid_level" -v ndisks="$ndisks" '
+        IN_DISK2_STANZA && !/^$/ || ($1 == "disk_config" && $2 == "disk2") {
+            IN_DISK2_STANZA = 1
+            DISK2_STANZA = DISK2_STANZA "\n" $0
+        }
+        IN_DISK2_STANZA && /^$/ {
+            IN_DISK2_STANZA = 0
+            for (i = 3; i <= ndisks; i++) {
+                print gensub("disk_config disk2", "disk_config disk" i, 1, DISK2_STANZA)
+            }
+        }
+        $1 == "raid1" {
+            sub("^raid1", "raid" raid_level)
+            for (i = ndisks; i >= 3; i--) {
+                $0 = gensub(",disk2(\.[0-9]+)", "&,disk" i "\\1", 1)
+            }
+        }
+        !/^#/ { print }
+    ' $FAI/disk_config/RAID1
 }
 
 # Allow the disk_config classes to be manually overridden
@@ -27,42 +62,45 @@ if ifclass TINY   ||
    ifclass MEDIUM || ifclass MEDIUM2 ||
    ifclass LARGE  || ifclass LARGE2  ||
    ifclass RAID1  || ifclass DATA2 ; then
-	exit
+    exit
 fi
 
 if ifclass RAID1 ; then
-	exit
+    exit
 
 elif ifclass DISK1P3 ; then
-	exit
+    exit
 
 elif ifclass DISK1P5 ; then
-	exit
+    exit
+
+elif ifclass RAID5 ; then
+    make_raid_disk_config 5 > $FAI/disk_config/RAID5
 
 elif ifclass VM_GUEST && [ `disk_count` -gt 1 ]; then
-	echo "DATA2"
+    echo "DATA2"
 
 elif ifclass VM_HOST ; then
-	# FIXME: It would be nice if all servers could use a common layout and this line could go away.
-	exit 0
+    # FIXME: It would be nice if all servers could use a common layout and this line could go away.
+    exit 0
 
 elif [ `disk_count` -gt 2 ]; then
-	echo "Too many hard disks. Too risky." >&2
-	exit 1
+    echo "Too many hard disks. Too risky." >&2
+    exit 1
 
 elif ifclass DISK2 ; then
-	size=`disk_sizes | awk 'NR == 2'`
-	if   [ "$size" -lt  60000000 ]; then echo "The hard disk is too small (50 GB minimum)." >&2 ; exit 1
-	elif [ "$size" -lt 150000000 ]; then echo "MEDIUM2"
-	else                                 echo "LARGE2"
-	fi
+    size=`disk_sizes | awk 'NR == 2'`
+    if   [ "$size" -lt  60000000 ]; then echo "The hard disk is too small (50 GB minimum)." >&2 ; exit 1
+    elif [ "$size" -lt 150000000 ]; then echo "MEDIUM2"
+    else                                 echo "LARGE2"
+    fi
 
 else
-	size=`disk_sizes | head -n 1`
-	if   [ "$size" -lt  10000000 ]; then echo "TINY"
-	elif [ "$size" -lt  60000000 ]; then echo "SMALL"
-	elif [ "$size" -lt 150000000 ]; then echo "MEDIUM"
-	elif ifclass RAID             ; then echo "RAID1"
-	else                                 echo "LARGE"
-	fi
+    size=`disk_sizes | head -n 1`
+    if   [ "$size" -lt  10000000 ]; then echo "TINY"
+    elif [ "$size" -lt  60000000 ]; then echo "SMALL"
+    elif [ "$size" -lt 150000000 ]; then echo "MEDIUM"
+    elif ifclass RAID             ; then echo "RAID1"
+    else                                 echo "LARGE"
+    fi
 fi

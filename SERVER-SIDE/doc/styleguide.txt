@@ -43,7 +43,8 @@ NO_OMNI         Suppress inferred class OMNI
 NO_SLOW         Suppress inferred class SLOW
 
 VM_HOST         Install Proxmox VE with a large /var/lib/vz partition
-RAID            RAID1 using Linux md
+RAID1           RAID1 using Linux md for two disks
+RAID5           RAID3 using Linux md for >=2 disks, all of the same size
 DISK1P3         Install Linux to partitions 3 and 4 of disk1
 DISK1P5         Install Linux to partitions 5 and 6 of disk1
 

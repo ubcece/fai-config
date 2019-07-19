@@ -51,6 +51,8 @@ case $HOSTNAME in
         echo "DISK1P3 CUDA" ;;
     newton|leibnitz|darwin|zeus)
         echo "RAID1" ;;
+    thanos)
+        echo "RAID5" ;;
     galileo|pleiades)
         echo "RAID1 CUDA" ;;
     sumi|miga|quatchi)
