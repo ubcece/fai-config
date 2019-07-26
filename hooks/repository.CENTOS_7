@@ -11,6 +11,7 @@ $ROOTCMD yum --quiet --assumeyes update nss
 $ROOTCMD yum --quiet --assumeyes install ca-certificates pyliblzma epel-release
 
 if ifclass VIDEO_NVIDIA ; then
-    $ROOTCMD rpm --import - < $FAI/package_config/ELREPO.asc
-    $ROOTCMD rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+    fcopy -iBM /etc/yum.repos.d/elrepo-stub.repo
+    $ROOTCMD yum --quiet --assumeyes install elrepo-release
+    rm -f $target/etc/yum.repos.d/elrepo-stub.repo
 fi

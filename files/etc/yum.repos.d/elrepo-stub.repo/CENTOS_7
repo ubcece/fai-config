@@ -1,0 +1,9 @@
+### Stub for ELRepo.org Community Enterprise Linux Repository for el7
+
+[elrepo]
+name=ELRepo.org Community Enterprise Linux Repository - el7
+baseurl=https://elrepo.org/linux/elrepo/el7/$basearch/
+mirrorlist=https://mirrors.elrepo.org/mirrors-elrepo.el7
+enabled=1
+gpgcheck=1
+protect=0
