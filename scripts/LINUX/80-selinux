@@ -1,6 +1,8 @@
 #!/bin/bash
 
-[ -f "$target/etc/selinux/config" ] || exit
+if [ ! -f "$target/etc/selinux/config" ]; then
+    exit
+fi
 
 echo "Detected SELinux."
 
