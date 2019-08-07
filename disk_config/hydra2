@@ -1,29 +1,33 @@
-# This disk_config is based on 
+# This disk_config is suitable for a hard disk with >=150GB
 
 disk_config disk1 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1 align-at:8k
 primary		/boot/efi	150M-200M	vfat	rw
-primary		-		8G	-	-
-primary		-		100G	-	-
-primary		-		80G-	-	-
+primary		swap		8G	swap	rw
+primary		-		140G-	-	-
 
-disk_config disk2 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid align-at:8k
-primary		-		150-200M	vfat	-
-primary		-		8G	-	-
-primary		-		100G	-	-
+disk_config disk2 disklabel:gpt preserve_lazy:1 fstabkey:uuid align-at:8k
 primary		-		8G-	-	-
 
-disk_config raid fstabkey:uuid
-raid1		swap		disk1.2,disk2.2	swap	rw
-raid1		-		disk1.3,disk2.3	-	-
-raid0		-		disk1.4,disk2.4	-	-
+#disk_config disk3 disklabel:gpt preserve_lazy:1 fstabkey:uuid align-at:8k
+#primary		-		8G-	-	-
 
-disk_config lvm fstabkey:uuid preserve_lazy:data-data
-vg		vg		md1
-vg-root1	/		35G-	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
+disk_config raid fstabkey:uuid
+#raid1		-		disk2.1,disk3.1	-	-
+raid1		-		disk2.1		-	-
+
+disk_config lvm fstabkey:uuid preserve_lazy:vg-data
+vg		vg		disk1.3
+vg-root1	/		60G-90G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
 vg-var1		/var		6G-12G	ext4	rw createopts="-O ^metadata_csum"
-vg-root2	/altroot	35G-	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
+vg-root2	/altroot	60G-90G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
 vg-var2		/altroot/var	6G-12G	ext4	rw createopts="-O ^metadata_csum"
+vg-data		/data		5G-	xfs	rw createopts="-m crc=0"
+
 vg-snapreserve	-		1G	-	-
 
-vg		data		md2
-data-data	/data		4G-	xfs	rw
+
+disk_config lvm fstabkey:uuid preserve_lazy:data-data
+vg		data		md0
+data-data	/bigdata	5G-	xfs	rw createopts="-m crc=0"
+
+data-snapreserve	-	5%	-	-
