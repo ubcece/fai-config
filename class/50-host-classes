@@ -32,14 +32,14 @@ case $HOSTNAME in
     fog*|s?fog[dp]*)
         echo "SERVER SLOW" ;;
     *webgoat*)
-        echo "SERVER WEBGOAT" ;;
+        echo "SERVER WEBGOAT NO_DATA2 UBUNTU_18_04" ;;
     [kmxv]web?|[kmx]vweb?|s?web[dp]*)
         echo "SERVER WEB RT" ;;
     [kmxv]flex?)
         echo "SERVER" ;;
     purang1[345])
         echo "VM_HOST" ;;
-    bci04|mehdi-pc02|kramer|purang8|oceanus|vwong-pc11)
+    bci04|mehdi-pc02|kramer|purang8|marie|vwong-pc11)
         echo "CUDA" ;;
     bci06)
         echo "CUDA NO_ECE" ;;

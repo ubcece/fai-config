@@ -77,7 +77,7 @@ elif ifclass DISK1P5 ; then
 elif ifclass RAID5 ; then
     make_raid_disk_config 5 > $FAI/disk_config/RAID5
 
-elif ifclass VM_GUEST && [ `disk_count` -gt 1 ]; then
+elif ifclass VM_GUEST && ! ifclass NO_DATA2 && [ `disk_count` -gt 1 ]; then
     echo "DATA2"
 
 elif ifclass VM_HOST ; then

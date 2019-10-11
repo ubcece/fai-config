@@ -1090,19 +1090,6 @@ python-subversion                       # For dev.ece.ubc.ca
 subversion-tools                        # For dev.ece.ubc.ca
 xinetd                                  # For dev.ece.ubc.ca
 
-PACKAGES install WEBGOAT
-apache2
-git
-libapache2-mod-authnz-external
-maven
-monit
-oracle-java8-installer  # From WebUpd8Team PPA
-postfix
-pwgen
-tomcat7
-tomcat7-admin
-xsltproc
-
 PACKAGES taskinst XFCE
 xubuntu-desktop
 

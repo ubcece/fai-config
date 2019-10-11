@@ -1197,7 +1197,7 @@ xinetd                                  # For dev.ece.ubc.ca
 
 PACKAGES install WEBGOAT
 apache2
-default-jdk
+default-jdk-headless
 git
 libapache2-mod-authnz-external
 libapache2-mod-md
@@ -1205,8 +1205,6 @@ maven
 monit
 postfix
 pwgen
-tomcat8
-tomcat8-admin
 xsltproc
 
 PACKAGES taskinst XFCE

@@ -8,7 +8,6 @@ replacing any existing accounts in spring-security.xml.
 from glob import glob
 from itertools import chain
 from subprocess import check_output
-import xml.etree.ElementTree as ET
 
 def pwgen(*args, **kwargs):
     """
@@ -21,38 +20,27 @@ def pwgen(*args, **kwargs):
     for pw in check_output(['/usr/bin/pwgen'] + args).rstrip().split('\n'):
         yield pw
 
-def edit_spring_users(filename, users):
+def sql_insert_statements(user):
     """
-    Replace all children of the <user-service> element in the file with
-    the given users.
+    asdf
     """
-    ns = {
-        '': 'http://www.springframework.org/schema/security',
-        'beans': 'http://www.springframework.org/schema/beans',
-    }
-    for prefix, uri in ns.items():
-        ET.register_namespace(prefix, uri)
-    tree = ET.ElementTree(file=filename)
-    user_service = tree.find('.//sec:user-service', dict(ns, sec=ns['']))
-    user_service.clear()
-    for user in users:
-        el = ET.Element('{{{0}}}user'.format(ns['']), user)
-        el.tail = '\n'
-        user_service.append(el)
-    tree.write(filename, encoding='UTF-8')
+    return '\n'.join([
+        """INSERT INTO WEB_GOAT_USER (USERNAME, PASSWORD, ROLE) VALUES ({0}, {1}, {2});""".format(*sql_str_escape(user['name'], user['password'], user['authorities'])),
+        """INSERT INTO USER_TRACKER (USERNAME) VALUES ({0});""".format(*sql_str_escape(user['name'])),
+    ])
+
+def sql_str_escape(*strings):
+    return ["'" + s  + "'" for s in strings]
 
 users = [
-    {'name': 'group{}'.format(i), 'authorities': 'ROLE_WEBGOAT_USER'}
-    for i in range(1, 31)
+    {'name': 'group{:02d}'.format(i), 'authorities': 'WEBGOAT_USER'}
+    for i in range(1, 16)
 ] + [
-    {'name': 'admin{}'.format(i), 'authorities': 'ROLE_WEBGOAT_ADMIN'}
-    for i in range(1, 6)
+    {'name': 'admin{}'.format(i), 'authorities': 'WEBGOAT_ADMIN'}
+    for i in range(1, 3)
 ] + [
-    {'name': 'tc-admin{}'.format(i), 'authorities': 'ROLE_SERVER_ADMIN'}
-    for i in range(1, 6)
-] + [
-    {'name': 'ubcit', 'authorities': 'ROLE_WEBGOAT_ADMIN'}
+    {'name': 'ubcit', 'authorities': 'WEBGOAT_ADMIN'}
 ]
 users = [dict(u, password=pw) for u, pw in zip(users, pwgen(N=len(users)))]
-for f in glob('/var/lib/tomcat?/webapps/WebGoat/WEB-INF/spring-security.xml'):
-    edit_spring_users(f, users)
+for u in users:
+    print(sql_insert_statements(u))

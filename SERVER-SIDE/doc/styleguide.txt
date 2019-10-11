@@ -33,6 +33,7 @@ CENTOS          The recommended version of CentOS
 CENTOS_7        CentOS 7
 
 SERVER          Supress inferred classes DISK2 GNOME KDE OMNI SLOW
+NO_DATA2        Suppress inferred class DATA2
 NO_STANDARD     Suppress inferred class STANDARD
 NO_ECE          Suppress inferred class ECE
 NO_GNOME        Suppress inferred class GNOME
