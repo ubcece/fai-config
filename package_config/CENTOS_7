@@ -12,6 +12,7 @@ vim-enhanced
 man
 curl
 libfastjson
+nss-pem
 screen
 unzip
 which

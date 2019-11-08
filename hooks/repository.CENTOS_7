@@ -4,14 +4,14 @@
 
 # Must update nss first to avoid an SSL certificate error with the epel
 # repository's mirrorlist/metalink.
-$ROOTCMD yum --quiet --assumeyes update nss
+$ROOTCMD yum --assumeyes update nss
 
 # pyliblzma is needed to provide yum with support for xz compression.
 # ca-certificates is needed for yum to handle HTTPS.
-$ROOTCMD yum --quiet --assumeyes install ca-certificates pyliblzma epel-release
+$ROOTCMD yum --assumeyes install ca-certificates pyliblzma epel-release nss-pem
 
 if ifclass VIDEO_NVIDIA ; then
     fcopy -iBM /etc/yum.repos.d/elrepo-stub.repo
-    $ROOTCMD yum --quiet --assumeyes install elrepo-release
+    $ROOTCMD yum --assumeyes install elrepo-release
     rm -f $target/etc/yum.repos.d/elrepo-stub.repo
 fi
