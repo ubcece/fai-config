@@ -289,6 +289,7 @@ libdbd-pg-perl
 libio-socket-ssl-perl
 nmap
 postgresql
+python3-yaml
 ruby-ipaddress
 ruby-dev                                # For building Ruby gems
 slapd-smbk5pwd
