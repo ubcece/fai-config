@@ -20,6 +20,7 @@ nfs-utils
 pakchois
 ncurses-base # currently missing in the base file
 lvm2
+redhat-lsb-core
 
 PACKAGES yumi GRUB_PC
 grub2
