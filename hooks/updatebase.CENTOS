@@ -1,23 +1,10 @@
 #! /bin/bash
 
-if [ ! -f $target/etc/resolv.conf ]; then
-    cp /etc/resolv.conf $target/etc
-fi
-
 if [ "$verbose" ]; then
 	echo "Updating base"
-	$ROOTCMD yum -y update 2>&1 | tee -a $LOGDIR/software.log
+	$ROOTCMD yum -y update |& tee -a $LOGDIR/software.log
 else
 	$ROOTCMD yum -y update >> $LOGDIR/software.log
 fi
 
-# /usr/lib/fai/updatebase has a bunch of APT-specific actions.
-# We just want the part about mounting /proc and /sys etc.
 skiptask updatebase
-
-if [ "$FAI_ACTION" = "install" -o "$FAI_ACTION" = "dirinstall" ]; then
-    mount -t proc   proc   $FAI_ROOT/proc
-    mount -t sysfs  sysfs  $FAI_ROOT/sys
-    [ -f /etc/init.d/udev ] && mount --bind /dev $FAI_ROOT/dev
-    mount -t devpts devpts $FAI_ROOT/dev/pts
-fi
