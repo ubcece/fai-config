@@ -3,3 +3,4 @@ rm -f /var/tmp/base.tar.*
 
 FAI_DEBOOTSTRAP='trusty http://mirror.it.ubc.ca/ubuntu'
 FAI_DEBOOTSTRAP_OPTS='--include tasksel'
+FAI_BASEFILEURL='https://cloud-images.ubuntu.com/releases/server/trusty/release/'

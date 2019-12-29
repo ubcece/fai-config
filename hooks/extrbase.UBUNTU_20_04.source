@@ -2,3 +2,7 @@
 rm -f /var/tmp/base.tar.*
 
 FAI_DEBOOTSTRAP='focal http://mirror.it.ubc.ca/ubuntu'
+FAI_BASEFILEURL='https://cloud-images.ubuntu.com/releases/server/focal/release'
+# For daily builds, use this base URL:
+# FAI_BASEFILEURL='https://cloud-images.ubuntu.com/daily/server/focal/current'
+# ... and also change class/90-cloudimg

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+. /usr/lib/fai/subroutines
+
+# https://cloud-images.ubuntu.com/releases/*/release/
+if ifclass AMD64 && ( ifclass SERVER || ifclass USE_CLOUD_IMAGE ); then
+    if ifclass UBUNTU_16_04 ; then
+        ifclass USE_CLOUD_IMAGE || echo USE_CLOUD_IMAGE
+        echo ubuntu-16.04-server-cloudimg-amd64-root
+    elif ifclass UBUNTU_18_04 ; then
+        ifclass USE_CLOUD_IMAGE || echo USE_CLOUD_IMAGE
+        echo ubuntu-18.04-server-cloudimg-amd64-root
+    elif ifclass UBUNTU_19_04 ; then
+        ifclass USE_CLOUD_IMAGE || echo USE_CLOUD_IMAGE
+        echo ubuntu-19.04-server-cloudimg-amd64-root
+    elif ifclass UBUNTU_19_10 ; then
+        ifclass USE_CLOUD_IMAGE || echo USE_CLOUD_IMAGE
+        echo ubuntu-19.10-server-cloudimg-amd64-root
+    elif ifclass UBUNTU_20_04 ; then
+        ifclass USE_CLOUD_IMAGE || echo USE_CLOUD_IMAGE
+        echo ubuntu-20.04-server-cloudimg-amd64-root
+        # For daily builds, use this image name:
+        # echo focal-server-cloudimg-amd64-root
+        # ... and also change hooks/extrbase.UBUNTU_20_04.source
+    fi
+fi
+
+# CentOS cloud images (https://cloud.centos.org/) aren't really suitable for
+# FAI, as they contain entire raw disks or virtual machine definitions.

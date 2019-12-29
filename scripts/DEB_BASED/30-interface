@@ -44,7 +44,7 @@ netplan_yaml() {
     echo     '# Run `netplan apply` after editing.'
     echo     "network:"
     echo     "    version: 2"
-    ifclass SERVER ||
+    ifclass SERVER || ifclass USE_CLOUD_IMAGE ||
     echo     "    renderer: NetworkManager"
     echo     "    ethernets:"
     echo     "        $IFNAME:"

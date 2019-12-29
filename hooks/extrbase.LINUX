@@ -4,3 +4,29 @@ if [ -d "$target/tmp" ]; then
     chown 0:0 "$target/tmp"
     chmod 1777 "$target/tmp"
 fi
+
+# Modify /usr/lib/fai/fetch-basefile to look for .tar* files only, and
+# allow dots in the names of the files / classes.
+patch -p0 <<'FETCH_BASEFILE_PATCH'
+--- /usr/lib/fai/fetch-basefile.ext	2018-09-10 04:29:00.000000000 -0700
++++ /usr/lib/fai/fetch-basefile	2019-12-29 04:09:55.641477102 -0800
+@@ -38,7 +38,7 @@
+ #shift $(($OPTIND - 1))
+ 
+-# get list of all files at URL
+-flist=$(lftp -e 'cls;exit' $url 2>/dev/null)
++# get list of all .tar* files at URL
++flist=$(lftp -e 'cls;exit' $url 2>/dev/null | grep '\.tar')
+ # create an array of all lines
+ baselist=($flist)
+ 
+@@ -50,7 +50,7 @@
+ # now search for each class, if a basename matches
+ for c in $revclasses; do
+     for f in ${baselist[@]}; do
+-	base=${f%%.*}
++	base=${f%%.tar*}
+ 	if [ "$c" = "$base" ]; then
+             found=1
+             [ $mount = 1 ] && mount_ramdisk
+FETCH_BASEFILE_PATCH

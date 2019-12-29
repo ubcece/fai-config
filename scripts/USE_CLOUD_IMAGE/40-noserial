@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# The out-of-the-box configuration for cloud-init puts
+# GRUB_CMDLINE_LINUX_DEFAULT="console=tty1 console=ttyS0"
+# in /etc/default/grub.d/50-cloudimg-settings.cfg.  However, if there is no
+# serial console, then writing to /dev/console results in an I/O error.
+#
+# If writing to the serial console ttyS0 fails now, assume that it will fail
+# later too.
+if ! echo >/dev/ttyS0 2>/dev/null; then
+    cat > $target/etc/default/grub.d/80-cloudimg-noserial.cfg <<-'EOF'
+	GRUB_CMDLINE_LINUX_DEFAULT="$(echo "$GRUB_CMDLINE_LINUX_DEFAULT" | sed -e 's/ console=ttyS0//')"
+	EOF
+fi

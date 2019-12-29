@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Use FAI as a NoCloud data source for cloud-init
+# https://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html
+cat > $target/etc/default/grub.d/90-cloudimg-datasource.cfg <<-EOF
+GRUB_CMDLINE_LINUX_DEFAULT="\$GRUB_CMDLINE_LINUX_DEFAULT ds=nocloud-net\\;seedfrom=https://fai.ece.ubc.ca/fai/cloud-init/$FQDN/$auth/"
+EOF
+
+$ROOTCMD update-grub

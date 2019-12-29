@@ -2,17 +2,6 @@
 
 PACKAGES install
 ubuntu-minimal
-bash
-debconf-utils
-debootstrap
-debsums
-friendly-recovery
-lsb-core
-lvm2
-ncurses-term
-ssh
-tasksel
-xfsprogs
 
 PACKAGES install NOT_VZ_CONTAINER
 linux-generic
@@ -963,6 +952,10 @@ libwww-perl
 libxml-rss-perl
 procmail
 
+PACKAGES taskinst USE_CLOUD_IMAGE
+cloud-image
+standard
+
 PACKAGES install SERVER
 apparmor-profiles
 apparmor-utils
@@ -994,6 +987,18 @@ ubuntu-minimal-
 rsyslog-
 syslog-ng
 ubuntu-standard
+bash
+cryptsetup
+debconf-utils
+debootstrap
+debsums
+friendly-recovery
+lsb-core
+lvm2
+ncurses-term
+ssh
+tasksel
+xfsprogs
 anacron
 apparmor
 apport

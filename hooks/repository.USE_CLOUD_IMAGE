@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mkdir -p $target/run/systemd/resolve
+cat /etc/resolv.conf > $target/run/systemd/resolve/stub-resolv.conf
