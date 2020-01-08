@@ -5,7 +5,7 @@
 disk_config disk1 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1 align-at:8k
 primary		/boot/efi	150M-200M	vfat	rw
 primary		swap		4G	swap	rw
-primary		-		31000M-	-	-
+primary		-		29000M-	-	-
 
 disk_config disk2 disklabel:gpt preserve_lazy:1 fstabkey:uuid align-at:8k
 primary		-		16M	vfat	-
