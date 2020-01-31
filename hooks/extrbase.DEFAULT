@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Prepare the /data partition.
+#
+# This really should be a post-mountdisks hook, but FAI only allows hooks that
+# precede a task, so it's written as an extrbase hook instead.
+
+[ "$FAI_ACTION" = install ] || exit
+
+if [ -d "$target/data" ]; then
+    chown 0:0 "$target/data"
+    chmod 1777 "$target/data"
+fi
+
+if mountpoint -q "$target/data"; then
+    touch "$target/data/.FAI_DONT_OVERWRITE_THIS_PARTITION"
+fi
