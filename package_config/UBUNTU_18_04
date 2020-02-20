@@ -31,11 +31,9 @@ PACKAGES install GRUB_EFI
 grub-efi
 
 PACKAGES install CUDA
+cuda-repo-ubuntu1804
+cuda
 caffe-cuda
-nvidia-cuda-doc
-nvidia-cuda-gdb
-nvidia-visual-profiler
-nvidia-cuda-toolkit
 libcupti-dev
 libprotobuf-dev
 libleveldb-dev
@@ -57,6 +55,7 @@ libgtest-dev
 libiomp-dev
 libleveldb-dbg
 libleveldb-dev
+libtorch-dev
 lmdb-utils
 openmpi-bin
 protobuf-c-compiler

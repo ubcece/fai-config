@@ -7,4 +7,5 @@ if ! ifclass VIDEO_NVIDIA ; then
     exit 1
 elif ifclass DEB_BASED && ifclass AMD64 ; then
     fcopy -iBM /etc/apt/sources.list.d/cuda.list
+    fcopy -iBM /etc/apt/preferences.d/50cuda_pin.pref
 fi
