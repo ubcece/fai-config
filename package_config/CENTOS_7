@@ -103,7 +103,6 @@ server-platform-devel
 server-policy
 tex
 technical-writing
-cryptsetup
 workstation-policy
 
 PACKAGES yumr OMNI
