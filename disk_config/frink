@@ -1,8 +1,0 @@
-disk_config sda disklabel:gpt preserve_always:1,2,3,5,6 bootable:4 fstabkey:device
-
-primary  -             190-300     msdos        ro
-primary  -             30000-40000 -            ro
-primary  -             25000-40000 -            ro
-primary  /             25000-40000 ext3         rw,errors=remount-ro
-primary  swap          2000-5000   swap         rw
-primary  /mac2         25000-40000 hfsplus      ro

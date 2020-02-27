@@ -2,13 +2,14 @@
 # This file is also used as a template for configuring RAID5.
 
 disk_config disk1 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid bootable:1 align-at:8k
-primary		/boot/efi	150M-200M	vfat	rw
-primary		-		8G	-	-
-primary		-		90G-	-	-
+primary		/boot/efi	150M-1G	vfat	rw
+# disk1.2 was for swap but is now a placeholder to keep old partition numbering
+primary		-		1	-	-
+primary		-		98G-	-	-
 
 disk_config disk2 disklabel:gpt-bios preserve_lazy:1 fstabkey:uuid align-at:8k
 primary		-		150-200M	vfat	-
-primary		-		8G	-	-
+primary		-		1	-	-
 primary		-		90G-	-	-
 
 disk_config raid fstabkey:uuid
@@ -17,6 +18,7 @@ raid1		-		disk1.3,disk2.3	-	-
 
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data
 vg		vg		md1
+vg-swap		swap		8G	swap	rw
 vg-root1	/		35G-60G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
 vg-var1		/var		6G-12G	ext4	rw createopts="-O ^metadata_csum"
 vg-root2	/altroot	35G-60G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"

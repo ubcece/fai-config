@@ -97,7 +97,7 @@ elif ifclass DISK2 ; then
 
 else
     size=`disk_sizes | head -n 1`
-    if   [ "$size" -lt  10000000 ]; then echo "TINY"
+    if   [ "$size" -lt  12000000 ]; then echo "TINY"
     elif [ "$size" -lt  60000000 ]; then echo "SMALL"
     elif [ "$size" -lt 150000000 ]; then echo "MEDIUM"
     elif ifclass RAID             ; then echo "RAID1"

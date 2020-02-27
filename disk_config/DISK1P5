@@ -1,4 +1,3 @@
-
 # Preserve partitions 1, 2, 3, and 4 of disk1 (for Windows dual-boot UEFI)
 
 disk_config disk1 disklabel:gpt preserve_lazy:1,2,3,4 fstabkey:uuid align-at:8k
@@ -6,11 +5,13 @@ primary		-		0-	-	-
 primary		-		0-	-	-
 primary		-		0-	-	-
 primary		-		0-	-	-
-primary		swap		2G	swap	rw
-primary		-		38G-	-	-
+# disk1.5 was for swap but is now a placeholder to keep old partition numbering
+primary		-      		1	-	-
+primary		-		100G-	-	-
 
 disk_config lvm fstabkey:uuid preserve_lazy:vg-data
 vg		vg		disk1.6
+vg-swap		swap		2G-RAM:108%	swap	rw
 vg-root1	/		35G-60G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
 vg-var1		/var		6G-12G	ext4	rw createopts="-O ^metadata_csum"
 vg-root2	/altroot	35G-60G	ext4	rw,errors=remount-ro createopts="-O ^metadata_csum"
