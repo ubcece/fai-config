@@ -2,4 +2,3 @@
 rm /var/tmp/base.tar.xz
 
 FAI_DEBOOTSTRAP='focal http://mirror.it.ubc.ca/ubuntu'
-FAI_DEBOOTSTRAP_OPTS='--include tasksel'

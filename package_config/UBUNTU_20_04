@@ -2,7 +2,6 @@
 
 PACKAGES install
 ubuntu-minimal
-bash
 cryptsetup
 debconf-utils
 debootstrap
@@ -10,9 +9,9 @@ debsums
 friendly-recovery
 lsb-core
 lvm2
+netplan.io
 ncurses-term
 ssh
-tasksel
 xfsprogs
 
 PACKAGES install NOT_VZ_CONTAINER
@@ -99,9 +98,6 @@ postgresql-contrib
 postgresql-doc
 postgresql-server-dev
 
-PACKAGES install ECE
-cfengine2
-
 PACKAGES install FAISERVER
 apache2
 cifs-utils
@@ -129,16 +125,14 @@ upx-ucl
 uuid-dev
 wimtools
 
-PACKAGES taskinst GNOME
+PACKAGES install GNOME
+synaptic
+fonts-arphic-ukai
+fonts-arphic-uming
 ubuntu-desktop
 ubuntu-docs
 ubuntu-gnome-desktop
-
-PACKAGES install GNOME
-synaptic
-ttf-freefont
-fonts-arphic-ukai
-fonts-arphic-uming
+vino
 
 PACKAGES install HP_ILO
 cpqacuxe                                # HP-provided package
@@ -155,11 +149,8 @@ PACKAGES install IPMI
 freeipmi-tools
 ipmitool
 
-PACKAGES taskinst KDE
-ubuntu-desktop
-
 PACKAGES install KDE
-kde-full
+kubuntu-desktop
 
 PACKAGES install LOOKUPSERVER
 autofs5-
@@ -184,7 +175,7 @@ syslog-ng
 # use libcurl4
 lshell
 
-PACKAGES taskinst LXDE
+PACKAGES install-norec LXDE
 lubuntu-desktop
 
 PACKAGES install MAIL
@@ -344,10 +335,8 @@ automake
 bibtex2html
 bin86
 bison
-bittorrent
 blender
 bluefish
-bluez-gnome
 bmake
 bridge-utils
 build-essential
@@ -357,59 +346,37 @@ bzrtools
 cadaver
 cflow
 chktex
-chromium-browser
-chromium-browser-inspector
-chromium-browser-l10n
-chromium-chromedriver
-chromium-codecs-ffmpeg
-#chromium-codecs-ffmpeg-extra
+# In Ubuntu 20.04, the chromium-browser dpkg tries to install a snap.
+# This currently leads to a timeout error during installation.
+#chromium-browser
+#chromium-browser-inspector
+#chromium-browser-l10n
+#chromium-chromedriver
+#chromium-codecs-ffmpeg
 cifs-utils
 cjk-latex
-ckermit
 clang
 cmake
 command-not-found
-console-tools
-cpuburn
 cpufrequtils
 cron-apt
 cscope
 cups
 cups-bsd
-cups-driver-gutenprint
-cups-pdf
 curl
 cvs
 cxref
 cython
 cython3
-db4.2-util
-dbus-1-utils
 dc
 ddd
 debsums
 default-jdk
-deskbar-applet
 devscripts
 dia
 dos2unix
 ebtables
-eclipse
-eclipse-cdt
-eclipse-emf
-eclipse-emf-examples
-eclipse-emf-sdk
-eclipse-jdt
-eclipse-pde
-eclipse-platform
-eclipse-platform-data
-eclipse-plugin-cvs
-eclipse-rcp
-eclipse-xsd
-eclipse-xsd-sdk
-ekiga
 emacs
-evolution-mapi
 evolution-plugins
 exuberant-ctags
 fakeroot
@@ -425,34 +392,25 @@ fortunes
 fortunes-min
 fping
 ftp
-g++-4.9-multilib
 gcc-doc
-gcc-4.9-multilib
 gcc-multilib
 gdb
 gdb-doc
 gdebi
-gdesklets
-gecko-mediaplayer
 gfortran
 ghc
 gimp
 gimp-data
 gimp-gutenprint
 git
-git-arch
 git-buildpackage
 git-cvs
 git-doc
 git-email
 git-svn
 gitk
-glipper
-gnome-btdownload
 gnome-power-manager
 gnome-screensaver
-gnome-themes-extras
-gnome-themes-more
 gnuhtml2latex
 gnuplot
 gparted
@@ -460,9 +418,8 @@ graphviz
 gsfonts-other
 gsfonts-x11
 gsl-bin
-gstreamer0.10-ffmpeg
-gstreamer0.10-plugins-ugly
 gstreamer1.0-libav
+gstreamer1.0-plugins-ugly
 gtkwave
 gv
 h5utils
@@ -475,18 +432,15 @@ iamerican
 ibritish
 icedax
 iftop
-ijsgutenprint
 ikiwiki
 imagemagick
 info
 inkscape
 installation-report
 intltool-debian
-iproute
 iputils-arping
 ipython
 iverilog
-jadetex
 jove
 jq
 jython
@@ -496,33 +450,25 @@ language-pack-en
 latex2html
 latex2rtf
 latex2rtf-doc
-latex-beamer
 lbdb # mutt -> lbdb
 ldap-utils
 lftp
-lib32bz2-dev
-lib32z1-dev
 libapache2-mod-md
 libapr1-dev
 libboost-all-dev
 libboost-dev
 libconfig++-dev
-libdvdcss2
 libelf-dev
 libfile-which-perl                      # RT 169425
 libgmp3-dev
 libgmpxx4ldbl
-libgsl0-dev
-libgsl0ldbl
+libgsl-dev
 libhdf5-dev
 libmpc-dev
-libmpfr4
 libmpfr-dev
-libncurses5-dbg
 libnss3-tools
 libnet-ldap-perl # mutt -> lbdb -> libnet-ldap-perl
 libnss3-tools
-libpolarssl-dev
 libreoffice
 libreoffice-gnome
 libreoffice-gtk
@@ -530,8 +476,6 @@ libreoffice-help-en-us
 libreoffice-java-common
 libreoffice-lightproof-en
 libreoffice-pdfimport
-libreoffice-presentation-minimizer
-libreoffice-presenter-console
 libssl-dev
 libtool
 liferea
@@ -549,12 +493,12 @@ m4
 manpages-dev
 markdown
 maven
-mawk
 meld
 mencoder
 menu
 mercurial
 minicom
+mktorrent
 mono-complete
 mosh
 mpack
@@ -563,9 +507,9 @@ mtools
 mtr
 mtr-tiny-
 mutt
-mythes-thesaurus
 netdiag
 netmask
+network-manager
 ninja-build
 nmap
 nodejs                  # Available in Debian >= 8 and Ubuntu
@@ -589,116 +533,52 @@ pssh
 pstoedit
 psutils
 pep8
-pep257
 pylint
-pylint3
-python-anyjson
 python3-anyjson
-python-bs4
 python3-bs4
-python-dev
 python3-dev
-python-docopt
 python3-docopt
-python-flask
 python3-flask
-python-gmpy2
 python3-gmpy2
-python-gnome2
-python-gnome2-extras
-python-h5py
-python-html5lib
 python3-html5lib
-python-httplib2
 python3-httplib2
-python-ipy
 python3-ipy
-python-iso8601
 python3-iso8601
-python-ldap3
 python3-ldap3
-python-keyring
 python3-keyring
-python-ldap3
 python3-ldap3
-python-lxml
 python3-lxml
-python-matplotlib
 python3-matplotlib
-python-matplotlib-data
-python-mechanicalsoup
 python3-mechanicalsoup
-python-mock
 python3-mock
-python-mpltoolkits.basemap
-python-mpltoolkits.basemap-data
-python-mpmath
 python3-mpmath
-python-newt
 python3-newt
-python-nine
 python3-nine
-python-nltk
 python3-nltk
-python-numexpr
 python3-numexpr
-python-numpy-dev
-python3-numpy-dev
-python-pandas
+python3-numpy
 python3-pandas
-python-pil
 python3-pil
-python-pip
 python3-pip
-python-progressbar
 python3-progressbar
-python-psycopg2
 python3-psycopg2
-python-pycurl
 python3-pycurl
-python-pygraph
-python3-pygraph
-python-pylint-common
 python3-pylint-common
-python-pylint-flask
 python3-pylint-flask
-python-pysimplesoap
 python3-pysimplesoap
-python-pysqlite2
-python-qt3
-python-reportlab
 python3-reportlab
-python-reportlab-accel
 python3-reportlab-accel
-python-reportlab-doc
-python-scientific
-python-scipy
 python3-scipy
-python-scrapy
-python-six
 python3-six
-python-sklearn
-python-suds
 python3-suds
-python-tables
 python3-tables
-python-termcolor
 python3-termcolor
-python-tk
 python3-tk
-python-virtualenv
 python3-venv
-python-vtk
-python-w3lib
 python3-w3lib
-python-wheel
 python3-wheel
-python-xlrd
 python3-xlrd
-python-xlsxwriter
 python3-xlsxwriter
-python-xlwt
-python-yaml
 python3-yaml
 qalc
 qrencode
@@ -706,7 +586,6 @@ quilt
 quota
 rake
 r-base
-r-base-latex
 r-cran-abind
 r-cran-base64enc
 r-cran-date
@@ -764,16 +643,12 @@ r-cran-xts
 r-cran-zelig
 r-cran-zoo
 rcs
-rcs-latex
 rdesktop
-rdoc
 reportbug
-resolvconf
 rhythmbox
 ri
 rlwrap
 ruby
-ruby-algorithm-diff
 ruby-bsearch
 ruby-childprocess
 ruby-chronic
@@ -798,10 +673,8 @@ ruby-ffi
 ruby-flexmock
 ruby-gettext
 ruby-googlecharts
-ruby-hiera
 ruby-highline
 ruby-htree
-ruby-inotify
 ruby-ipaddress
 ruby-json
 ruby-levenshtein
@@ -820,7 +693,6 @@ ruby-net-ssh-multi
 ruby-nokogiri
 ruby-rspec
 ruby-safe-yaml
-ruby-session
 ruby-setup
 ruby-spreadsheet
 ruby-sqlite3
@@ -847,16 +719,14 @@ texlive-full
 texmaker
 thunderbird-locale-en
 tig
-totem-mozilla
-transcode
-transfig
+transmission
+transmission-cli
 ttf-bitstream-vera
 ttf-dejavu
 ttf-mscorefonts-installer
 ubuntu-restricted-addons
 udftools
 unace
-unity-chromium-extension
 unity-scope-chromiumbookmarks
 unrar
 untex
@@ -868,7 +738,6 @@ vbetool
 verilator
 vim-gtk
 vlc
-vnc4server
 w3m
 wamerican
 whois
@@ -882,7 +751,6 @@ xdg-utils
 xemacs21
 xfig
 xfig-libs
-xresprobe
 xtightvncviewer
 zip
 zlib1g-dev
@@ -1060,7 +928,6 @@ ncdu
 nfs-common
 nscd
 nslcd
-ntp
 parted
 patchutils
 pciutils
@@ -1217,13 +1084,13 @@ postfix
 pwgen
 xsltproc
 
-PACKAGES taskinst XFCE
+PACKAGES install XFCE
 xubuntu-desktop
 
 # LXDE and XFCE would both install lightdm-gtk-greeter, which changes
 # the X login screen away from the Ubuntu default.  Undo that.
 PACKAGES install GNOME
-lightdm-gtk-greeter-
+#lightdm-gtk-greeter-
 
 PACKAGES install GNOME KDE LXDE XFCE
 lirc-
