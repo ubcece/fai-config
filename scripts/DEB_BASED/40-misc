@@ -10,8 +10,8 @@ for module in $MODULESLIST; do
     ainsl -a /etc/modules "^$module$"
 done
 
-fcopy -Mv /etc/hostname || echo $HOSTNAME > $target/etc/hostname
-ainsl -av /etc/mailname ${HOSTNAME}
+fcopy -Mv /etc/hostname || echo "$FQDN" > $target/etc/hostname
+ainsl -av /etc/mailname "$FQDN"
 if [ ! -e $target/etc/adjtime ]; then
     printf "0.0 0 0.0\n0\nUTC" > $target/etc/adjtime
 fi

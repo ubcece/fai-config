@@ -290,7 +290,13 @@ ece_resolve_fqdn() {
             esac
         done
     )
-    if [ -z "$FQDN" ]; then
+    if [ -n "$FQDN" ]; then
+        case "$HOSTNAME" in
+          *".$DOMAIN")
+            HOSTNAME="${HOSTNAME%%.$DOMAIN}"
+            ;;
+        esac
+    else
         case "$HOSTNAME" in
           *".$DOMAIN")
             FQDN="${HOSTNAME}"
@@ -305,6 +311,7 @@ ece_resolve_fqdn() {
             ;;
         esac
     fi
+    hostname "$FQDN"
 }
 
 ece_setup_hook() {
