@@ -26,9 +26,9 @@ by invoking SERVER-SIDE/bin/fai-pxe -c $classname1,$classname2.
 DEBIAN          The recommended version of Debian
 DEBIAN_6        Debian 6 (squeeze)
 UBUNTU          The recommended version of Ubuntu
-UBUNTU_14_04    Ubuntu 14.04 LTS (trusty)
 UBUNTU_16_04    Ubuntu 16.04 LTS (xenial)
 UBUNTU_18_04    Ubuntu 18.04 LTS (bionic)
+UBUNTU_20_04    Ubuntu 20.04 LTS (focal)
 CENTOS          The recommended version of CentOS
 CENTOS_7        CentOS 7
 
