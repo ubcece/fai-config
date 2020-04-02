@@ -21,7 +21,7 @@ mask2cdr() {
 # https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
 alt_ifname() {
     local IFNAME="$1"
-    $ROOTCMD udevadm test --action=ADD "/sys/class/net/$IFNAME" 2>/dev/null |
+    $ROOTCMD udevadm test --action=add "/sys/class/net/$IFNAME" 2>/dev/null |
     awk -F= '
         /=/ { VAL[$1] = $2 }
         END {
