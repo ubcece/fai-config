@@ -1,0 +1,2 @@
+deb     http://mirror.it.ubc.ca/debian              buster-backports  main contrib non-free
+deb-src http://mirror.it.ubc.ca/debian              buster-backports  main contrib non-free

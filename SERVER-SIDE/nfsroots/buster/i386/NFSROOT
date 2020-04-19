@@ -44,6 +44,7 @@ firmware-misc-nonfree
 
 # Custom additions
 PACKAGES install
+ansible
 bash-completion
 binutils
 bridge-utils
@@ -57,7 +58,7 @@ eject
 fai-doc
 #fuse-utils
 gawk
-git-core
+git
 gnupg
 kexec-tools
 liblinux-lvm-perl
@@ -90,7 +91,7 @@ lsb-release
 PACKAGES install DEBIAN
 console-common
 firmware-linux
-linux-headers-amd64
+linux-headers-686-pae
 lshw
 debootstrap/unstable
 

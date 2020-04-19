@@ -1,2 +1,0 @@
-# Workaround for https://bugs.launchpad.net/ubuntu/+bug/1109029
-deb     http://ppa.launchpad.net/morty/dracut-release/ubuntu    trusty            main
