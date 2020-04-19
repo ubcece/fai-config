@@ -44,7 +44,6 @@ firmware-misc-nonfree
 
 # Custom additions
 PACKAGES install
-ansible
 bash-completion
 binutils
 bridge-utils
@@ -80,6 +79,10 @@ udftools
 uuid-runtime
 virtualbox-guest-dkms
 virtualbox-guest-utils
+
+ansible/buster-backports
+m4
+python3-jmespath
 
 # install LSB (Linux Standard Base) to determine the
 # distribution and release of the install system
