@@ -1,6 +1,6 @@
---- /usr/sbin/fai-chboot.template	2015-11-25 01:06:59.000000000 -0800
-+++ /usr/sbin/fai-chboot	2016-01-06 13:30:29.501325113 -0800
-@@ -331,9 +331,20 @@
+--- /usr/sbin/fai-chboot.template	2020-03-20 07:40:53.000000000 -0700
++++ /usr/sbin/fai-chboot	2020-04-19 00:55:09.833155907 -0700
+@@ -333,9 +333,20 @@
  sub docopy {
  
 -  my ($srcfile, $pxedir, $desthex, $desthost, $ipadr) = @_;
@@ -22,28 +22,28 @@
 +     /eg;
      print DEST $_;
    }
-@@ -344,5 +355,5 @@
+@@ -346,5 +357,5 @@
  sub tcopy {
  
 -  my ($srchost,$desthost) = @_;
 +  my ($srchost,$desthost,$tmpl_subst_params) = @_;
    my ($ipadr,$srcfile,$srchex,$desthex);
  
-@@ -376,5 +387,5 @@
+@@ -378,5 +389,5 @@
      }
      print "copy pxe config from $srchost to template $desthost\n" if $verbose;
--    docopy($srcfile,$pxedir,$desthost,$desthost,$ipadr);
-+    docopy($srcfile,$pxedir,$desthost,$desthost,$ipadr,$tmpl_subst_params);
+-    docopy("$pxedir/$srcfile",$pxedir,$desthost,$desthost,$ipadr);
++    docopy("$pxedir/$srcfile",$pxedir,$desthost,$desthost,$ipadr,$tmpl_subst_params);
    } else {
      ($ipadr,$desthex) = host2hex($desthost);
-@@ -384,5 +395,5 @@
+@@ -386,5 +397,5 @@
      }
-     print "copy pxe config from $srchost to $desthost ($desthex)\n" if $verbose;
--    docopy($srcfile,$pxedir,$desthex,$desthost,$ipadr);
-+    docopy($srcfile,$pxedir,$desthex,$desthost,$ipadr,$tmpl_subst_params);
+     print "copy pxe config from $srchost to $desthost, filenames: $srcfile -> $desthex\n" if $verbose;
+-    docopy("$pxedir/$srcfile",$pxedir,$desthex,$desthost,$ipadr);
++    docopy("$pxedir/$srcfile",$pxedir,$desthex,$desthost,$ipadr,$tmpl_subst_params);
    }
  }
-@@ -433,6 +444,8 @@
+@@ -436,6 +447,8 @@
    die "Missing destination host name(s). Can't copy.\n" unless @ARGV;
    # copy a template config to multiple hosts
 -  foreach (@ARGV) {
