@@ -65,7 +65,9 @@ linux-base
 locales
 man
 ncurses-term
+ndctl
 ntfs-3g
+nvme-cli
 open-vm-tools
 patch
 pwgen
@@ -79,6 +81,7 @@ udftools
 uuid-runtime
 virtualbox-guest-dkms
 virtualbox-guest-utils
+zerofree
 
 ansible/buster-backports
 m4
@@ -90,6 +93,9 @@ python3-jmespath
 lsb-base
 lsb-core
 lsb-release
+
+PACKAGES install-norec
+ipmitool
 
 PACKAGES install DEBIAN
 console-common
