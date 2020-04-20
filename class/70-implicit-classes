@@ -9,10 +9,9 @@ if ! ifclass VZ_CONTAINER ; then
     fi
 fi
 
-# If a process that looks like a DHCP client is running, then emit class DHCPC
-# (unless explicitly suppressed by a NO_DHCPC class).
+# Emit class DHCPC unless suppressed by a NO_DHCPC class
 if ! ifclass NO_DHCPC ; then
-    ps ax | awk '$5 ~ "^dh" { print "DHCPC" ; exit }'
+    echo DHCPC
 fi
 
 for class in STANDARD ECE ; do
