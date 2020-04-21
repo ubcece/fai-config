@@ -9,6 +9,21 @@ error=0; trap 'error=$(($?>$error?$?:$error))' ERR # save maximum error code
 
 . /usr/lib/fai/subroutines
 
+# Given two lists, each represented as a comma-delimited string, produce a
+# comma-delimited string consisting of the first element of the first list
+# followed by all of the other elements of the second list.
+#
+# Example: bootorder 2,4,0,3 4,2,0,3   ===> 2,4,0,3
+# Example: bootorder 2,4,0,3 5,2,4,0,3 ===> 5,2,4,0,3
+bootorder() {
+    IFS=, read -r -a old_order <<<"$1"
+    IFS=, read -r -a new_order <<<"$2"
+    echo -n "${old_order[0]}"
+    for n in "${new_order[@]}"; do
+        [ "$n" != ${old_order[0]} ] && echo -n ",$n"
+    done
+}
+
 # Find the physical devices on which the given partitions reside, tracing
 # through MD and LVM layers if necessary.
 # See also hooks/debconf.DEB_BASED
@@ -46,12 +61,19 @@ if ifclass GRUB_EFI && [ -L "$target/etc/grub2-efi.cfg" ]; then
     #     original installed one, and looks for grub.cfg in /boot/grub2/.
     #
     # However, it would be a good idea to (re-)generate the GRUB configuration.
-    # TODO: run efibootmgr?
     $ROOTCMD grub2-mkconfig -o /etc/grub2-efi.cfg
     if [ $? = 0 ]; then
         echo "Generated GRUB (EFI) configuration"
     else
         echo "ERROR: Failed to generate GRUB (EFI) configuration"
+    fi
+
+    # Installing GRUB generally changes the boot order to put the newly added
+    # GRUB entry first.  Put the previous first-choice boot preference, noted
+    # in hooks/defvar.GRUB_EFI.source,  back in front.
+    if [ -n "$PREV_EFI_BOOTORDER" ]; then
+        NEW_EFI_BOOTORDER=$(efibootmgr | awk '$1 == "BootOrder:" { print $2 }')
+        efibootmgr -o "$(bootorder "$PREV_EFI_BOOTORDER" "$NEW_EFI_BOOTORDER")"
     fi
 
 elif ifclass GRUB_PC; then

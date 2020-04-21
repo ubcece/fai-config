@@ -1,0 +1,4 @@
+# Note the order of the EFI boot entries, so that
+# scripts/{DEB,RPM}_BASED/50-grub can restore the order after installing GRUB.
+
+PREV_EFI_BOOTORDER=$(efibootmgr | awk '$1 == "BootOrder:" { print $2 }')
