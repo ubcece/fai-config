@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+ANSIBLE_CONFIG_DIR=/var/cache/ansible/config
+
+if [ -z "$ANSIBLE_CONFIG_URL" ]; then
+    echo '$ANSIBLE_CONFIG_URL is not configured.  Skipping Ansible run.'
+    exit
+fi
+
+gitpath=$(expr match "$ANSIBLE_CONFIG_URL" '\([^[:space:]#]\+\)')
+gitbranch=$(expr match "$ANSIBLE_CONFIG_URL" '[^[:space:]#]*#\([^[:space:]]\+\)')
+: ${gitbranch:=master}
+
+if ! mountpoint -q "$(dirname "$ANSIBLE_CONFIG_DIR")"; then
+    mkdir -p "$(dirname "$ANSIBLE_CONFIG_DIR")"
+    mount -t tmpfs -o size=256M tmpfs "$(dirname "$ANSIBLE_CONFIG_DIR")"
+fi
+
+git clone --single-branch --branch "$gitbranch" --depth 1 \
+    "$gitpath" "$ANSIBLE_CONFIG_DIR"
+
+cd "$ANSIBLE_CONFIG_DIR"
+echo "Checked out rev $(git rev-parse HEAD) of $ANSIBLE_CONFIG_URL"
+ansible-playbook -c chroot -i ece_linux_inventory.yml -i chroot.config \
+    -l "$target" main.yml

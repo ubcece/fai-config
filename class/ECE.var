@@ -1,1 +1,1 @@
-PUPPET_SERVER=puppet.ece.ubc.ca
+ANSIBLE_CONFIG_URL=https://dev.ece.ubc.ca/git/ansible-config

@@ -3,9 +3,9 @@ FAI Dependencies
 
 ECE's FAI infrastructure has external dependencies and is not self-hosting.
 Our FAI setup relies on a DHCP server, a Git server, a Debian/Ubuntu mirror,
-and a CFengine server.  Since these dependencies are Debian servers
-themselves, it might be possible to end up with a minor bootstrapping
-challenge if a disaster knocks out one of those services.
+and Ansible.  Since these dependencies are themselves FAI-installed servers, it
+might be possible to end up with a minor bootstrapping challenge if a disaster
+knocks out one of those services.
 
 
 Servers
@@ -70,9 +70,9 @@ much simpler when those services are all located on the same server.
  4) Key distribution from the FAI server
     (fai.ece.ubc.ca)
 
-    The FAI client needs to fetch the CFengine and SSH host keys early in the
-    FAI process.  This presents a security challenge since private keys should
-    be kept secret.
+    The FAI client needs to fetch the SSH host keys early in the FAI process.
+    This presents a security challenge since private keys should be kept
+    secret.
 
     In the past, the client would fetch these host-specific files from the FAI
     server over SSH.  However, that would require the client to connect to the
@@ -101,19 +101,15 @@ much simpler when those services are all located on the same server.
  5) APT repositories
     (mirror.it.ubc.ca)
 
-    We currently use ECE's Debian mirror on http://mirrors.ece.ubc.ca.  An
-    alternative approach would be for mirrors.ece.ubc.ca to share the
-    repositories over NFS.  If the mirror server is unavailable, it should be
-    easy to reconfigure FAI to use another public Debian repository.
+    We currently use UBC IT's mirror on http://mirror.it.ubc.ca.  If the mirror
+    server is unavailable, it should be easy to reconfigure FAI to use another
+    public repository (see hooks/extrbase.* and files/etc/apt/sources.list/*).
 
- 6) CFengine server
-    (cfmaster.ece.ubc.ca)
+ 6) Ansible configuration (for installations with class ECE)
+    (dev.ece.ubc.ca)
 
-    The CFengine server does not necessarily need to reside on the same
-    machine as the FAI server, and it currently doesn't.  That is not a
-    technical problem, but it is somewhat inconvenient to have to edit the FAI
-    and CFengine configurations on separate servers, since such configuration
-    changes are often logically correlated.
+    The Ansible configuration resides in a Git repository on dev.ece.ubc.ca,
+    but it could just as well be on any private Git repository such as GitHub.
 
  7) FAI log archive
     (fai.ece.ubc.ca)
@@ -125,8 +121,8 @@ much simpler when those services are all located on the same server.
     a web server accepts log files uploaded by the client and executes
     fai-chboot when requested by the FAI client.
 
-In addition, FAI may be configured to use supplementary APT repositories to
-obtain some software, such as Proxmox VE.  Also, some scripts in the FAI
-configuration may download software from other sources, such as MATLAB.
+In addition, FAI may be configured to use supplementary repositories to obtain
+some software, such as Proxmox VE.  Also, some scripts in the FAI configuration
+may download software from other sources, such as MATLAB.
 
 # vim: tw=78:
