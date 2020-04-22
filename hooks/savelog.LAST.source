@@ -171,7 +171,11 @@ fi
 # Here you can define your own patterns. Put one pattern in a line,
 # do not create empty lines.
 myerrorpatterns="X_X-X_XX"
-myignorepatterns="X_X-X_XX"
+myignorepatterns="^changed:
+failed=0\>
+lib[a-z0-9-]*error
+\<no error
+vim/syntax"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # The main routine
 errorpatterns="$globalerrorpatterns
