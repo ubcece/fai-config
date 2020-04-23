@@ -1,5 +1,16 @@
 #!/bin/bash
 
-if [ $FAI_ACTION = "install" ]; then
-    $ROOTCMD mkdir -p /boot/grub
-fi
+. /usr/lib/fai/subroutines
+
+# On Debian/Ubuntu, installing a kernel triggers
+# /etc/kernel/postinst.d/zz-update-grub, which calls update-grub, but only if
+# /boot/grub/grub.cfg already exists.
+
+case $FAI_ACTION in
+  install|dirinstall)
+    if ifclass DEB_BASED; then
+        $ROOTCMD mkdir -p /boot/grub
+        [ -e "$target/boot/grub/grub.cfg" ] || touch "$target/boot/grub/grub.cfg"
+    fi
+    ;;
+esac

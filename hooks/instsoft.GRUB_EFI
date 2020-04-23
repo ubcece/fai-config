@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. /usr/lib/fai/subroutines
+
 # Ensure that the EFI System Partition is mounted if doing a dirinstall.
 # (The mountdisks tasks is skipped when doing a dirinstall.)
 
@@ -10,3 +12,16 @@ if [ $FAI_ACTION = "dirinstall" ]; then
         echo "Mounted $target/boot/efi"
     fi
 fi
+
+# On Debian/Ubuntu, installing a kernel triggers
+# /etc/kernel/postinst.d/zz-update-grub, which calls update-grub, but only if
+# /boot/grub/grub.cfg already exists.
+
+case $FAI_ACTION in
+  install|dirinstall)
+    if ifclass DEB_BASED; then
+        $ROOTCMD mkdir -p /boot/grub
+        [ -e "$target/boot/grub/grub.cfg" ] || touch "$target/boot/grub/grub.cfg"
+    fi
+    ;;
+esac
