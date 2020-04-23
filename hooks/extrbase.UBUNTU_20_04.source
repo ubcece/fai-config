@@ -1,4 +1,4 @@
 # Remove the base image to trigger debootstrap
-rm /var/tmp/base.tar.xz
+rm -f /var/tmp/base.tar.*
 
 FAI_DEBOOTSTRAP='focal http://mirror.it.ubc.ca/ubuntu'

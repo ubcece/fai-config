@@ -1,5 +1,5 @@
 # Remove the base image to trigger debootstrap
-rm /var/tmp/base.tar.xz
+rm -f /var/tmp/base.tar.*
 
 FAI_DEBOOTSTRAP='bionic http://mirror.it.ubc.ca/ubuntu'
 FAI_DEBOOTSTRAP_OPTS='--include tasksel'
