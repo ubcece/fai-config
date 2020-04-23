@@ -9,8 +9,8 @@ if [ -z "$ANSIBLE_CONFIG_URL" ]; then
     exit
 fi
 
-gitpath=$(expr match "$ANSIBLE_CONFIG_URL" '\([^[:space:]#]\+\)')
-gitbranch=$(expr match "$ANSIBLE_CONFIG_URL" '[^[:space:]#]*#\([^[:space:]]\+\)')
+# Interpret $ANSIBLE_CONFIG_URL -- anything after a "#" is the branch
+IFS='#' read -r gitpath gitbranch junk <<<"$ANSIBLE_CONFIG_URL"
 : ${gitbranch:=master}
 
 if ! mountpoint -q "$(dirname "$ANSIBLE_CONFIG_DIR")"; then
@@ -24,4 +24,4 @@ git clone --single-branch --branch "$gitbranch" --depth 1 \
 cd "$ANSIBLE_CONFIG_DIR"
 echo "Checked out rev $(git rev-parse HEAD) of $ANSIBLE_CONFIG_URL"
 ansible-playbook -c chroot -i ece_linux_inventory.yml -i chroot.config \
-    -l "$target" main.yml
+    -l "$target" master.yml
