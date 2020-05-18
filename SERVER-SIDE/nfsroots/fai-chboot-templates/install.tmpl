@@ -10,8 +10,8 @@ label fai-install-buster
 
 label fai-install-buster-amd64
     kernel fai/vmlinuz-buster-amd64
-    append ip=dhcp initrd=fai/initrd-buster-amd64 root=nfs:/exports/fai/nfsroot-buster-amd64:vers=3 rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+    append ip=dhcp initrd=fai/initrd-buster-amd64 root=nfs4:fai.ece.ubc.ca:/exports/fai/nfsroot-buster-amd64 rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
 
 label fai-install-buster-i386
     kernel fai/vmlinuz-buster-i386
-    append ip=dhcp initrd=fai/initrd-buster-i386  root=nfs:/exports/fai/nfsroot-buster-i386:vers=3  rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
+    append ip=dhcp initrd=fai/initrd-buster-i386  root=nfs4:fai.ece.ubc.ca:/exports/fai/nfsroot-buster-i386  rootovl nomodeset net.ifnames=0 FAI_FLAGS=sshd,reboot,initial FAI_ACTION=install FAI_CLASSES=${FAI_CLASSES:=} auth=$auth FAI_CONFIG_SRC_REF=${FAI_CONFIG_SRC_REF:=}
