@@ -24,7 +24,7 @@ sub serve_manifest {
     my ($q, $host, $auth) = @_;
 
     my %files;
-    for my $base (File::Spec->join($keydist_file_root, $host),
+    for my $base (($host ? File::Spec->join($keydist_file_root, $host) : ()),
                   File::Spec->join($keydist_file_root, 'DEFAULT')) {
         File::Find::find({ follow => 1, no_chdir => 1, wanted => sub {
                             if (-f) {
@@ -62,7 +62,7 @@ sub serve_manifest {
 sub serve_file {
     my ($q, $host, $path) = @_;
 
-    my $fs_path = File::Spec->join($keydist_file_root, $host, $path);
+    my $fs_path = File::Spec->join($keydist_file_root, $host, $path) if $host;
     my $fallback_fs_path = File::Spec->join($keydist_file_root, 'DEFAULT', $path);
     if (!-f $fs_path && !-f $fallback_fs_path) {
         print $q->header(-status => '404 Not Found');
@@ -95,13 +95,20 @@ sub cgimain {
 
     my $auth = $q->param('auth') || $q->cookie('auth') || '';
     my $host = $q->param('host') || $q->cookie('host') || '';
+    my $mac = $q->param('mac') || $q->cookie('mac') || '';
 
-    if (!FAI::ECE::Auth::verify_hash($auth, $host, MAX_DELAY)) {
+    if (!FAI::ECE::Auth::verify_hash($auth, $host, $mac, MAX_DELAY)) {
         print $q->header(-status => '401 Unauthorized');
         return;
     }
 
-    # TODO: Sanity-check $host and $path
+    unless ($host =~ /^[a-z0-9][a-z0-9.-]*(?<!-)$/i or
+            $mac =~ /^[0-9a-f]{2}(?::[0-9a-f]{2}){5}$/i) {
+        print $q->header(-status => '201 No content');
+        return;
+    }
+
+    # FIXME: Sanity-check $path
     my $path = $q->path_info;
     if ($path eq '' || $path eq '/') {
         serve_manifest($q, $host, $auth);

@@ -168,13 +168,16 @@ ece_setup_fetchkeys() {
 
     case "$FAI_CONFIG_SRC" in file://*) return ;; esac
 
-    echo "Fetching keys for host $FQDN..."
+    defaultdev=$(ip route show | awk '$1 == "default" { print $NF }')
+    MACADDR=$(ip link show dev "$defaultdev" | awk '$1 == "link/ether" { print $2 }')
+
+    printf "Fetching keys for host %s or MAC address %s...\n" "${FQDN:-\"\"}" "$MACADDR"
     wget_verbosity=-nv
     (
         umask 077 ;
         wget $wget_verbosity --recursive -e robots=off --level=0 \
              --directory-prefix=/tmp/keydist --no-host-directories --cut-dirs=2 \
-             --post-data="host=$FQDN&auth=$auth" \
+             --post-data="host=$FQDN&mac=$MACADDR&auth=$auth" \
              "https://$SERVER/fai/keydist"
     )
     status=$?

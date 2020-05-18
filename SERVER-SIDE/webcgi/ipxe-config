@@ -41,6 +41,15 @@ sub parse_ipv4addr {
 }
 
 ######################################################################
+# Parses a MAC address in '01:ab:23:cd:34:ef' format, to be returned
+# as string of 6 pairs of lowercase hex digits, separated by hyphens.
+######################################################################
+sub parse_macaddr {
+    local ($_) = @_;
+    sprintf('%02x' . '-%02x'x5, map {hex} /([0-9a-f]{2})/gi);
+}
+
+######################################################################
 # Prepends the global $root_prefix to a path.
 ######################################################################
 sub load_path {
@@ -134,16 +143,21 @@ sub syslinux_to_ipxe {
 }
 
 sub config_for {
-    my ($q, $ip) = @_;
-    $ip and syslinux_to_ipxe($q, sprintf('%08X', $ip))
-         or syslinux_to_ipxe($q, 'default');
+    my ($q) = @_;
+    my $ip = parse_ipv4addr($q->remote_addr);
+    my $mac = parse_macaddr(scalar $q->param('mac'));
+
+    $q->param('launch') eq 'ipxe-image' and $mac
+        and syslinux_to_ipxe($q, "01-$mac")
+    or $ip
+        and syslinux_to_ipxe($q, sprintf('%08X', $ip))
+    or syslinux_to_ipxe($q, 'default');
 }
 
 sub cgimain {
     my ($q) = @_;
     $root_prefix = dirname($q->url()) . '/syslinux/';
-    my $ip = parse_ipv4addr($q->remote_addr);
-    config_for($q, $ip) or print $q->header(-status => '204 No content');
+    config_for($q) or print $q->header(-status => '204 No content');
 }
 
 sub main {

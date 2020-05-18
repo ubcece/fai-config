@@ -25,39 +25,41 @@ my $secret = join '', <SECRETFILE>;
 close SECRETFILE;
 
 sub hash {
-    my ($time, $host) = @_;
-    return sha1_hex(sprintf('%s:%s:%s', $time, $secret, $host));
+    my ($time, $host_or_mac) = @_;
+    return sha1_hex(sprintf('%s:%s:%s', $time, $secret, $host_or_mac));
 }
 
 sub generate_hash {
-    my ($host) = @_;
+    my ($host_or_mac) = @_;
     my $time = time;
-    my $hash = hash($time, $host);
+    my $hash = hash($time, $host_or_mac);
     return {
         auth => $hash,
         time => $time,
-        host => $host,
     };
 }
 
 sub verify_hash {
-    my ($hash, $host, $max_delay) = @_;
+    my ($hash, $host, $mac, $max_delay) = @_;
 
     my $hash_len = length FAI::ECE::Auth::hash;
     my ($auth, $time) = ((substr $hash, 0, $hash_len), (substr $hash, $hash_len));
-
-    my $correct_hash = hash($time, $host);
     if (time - $time >= $max_delay) {
-        printf STDERR "Received hash %s: Authorization for $host expired at %s\n",
+        printf STDERR "Received hash %s: Authorization expired at %s\n",
             $hash, strftime("%FT%T", localtime($time + $max_delay));
         return undef;
-    } elsif ($auth ne $correct_hash) {
-        printf STDERR "Received hash %s; Required hash %s for host %s if issued at %s\n",
-            $hash, $correct_hash, $host,
-            strftime("%FT%T", localtime($time));
-        return undef;
     }
-    1;
+
+    my $correct_host_hash = hash($time, $host);
+    if ($auth eq $correct_host_hash) {
+        return 1;
+    }
+
+    my $correct_mac_hash = hash($time, $mac || '');
+    if ($auth eq $correct_mac_hash) {
+        return 1;
+    }
+    return undef;
 }
 
 sub cgimain {
@@ -78,12 +80,12 @@ sub cgimain {
 
 sub main {
     my @argv = @_;
-    my ($host) = @argv;
-    if (!defined $host || 0 == length $host) {
-        croak "Missing host parameter";
+    my ($host_or_mac) = @argv;
+    if (!defined $host_or_mac || 0 == length $host_or_mac) {
+        croak "Must specify hostname or MAC address to generate an authentication hash";
     }
 
-    my $credentials = generate_hash($host);
+    my $credentials = generate_hash($host_or_mac);
     say $credentials->{auth} . $credentials->{time};
 }
 

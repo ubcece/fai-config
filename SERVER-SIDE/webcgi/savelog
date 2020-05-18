@@ -19,6 +19,7 @@ sub cgimain {
 
     my $auth = $q->param('auth') || '';
     my $host = $q->param('host');
+    my $mac = $q->param('mac');
     my $action = $q->param('action') || 'noaction';
     my $rundate = $q->param('rundate');
 
@@ -33,7 +34,7 @@ sub cgimain {
         say "Status: 400 Bad Request\r\n";
         return;
     }
-    if (!FAI::ECE::Auth::verify_hash($auth, $host, MAX_DELAY)) {
+    if (!FAI::ECE::Auth::verify_hash($auth, $host, $mac, MAX_DELAY)) {
         say "Status: 401 Unauthorized\r\n";
         return;
     }
