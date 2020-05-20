@@ -24,9 +24,7 @@ case `uname -m` in
   x86_64)
         mkdir Matlab_$MATLAB_VERSION &&
 
-	echo ${FILER_SRC_DIR}Matlab_${MATLAB_VERSION}.tar.gz #DEBUG
-
-	ssh -A ${FILER} "ssh -A $(hostname) <${FILER_SRC_DIR}Matlab_${MATLAB_VERSION}.tar.gz \"tar xzvf - --no-same-owner -C /opt/Matlab_$MATLAB_VERSION --strip-components=1 \""
+	ssh -A $FILER "ssh -A $(hostname) <${FILER_SRC_DIR}Matlab_${MATLAB_VERSION}.tar.gz \"tar xzvf - --no-same-owner -C /opt/Matlab_$MATLAB_VERSION --strip-components=1 \""
 
 	;;
   *)
