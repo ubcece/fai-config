@@ -2,25 +2,20 @@
 
 MATLAB_VERSION=R2020a
 
-if [ -z "$SERVER" ]; then
-	echo "Error: \$SERVER is not set in $0."
-	exit 1
-fi
+FILER=filer1.ece.ubc.ca
+FILER_SRC_DIR=/data/Linux/Matlab/
 
 # Idempotency!
-if [ -L $target/opt/Matlab_$MATLAB_VERSION ]; then
-    ( cd $target/opt
+if [ -L /opt/Matlab_$MATLAB_VERSION ]; then
+    ( cd /opt
       rm -rf "$(readlink Matlab_$MATLAB_VERSION)"
       mkdir -p "$(readlink Matlab_$MATLAB_VERSION)" )
-elif [ -d $target/opt/Matlab_$MATLAB_VERSION ]; then
-    rm -rf $target/opt/Matlab_$MATLAB_VERSION
+elif [ -d /opt/Matlab_$MATLAB_VERSION ]; then
+    rm -rf /opt/Matlab_$MATLAB_VERSION
 fi
 
-MOUNTPT=/tmp/$SERVER/matlab
-mkdir -p "$MOUNTPT"
-mount -t nfs -o ro,nolock,tcp,rsize=32768 $SERVER:/exports/matlab "$MOUNTPT"
 
-cd $target/opt/
+cd /opt/
 case `uname -m` in
   i686)
 	echo "32bit linux is not supported by Mathworks, after 2012." >&2
@@ -28,7 +23,11 @@ case `uname -m` in
 	;;
   x86_64)
         mkdir Matlab_$MATLAB_VERSION &&
-	tar -xz --no-same-owner -C Matlab_$MATLAB_VERSION --strip-components=1 -f "$MOUNTPT"/Matlab_${MATLAB_VERSION}.tar.gz
+
+	echo ${FILER_SRC_DIR}Matlab_${MATLAB_VERSION}.tar.gz #DEBUG
+
+	ssh -A ${FILER} "ssh -A $(hostname) <${FILER_SRC_DIR}Matlab_${MATLAB_VERSION}.tar.gz \"tar xzvf - --no-same-owner -C /opt/Matlab_$MATLAB_VERSION --strip-components=1 \""
+
 	;;
   *)
 	echo "Don't know my own architecture." >&2
@@ -36,10 +35,8 @@ case `uname -m` in
 esac
 
 
-umount "$MOUNTPT"
-
-mkdir -p $target/usr/local/bin
-cd $target/usr/local/bin
+mkdir -p /usr/local/bin
+cd /usr/local/bin
 ln -sf /opt/Matlab_$MATLAB_VERSION/bin/matlab
 ln -sf /opt/Matlab_$MATLAB_VERSION/bin/mbuild
 ln -sf /opt/Matlab_$MATLAB_VERSION/bin/mcc
