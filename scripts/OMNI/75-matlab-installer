@@ -6,16 +6,16 @@ FILER=filer1.ece.ubc.ca
 FILER_SRC_DIR=/data/Linux/Matlab/
 
 # Idempotency!
-if [ -L /opt/Matlab_$MATLAB_VERSION ]; then
-    ( cd /opt
+if [ -L $target/opt/Matlab_$MATLAB_VERSION ]; then
+    ( cd $target/opt
       rm -rf "$(readlink Matlab_$MATLAB_VERSION)"
       mkdir -p "$(readlink Matlab_$MATLAB_VERSION)" )
-elif [ -d /opt/Matlab_$MATLAB_VERSION ]; then
-    rm -rf /opt/Matlab_$MATLAB_VERSION
+elif [ -d $target/opt/Matlab_$MATLAB_VERSION ]; then
+    rm -rf $target/opt/Matlab_$MATLAB_VERSION
 fi
 
 
-cd /opt/
+cd $target/opt/
 case `uname -m` in
   i686)
 	echo "32bit linux is not supported by Mathworks, after 2012." >&2
@@ -24,8 +24,13 @@ case `uname -m` in
   x86_64)
         mkdir Matlab_$MATLAB_VERSION &&
 
-	ssh -A $FILER "ssh -A $(hostname) <${FILER_SRC_DIR}Matlab_${MATLAB_VERSION}.tar.gz \"tar xzvf - --no-same-owner -C /opt/Matlab_$MATLAB_VERSION --strip-components=1 \""
+	mkfifo scp_pipe
 
+	scp ${FILER}:${FILER_SRC_DIR}Matlab_${MATLAB_VERSION}.tar.gz scp_pipe &
+
+	tar xzf scp_pipe  --no-same-owner -C Matlab_$MATLAB_VERSION --strip-components=1 &&
+
+	rm scp_pipe
 	;;
   *)
 	echo "Don't know my own architecture." >&2
@@ -33,8 +38,8 @@ case `uname -m` in
 esac
 
 
-mkdir -p /usr/local/bin
-cd /usr/local/bin
+mkdir -p $target/usr/local/bin
+cd $target/usr/local/bin
 ln -sf /opt/Matlab_$MATLAB_VERSION/bin/matlab
 ln -sf /opt/Matlab_$MATLAB_VERSION/bin/mbuild
 ln -sf /opt/Matlab_$MATLAB_VERSION/bin/mcc
