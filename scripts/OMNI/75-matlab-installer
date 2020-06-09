@@ -1,9 +1,8 @@
 #!/bin/bash
 
 MATLAB_VERSION=R2020a
-
-FILER=filer1.ece.ubc.ca
-FILER_SRC_DIR=/data/Linux/Matlab/
+MATLAB_SOURCE_DIR=sftp://faiclient@filer1.ece.ubc.ca/Matlab
+MATLAB_SOURCE_HOST_FINGERPRINT=e29fdd40bf33425d704ea24f7aaa898c
 
 # Idempotency!
 if [ -L $target/opt/Matlab_$MATLAB_VERSION ]; then
@@ -15,26 +14,25 @@ elif [ -d $target/opt/Matlab_$MATLAB_VERSION ]; then
 fi
 
 
-cd $target/opt/
 case `uname -m` in
-  i686)
-	echo "32bit linux is not supported by Mathworks, after 2012." >&2
-	exit 1
-	;;
   x86_64)
-        mkdir Matlab_$MATLAB_VERSION &&
-
-	mkfifo scp_pipe
-
-	scp ${FILER}:${FILER_SRC_DIR}Matlab_${MATLAB_VERSION}.tar.gz scp_pipe &
-
-	tar xzf scp_pipe  --no-same-owner -C Matlab_$MATLAB_VERSION --strip-components=1 &&
-
-	rm scp_pipe
-	;;
+    mkdir "$target/opt/Matlab_$MATLAB_VERSION"
+    # Use curl instead of the OpenSSH SFTP client because it can pipe the output
+    curl -o - \
+        --key /root/.ssh/id_rsa --pubkey /root/.ssh/id_rsa.pub \
+        --hostpubmd5 "$MATLAB_SOURCE_HOST_FINGERPRINT" \
+        "$MATLAB_SOURCE_DIR/Matlab_$MATLAB_VERSION.tar.gz" |
+    tar xzf - --no-same-owner --strip-components=1 \
+        -C "$target/opt/Matlab_$MATLAB_VERSION" ||
+    exit 1
+    ;;
+  i686)
+    echo "32-bit Linux is not supported by Mathworks, after 2012." >&2
+    exit 1
+    ;;
   *)
-	echo "Don't know my own architecture." >&2
-	exit 1
+    echo "Don't know my own architecture." >&2
+    exit 1
 esac
 
 
