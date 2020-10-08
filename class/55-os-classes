@@ -65,7 +65,7 @@ EXPLICIT_OS=$(explicit_class $classes)
 # not been provided
 case "$EXPLICIT_OS" in
     ""|UBUNTU)
-        OS="UBUNTU_16_04"
+        OS="UBUNTU_20_04"
         ;;
     DEBIAN)
         OS="DEBIAN_6"
